@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter, Route, Routes } from 'react-router-dom';
 
 import Login from './pages/Login';
 import Register from './pages/Register';
@@ -11,18 +11,18 @@ import BookingHistory from './pages/BookingHistory';
 
 function App () {
   return (
-    <Router>
-      <Switch>
-        <Route path="/" exact component={AllListings}/>
-        <Route path="/login" exact component={Login}/>
-        <Route path="/register" exact component={Register}/>
-        <Route path="/my-listings" exact component={HostedListings}/>
-        <Route path="/my-listings/edit/:id" exact component={EditListing}/>
-        <Route path="/listings" exact component={AllListings}/>
-        <Route path="/listing/:id" exact component={ViewListing}/>
-        <Route path="/booking-history/:id" exact component={BookingHistory}/>
-      </Switch>
-    </Router>
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<AllListings/>}/>
+        <Route path="/login" element={<Login/>}/>
+        <Route path="/register" element={<Register/>}/>
+        <Route path="/my-listings" element={<HostedListings/>}/>
+        <Route path="/my-listings/edit/:id" element={<EditListing/>}/>
+        <Route path="/listings" element={<AllListings/>}/>
+        <Route path="/listing/:id" element={<ViewListing/>}/>
+        <Route path="/booking-history/:id" element={<BookingHistory/>}/>
+      </Routes>
+    </BrowserRouter>
   )
 }
 
