@@ -26,3 +26,5 @@ const register = async (email, password, name) => {
     throw new Error(response.error);
   }
 }
+
+export default register;

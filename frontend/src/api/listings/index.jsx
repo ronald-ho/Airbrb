@@ -7,3 +7,17 @@ import { apiCall } from '../../services/api';
 export const getAllListings = async () => {
   return await apiCall('/listings', 'GET');
 }
+
+/**
+ * Get all listings by current user
+ * @returns {Promise<*>}
+ */
+export const getAllListingsByUser = async () => {
+  const currentUserEmail = localStorage.getItem('email');
+
+  const listingsResponse = await getAllListings();
+
+  return listingsResponse.data.filter(listing => {
+    return listing.owner === currentUserEmail;
+  });
+}

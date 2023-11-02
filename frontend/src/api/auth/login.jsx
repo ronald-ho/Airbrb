@@ -24,3 +24,5 @@ const login = async (email, password) => {
     throw new Error(response.error);
   }
 };
+
+export default login;
