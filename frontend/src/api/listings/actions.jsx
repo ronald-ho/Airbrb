@@ -27,23 +27,11 @@ export const getListing = async (listingId) => {
 /**
  * Update a Listing
  * @param listingId
- * @param title
- * @param address
- * @param price
- * @param thumbnail
- * @param metadata
+ * @param {NewListingDto} newListingDto
  * @returns {Promise<*>}
  */
-export const updateListing = async ({ listingId, title, address, price, thumbnail, metadata }) => {
-  const body = {
-    title,
-    address,
-    price,
-    thumbnail,
-    metadata
-  };
-
-  const response = await apiCall(`/listings/${listingId}`, 'PUT', body);
+export const updateListing = async (listingId, newListingDto) => {
+  const response = await apiCall(`/listings/${listingId}`, 'PUT', newListingDto);
 
   if (response.success) {
     return response.data;

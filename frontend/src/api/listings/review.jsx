@@ -4,15 +4,11 @@ import { apiCall } from '../../services/api';
  * Review a listing
  * @param listingId
  * @param bookingId
- * @param review
+ * @param {ReviewDto} review
  * @returns {Promise<*>}
  */
 export const reviewListing = async (listingId, bookingId, review) => {
-  const body = {
-    review
-  };
-
-  const response = await apiCall(`/listings/${listingId}/review/${bookingId}`, 'PUT', body);
+  const response = await apiCall(`/listings/${listingId}/review/${bookingId}`, 'PUT', review);
 
   if (response.success) {
     return response.data;

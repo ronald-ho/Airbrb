@@ -7,11 +7,7 @@ import { apiCall } from '../../services/api';
  * @returns {Promise<*>}
  */
 export const publishListing = async (listingId, availability) => {
-  const body = {
-    availability
-  };
-
-  const response = await apiCall(`/listings/publish/${listingId}`, 'PUT', body);
+  const response = await apiCall(`/listings/publish/${listingId}`, 'PUT', availability);
 
   if (response.success) {
     return response.data;
