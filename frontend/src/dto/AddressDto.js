@@ -1,6 +1,6 @@
 /**
- * Address DTO
- * @class Address
+ * AddressDto DTO
+ * @class AddressDto
  * @property {string} number
  * @property {string} street
  * @property {string} city
@@ -8,7 +8,7 @@
  * @property {string} postalCode
  * @property {string} country
  */
-class Address {
+class AddressDto {
   constructor (number, street, city, state, postalCode, country) {
     this.number = number;
     this.street = street;
@@ -20,7 +20,7 @@ class Address {
 }
 
 export function convertToAddressDTO (addressJson) {
-  return new Address(
+  return new AddressDto(
     addressJson.number,
     addressJson.street,
     addressJson.city,
@@ -30,4 +30,4 @@ export function convertToAddressDTO (addressJson) {
   );
 }
 
-export default Address;
+export default AddressDto;

@@ -1,13 +1,13 @@
 /**
- * Metadata DTO
- * @class Metadata
+ * MetadataDto DTO
+ * @class MetadataDto
  * @property {string} propertyType
  * @property {number} bathrooms
- * @property {Bedroom} bedrooms
+ * @property {BedroomDto} bedrooms
  * @property {string[]} amenities
  * @property {string[]} images
  */
-class Metadata {
+class MetadataDto {
   constructor (propertyType, bathrooms, bedrooms, amenities, images) {
     this.propertyType = propertyType;
     this.bathrooms = bathrooms;
@@ -17,4 +17,4 @@ class Metadata {
   }
 }
 
-export default Metadata;
+export default MetadataDto;

@@ -1,18 +1,18 @@
-import { convertToAddressDTO } from 'frontend/src/dto/Address';
-import { convertToReviewDTOs } from 'frontend/src/dto/Review';
+import { convertToAddressDTO } from 'frontend/src/dto/AddressDto';
+import { convertToReviewDTOs } from 'frontend/src/dto/ReviewDto';
 
 /**
- * Listing DTO
- * @class Listing
+ * ListingDto DTO
+ * @class ListingDto
  * @property {number} id
  * @property {string} title
  * @property {string} owner
- * @property {Address} address
+ * @property {AddressDto} address
  * @property {string} thumbnail
  * @property {number} price
- * @property {Review[]} reviews
+ * @property {ReviewDto[]} reviews
  */
-class Listing {
+class ListingDto {
   constructor (id, title, owner, address, thumbnail, price, reviews) {
     this.id = id;
     this.title = title;
@@ -28,7 +28,7 @@ export function convertToListingDTOs (listingJson) {
   return listingJson.map(item => {
     const addressDTO = convertToAddressDTO(item.address || {});
     const reviewsDTO = convertToReviewDTOs(item.reviews || []);
-    return new Listing(
+    return new ListingDto(
       item.id,
       item.title,
       item.owner,
@@ -40,4 +40,4 @@ export function convertToListingDTOs (listingJson) {
   });
 }
 
-export default Listing;
+export default ListingDto;

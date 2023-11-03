@@ -1,10 +1,10 @@
 /**
- * Review DTO
- * @class Review
+ * ReviewDto DTO
+ * @class ReviewDto
  * @property {number} rating
  * @property {string} message
  */
-class Review {
+class ReviewDto {
   constructor (rating, message) {
     this.rating = rating;
     this.message = message;
@@ -12,7 +12,7 @@ class Review {
 }
 
 export function convertToReviewDTOs (reviewsJson) {
-  return reviewsJson.map(review => new Review(review.rating, review.message));
+  return reviewsJson.map(review => new ReviewDto(review.rating, review.message));
 }
 
-export default Review;
+export default ReviewDto;

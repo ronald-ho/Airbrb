@@ -1,13 +1,13 @@
 /**
- * NewListing DTO class
- * @class NewListing
+ * NewListingDto DTO class
+ * @class NewListingDto
  * @property {string} title
- * @property {Address} address
+ * @property {AddressDto} address
  * @property {number} price
  * @property {string} thumbnail
- * @property {Metadata} metadata
+ * @property {MetadataDto} metadata
  */
-class NewListing {
+class NewListingDto {
   constructor (title, address, price, thumbnail, metadata) {
     this.title = title;
     this.address = address;
@@ -17,4 +17,4 @@ class NewListing {
   }
 }
 
-export default NewListing;
+export default NewListingDto;
