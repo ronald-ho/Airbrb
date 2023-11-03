@@ -31,7 +31,7 @@ export const getListing = async (listingId) => {
  * @returns {Promise<*>}
  */
 export const updateListing = async (listingId, newListingDto) => {
-  const response = await apiCall(`/listings/${listingId}`, 'PUT', newListingDto);
+  const response = await apiCall(`listings/${listingId}`, 'PUT', newListingDto);
 
   if (response.success) {
     return response.data;
@@ -46,7 +46,7 @@ export const updateListing = async (listingId, newListingDto) => {
  * @returns {Promise<*>}
  */
 export const deleteListing = async (listingId) => {
-  const response = await apiCall(`/listings/${listingId}`, 'DELETE');
+  const response = await apiCall(`listings/${listingId}`, 'DELETE');
 
   if (response.success) {
     return response.data;

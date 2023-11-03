@@ -25,7 +25,7 @@ export const getAllListingDetailsByUser = async () => {
     return listing.owner === currentUserEmail;
   });
 
-  console.log(`USER LISITINGS: ${JSON.stringify(userListings)}`);
+  console.log(`USER LISTINGS: ${JSON.stringify(userListings)}`);
 
   const listingIds = userListings.map(listing => listing.id);
 
