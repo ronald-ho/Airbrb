@@ -14,5 +14,3 @@ class ReviewDto {
 export function convertToReviewDTOs (reviewsJson) {
   return reviewsJson.map(review => new ReviewDto(review.rating, review.message));
 }
-
-export default ReviewDto;

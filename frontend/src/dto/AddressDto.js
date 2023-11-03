@@ -29,5 +29,3 @@ export function convertToAddressDTO (addressJson) {
     addressJson.country
   );
 }
-
-export default AddressDto;

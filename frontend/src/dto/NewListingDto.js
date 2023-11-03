@@ -16,5 +16,3 @@ class NewListingDto {
     this.metadata = metadata;
   }
 }
-
-export default NewListingDto;

@@ -2,23 +2,11 @@ import { apiCall } from '../../services/api';
 
 /**
  * Creates a new listing
- * @param title
- * @param address
- * @param price
- * @param thumbnail
- * @param metadata
+ * @param {NewListingDto} newListingDto
  * @returns {Promise<*>}
  */
-export const createNewListing = async ({ title, address, price, thumbnail, metadata }) => {
-  const body = {
-    title,
-    address,
-    price,
-    thumbnail,
-    metadata
-  };
-
-  const response = await apiCall('listings/new', 'POST', body);
+export const createNewListing = async (newListingDto) => {
+  const response = await apiCall('listings/new', 'POST', newListingDto);
 
   if (response.success) {
     return response.data;
@@ -33,7 +21,7 @@ export const createNewListing = async ({ title, address, price, thumbnail, metad
  * @returns {Promise<{success: boolean, error: (*|string)}|{success: boolean, data: *}>}
  */
 export const getListing = async (listingId) => {
-  return await apiCall(`/listings/${listingId}`, 'GET')
+  return await apiCall(`listings/${listingId}`, 'GET')
 }
 
 /**

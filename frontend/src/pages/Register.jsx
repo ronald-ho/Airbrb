@@ -13,7 +13,9 @@ function Register () {
   const [error, setError] = React.useState('');
   const [showPopup, setShowPopup] = React.useState(false);
 
-  const handleSubmit = async () => {
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+
     if (password !== confirmPassword) {
       setError('Passwords do not match');
       setShowPopup(true);
@@ -39,51 +41,56 @@ function Register () {
   return (
     <div>
       <h1>Register</h1>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Name"
-            variant="outlined"
-            value={name}
-            onChange={handleChange(setName)}
-          />
+      <form onSubmit={handleSubmit}>
+        <Grid container spacing={3}>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Name"
+              variant="outlined"
+              value={name}
+              onChange={handleChange(setName)}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Email"
+              variant="outlined"
+              value={email}
+              onChange={handleChange(setEmail)}
+              inputProps={{ autoComplete: 'email' }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Password"
+              type="password"
+              variant="outlined"
+              value={password}
+              onChange={handleChange(setPassword)}
+              inputProps={{ autoComplete: 'new-password' }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <TextField
+              fullWidth
+              label="Confirm Password"
+              type="password"
+              variant="outlined"
+              value={confirmPassword}
+              onChange={handleChange(setConfirmPassword)}
+              inputProps={{ autoComplete: 'new-password' }}
+            />
+          </Grid>
+          <Grid item xs={12}>
+            <Button type="submit" variant="contained" color="primary">
+              Register
+            </Button>
+          </Grid>
         </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Email"
-            variant="outlined"
-            value={email}
-            onChange={handleChange(setEmail)}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Password"
-            type="password"
-            variant="outlined"
-            value={password}
-            onChange={handleChange(setPassword)}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Confirm Password"
-            type="password"
-            variant="outlined"
-            value={confirmPassword}
-            onChange={handleChange(setConfirmPassword)}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
-            Register
-          </Button>
-        </Grid>
-      </Grid>
+      </form>
       {showPopup &&
         <Popup
           title="Error"

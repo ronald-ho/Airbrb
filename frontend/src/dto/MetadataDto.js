@@ -1,3 +1,5 @@
+import { convertToBedroomDTOs } from './BedroomDto';
+
 /**
  * MetadataDto DTO
  * @class MetadataDto
@@ -17,4 +19,19 @@ class MetadataDto {
   }
 }
 
-export default MetadataDto;
+/**
+ * Converts a JSON object to a MetadataDto DTO
+ * @param metadataJson
+ * @returns {MetadataDto}
+ */
+export function convertToMetadataDTO (metadataJson) {
+  const bedrooms = convertToBedroomDTOs(metadataJson.bedrooms || []);
+
+  return new MetadataDto(
+    metadataJson.propertyType,
+    metadataJson.bathrooms,
+    bedrooms,
+    metadataJson.amenities,
+    metadataJson.images
+  );
+}

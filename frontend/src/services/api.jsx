@@ -9,7 +9,7 @@ axios.interceptors.request.use(
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }
-    console.log(`Sending ${config.method.toUpperCase()} request to ${config.url}\n with config:`, config);
+    console.log(`Sending ${config.method.toUpperCase()} request to ${config.url}\n Data: ${JSON.stringify(config.data)}\n Headers:, ${config.headers}`);
     return config;
   },
   (error) => {
@@ -23,7 +23,7 @@ axios.interceptors.response.use(
     return response;
   },
   (error) => {
-    console.error('Error in response:', error);
+    console.error('Error in response:', error.response.data);
     return Promise.reject(error);
   }
 );

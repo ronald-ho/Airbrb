@@ -1,43 +1,58 @@
-import { convertToAddressDTO } from 'frontend/src/dto/AddressDto';
-import { convertToReviewDTOs } from 'frontend/src/dto/ReviewDto';
+import { convertToAddressDTO } from './AddressDto';
+import { convertToMetadataDTO } from './MetadataDto';
+import { convertToReviewDTOs } from './ReviewDto';
 
 /**
  * ListingDto DTO
  * @class ListingDto
- * @property {number} id
  * @property {string} title
  * @property {string} owner
  * @property {AddressDto} address
- * @property {string} thumbnail
  * @property {number} price
+ * @property {string} thumbnail
+ * @property {MetadataDto} metadata
  * @property {ReviewDto[]} reviews
+ * @property {Date[]} availability
+ * @property {boolean} published
+ * @property {string} postedOn
  */
 class ListingDto {
-  constructor (id, title, owner, address, thumbnail, price, reviews) {
-    this.id = id;
+  constructor (title, owner, address, price, thumbnail, metadata, reviews, availability, published, postedOn) {
     this.title = title;
     this.owner = owner;
     this.address = address;
-    this.thumbnail = thumbnail;
     this.price = price;
+    this.thumbnail = thumbnail;
+    this.metadata = metadata;
     this.reviews = reviews;
+    this.availability = availability;
+    this.published = published;
+    this.postedOn = postedOn;
   }
 }
 
+/**
+ * Converts a JSON object to a ListingDto DTO
+ * @param listingJson
+ * @returns {ListingDto[]}
+ */
 export function convertToListingDTOs (listingJson) {
-  return listingJson.map(item => {
-    const addressDTO = convertToAddressDTO(item.address || {});
-    const reviewsDTO = convertToReviewDTOs(item.reviews || []);
+  return listingJson.map(listing => {
+    const addressDto = convertToAddressDTO(listing.address);
+    const metadataDto = convertToMetadataDTO(listing.metadata);
+    const reviewsDto = convertToReviewDTOs(listing.reviews);
+    const availability = listing.availability;
     return new ListingDto(
-      item.id,
-      item.title,
-      item.owner,
-      addressDTO,
-      item.thumbnail,
-      item.price,
-      reviewsDTO
+      listing.title,
+      listing.owner,
+      addressDto,
+      listing.price,
+      listing.thumbnail,
+      metadataDto,
+      reviewsDto,
+      availability,
+      listing.published,
+      listing.postedOn
     );
   });
 }
-
-export default ListingDto;
