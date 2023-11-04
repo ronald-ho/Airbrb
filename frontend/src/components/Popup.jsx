@@ -2,9 +2,9 @@ import React, { useRef } from 'react';
 import {
   AlertDialog,
   AlertDialogBody,
+  AlertDialogContent,
   AlertDialogFooter,
   AlertDialogHeader,
-  AlertDialogContent,
   AlertDialogOverlay,
   Button,
 } from '@chakra-ui/react';
