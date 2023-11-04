@@ -1,8 +1,6 @@
 import React from 'react';
 import register from '../api/auth/register';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
+import { Box, Button, Flex, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
 import Popup from '../components/Popup';
 
 function Register () {
@@ -24,82 +22,51 @@ function Register () {
 
     try {
       await register(email, password, name);
+      // Handle successful registration here (e.g., redirect to login page)
     } catch (error) {
       setError(error.message);
       setShowPopup(true);
     }
-  }
+  };
 
   const handleChange = (setter) => (event) => {
     setter(event.target.value);
-  }
+  };
 
   const handleClosePopup = () => {
     setShowPopup(false);
-  }
+  };
 
   return (
-    <div>
-      <h1>Register</h1>
-      <form onSubmit={handleSubmit}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Name"
-              variant="outlined"
-              value={name}
-              onChange={handleChange(setName)}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Email"
-              variant="outlined"
-              value={email}
-              onChange={handleChange(setEmail)}
-              inputProps={{ autoComplete: 'email' }}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Password"
-              type="password"
-              variant="outlined"
-              value={password}
-              onChange={handleChange(setPassword)}
-              inputProps={{ autoComplete: 'new-password' }}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <TextField
-              fullWidth
-              label="Confirm Password"
-              type="password"
-              variant="outlined"
-              value={confirmPassword}
-              onChange={handleChange(setConfirmPassword)}
-              inputProps={{ autoComplete: 'new-password' }}
-            />
-          </Grid>
-          <Grid item xs={12}>
-            <Button type="submit" variant="contained" color="primary">
-              Register
-            </Button>
-          </Grid>
-        </Grid>
-      </form>
-      {showPopup &&
-        <Popup
-          title="Error"
-          body={error}
-          primaryButtonText="OK"
-          onClose={handleClosePopup}
-        />
-      }
-    </div>
+    <Flex minH="100vh" align="center" justify="center" bg="gray.50">
+      <Box p={8} width="50%" borderWidth={1} borderRadius={25} boxShadow="lg" bg="white">
+        <VStack spacing={4}>
+          <h1>Register</h1>
+          <FormControl id="name" isRequired>
+            <FormLabel>Name</FormLabel>
+            <Input type="text" value={name} onChange={handleChange(setName)}/>
+          </FormControl>
+          <FormControl id="email" isRequired>
+            <FormLabel>Email</FormLabel>
+            <Input type="email" value={email} onChange={handleChange(setEmail)}/>
+          </FormControl>
+          <FormControl id="password" isRequired>
+            <FormLabel>Password</FormLabel>
+            <Input type="password" value={password} onChange={handleChange(setPassword)}/>
+          </FormControl>
+          <FormControl id="confirm-password" isRequired>
+            <FormLabel>Confirm Password</FormLabel>
+            <Input type="password" value={confirmPassword} onChange={handleChange(setConfirmPassword)}/>
+          </FormControl>
+          <Button type="submit" colorScheme="blue" onClick={handleSubmit}>
+            Register
+          </Button>
+        </VStack>
+      </Box>
+      {showPopup && (
+        <Popup title="Error" body={error} primaryButtonText="OK" onClose={handleClosePopup}/>
+      )}
+    </Flex>
   );
 }
 
