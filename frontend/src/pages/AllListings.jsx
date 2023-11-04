@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import { getAllListings } from '../api/listings';
 import { Container, Flex, Box } from '@chakra-ui/react';
@@ -19,13 +18,13 @@ function AllListings () {
       try {
         if (localStorage.token) {
           const bookingsResponse = await getAllBookings();
-          
+
           if (!bookingsResponse.success) {
-            console.error('Error fetching bookings:', error);
+            console.error('Error fetching bookings');
             return null;
           }
 
-          let bookingsDict = {};
+          const bookingsDict = {};
 
           for (const booking of bookingsResponse.data.bookings) {
             console.log('booking', booking);
@@ -34,11 +33,11 @@ function AllListings () {
 
           setBookings(bookingsDict);
         }
-        
+
         const listingsResponse = await getAllListings();
 
         if (!listingsResponse.success) {
-          console.error('Error fetching listings:', error);
+          console.error('Error fetching listings');
           return null;
         }
 
@@ -52,7 +51,7 @@ function AllListings () {
               const propertyData = propertyResponse.data.listing;
               console.log(bookings, property.id);
               if (property.id in bookings) {
-                propertyData.bookingStatus = bookings[property.id];  
+                propertyData.bookingStatus = bookings[property.id];
               } else {
                 propertyData.bookingStatus = 'zzz';
               }
@@ -68,15 +67,15 @@ function AllListings () {
         );
 
         console.log(propertyDetails);
-        propertyDetails.sort((a, b) => {     
+        propertyDetails.sort((a, b) => {
           // Sort by booking status first - accepted, pending, and not booked (zzz)
           if (a.bookingStatus > b.bookingStatus) return 1;
           if (a.bookingStatus < b.bookingStatus) return -1;
-      
+
           // If not booked, sort in ascending alphabetical order
           if (a.title > b.title) return 1;
           if (a.title < b.title) return -1;
-      
+
           return 0;
         });
 
