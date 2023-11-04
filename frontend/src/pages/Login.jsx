@@ -1,8 +1,6 @@
 import React from 'react';
 import login from '../api/auth/login';
-import Button from '@mui/material/Button';
-import TextField from '@mui/material/TextField';
-import Grid from '@mui/material/Grid';
+import { Box, Button, Flex, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
 import Popup from '../components/Popup';
 
 function Login () {
@@ -30,43 +28,27 @@ function Login () {
   }
 
   return (
-    <div>
-      <h1>Login</h1>
-      <Grid container spacing={3}>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Email"
-            variant="outlined"
-            value={email}
-            onChange={handleChange(setEmail)}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <TextField
-            fullWidth
-            label="Password"
-            variant="outlined"
-            type="password"
-            value={password}
-            onChange={handleChange(setPassword)}
-          />
-        </Grid>
-        <Grid item xs={12}>
-          <Button variant="contained" color="primary" onClick={handleSubmit}>
+    <Flex minH="100vh" align="center" justify="center" bg="gray.50">
+      <Box p={8} width="50%" borderWidth={1} borderRadius={25} boxShadow="lg" bg="white">
+        <VStack spacing={4}>
+          <h1>Login</h1>
+          <FormControl id="email" isRequired>
+            <FormLabel>Email</FormLabel>
+            <Input type="email" value={email} onChange={handleChange(setEmail)}/>
+          </FormControl>
+          <FormControl id="password" isRequired>
+            <FormLabel>Password</FormLabel>
+            <Input type="password" value={password} onChange={handleChange(setPassword)}/>
+          </FormControl>
+          <Button colorScheme="blue" onClick={handleSubmit}>
             Login
           </Button>
-        </Grid>
-      </Grid>
-      {showPopup &&
-        <Popup
-          title="Error"
-          body={error}
-          primaryButtonText="OK"
-          onClose={handleClosePopup}
-        />
-      }
-    </div>
+        </VStack>
+      </Box>
+      {showPopup && (
+        <Popup title="Error" body={error} primaryButtonText="OK" onClose={handleClosePopup}/>
+      )}
+    </Flex>
   );
 }
 

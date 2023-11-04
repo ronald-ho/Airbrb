@@ -1,38 +1,45 @@
-import React from 'react';
-import Dialog from '@mui/material/Dialog';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogContentText from '@mui/material/DialogContentText';
-import DialogTitle from '@mui/material/DialogTitle';
-import Button from '@mui/material/Button';
+import React, { useRef } from 'react';
+import {
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  Button,
+} from '@chakra-ui/react';
 
 function Popup (props) {
   const { title, body, primaryButtonText, onClose } = props;
 
+  const cancelRef = useRef();
+
   return (
-    <Dialog
-      open={true}
+    <AlertDialog
+      isOpen={true}
+      leastDestructiveRef={cancelRef}
       onClose={onClose}
-      aria-labelledby="alert-dialog-title"
-      aria-describedby="alert-dialog-description"
+      isCentered
     >
-      <DialogTitle id="alert-dialog-title">
-        {title}
-      </DialogTitle>
-      <DialogContent>
-        <DialogContentText id="alert-dialog-description">
-          {body}
-        </DialogContentText>
-      </DialogContent>
-      <DialogActions>
-        <Button onClick={onClose} color="primary">
-          Close
-        </Button>
-        <Button onClick={onClose} color="primary" autoFocus>
-          {primaryButtonText}
-        </Button>
-      </DialogActions>
-    </Dialog>
+      <AlertDialogOverlay>
+        <AlertDialogContent>
+          <AlertDialogHeader id="alert-dialog-title">
+            {title}
+          </AlertDialogHeader>
+          <AlertDialogBody id="alert-dialog-description">
+            {body}
+          </AlertDialogBody>
+          <AlertDialogFooter>
+            <Button ref={cancelRef} onClick={onClose}>
+              Close
+            </Button>
+            <Button colorScheme="blue" onClick={onClose} ml={3}>
+              {primaryButtonText}
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialogOverlay>
+    </AlertDialog>
   );
 }
 
