@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { getAllListings } from '../api/listings';
 import { Container, Flex, Box } from '@chakra-ui/react';
-import listingPreview from '../components/listingPreview';
-import searchBar from '../components/searchBar';
+import ListingPreview from '../components/ListingPreview';
+import { SearchBar, InputBar } from '../components/SearchBar';
 import { getListing } from '../api/listings/actions';
 import { getAllBookings } from '../api/booking';
 
@@ -13,6 +13,21 @@ function AllListings () {
 
   // Get bookings data
   const [bookings, setBookings] = useState({});
+
+  // Display filters
+  const [isFiltersVisible, setIsFiltersVisible] = useState(false);
+  const [isSearchVisible, setIsSearchVisible] = useState(true);
+
+  const handleSearchClick = () => {
+    // Toggle the visibility state when SearchBar is clicked
+    setIsFiltersVisible(!isFiltersVisible);
+    setIsSearchVisible(false);
+  };
+
+  const handleSubmitClick = () => {
+    // api call for info
+    console.log('handle');
+  }
 
   useEffect(() => {
     const fetchBookings = async () => {
@@ -112,6 +127,13 @@ function AllListings () {
           return 0;
         });
 
+        propertyDetails.filter((listing) => {
+          console.log(listing.title.toLowerCase().includes('new'));
+          return (
+            listing.title.toLowerCase().includes('new')
+          );
+        })
+
         setListings(propertyDetails);
         setLoading(false);
       } catch (error) {
@@ -122,20 +144,41 @@ function AllListings () {
     fetchData();
   }, [bookings]);
 
-  // useEffect(() => {
-  //   setLoading(false);
-  // }, [listings]);
+  // listings.filter((listing) => {
+  //   return (
+  //     listing.title.toLowerCase().includes('new')
+  //   )
+  // })
 
   return (
     <Container>
       <div>
         <h1>All Listings</h1>
       </div>
-      {searchBar()}
+      {/* Navbar will go here */}
+      <Box>
+        {
+          isSearchVisible
+            ? <SearchBar onClickHandler={handleSearchClick} />
+            : <InputBar onClickHandler={handleSubmitClick} />
+        }
+
+        <Box display={isFiltersVisible ? 'block' : 'none'}>
+          Filters
+        </Box>
+      </Box>
+
       <Flex>
-        {!loading && listings.map((listing) => (
+        {
+        !loading
+          ? listings.map((listing, index) => (
+            <Box key={index}>{ListingPreview(listing)}</Box>
+          ))
+          : null
+        }
+        {/* {!loading && listings.map((listing) => (
           <Box key={listing.id}>{listingPreview(listing)}</Box>
-        ))}
+        ))} */}
       </Flex>
     </Container>
   )
