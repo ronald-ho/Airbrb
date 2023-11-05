@@ -1,10 +1,10 @@
 import { apiCall } from '../../services/api';
 
-/**
- * Creates a new listing
- * @param {NewListingDto} newListingDto
- * @returns {Promise<*>}
- */
+// /**
+//  * Creates a new listing
+//  * @param {NewListingDto} newListingDto
+//  * @returns {Promise<*>}
+//  */
 export const createNewListing = async (newListingDto) => {
   const response = await apiCall('listings/new', 'POST', newListingDto);
 

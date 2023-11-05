@@ -23,10 +23,6 @@ function Login () {
     setter(event.target.value);
   }
 
-  const handleClosePopup = () => {
-    setShowPopup(false);
-  }
-
   return (
     <Flex minH="100vh" align="center" justify="center" bg="gray.50">
       <Box p={8} width="50%" borderWidth={1} borderRadius={25} boxShadow="lg" bg="white">
@@ -46,7 +42,7 @@ function Login () {
         </VStack>
       </Box>
       {showPopup && (
-        <Popup title="Error" body={error} primaryButtonText="OK" onClose={handleClosePopup}/>
+        <Popup title="Error" body={error} primaryButtonText="OK" onClose={() => setShowPopup(false)}/>
       )}
     </Flex>
   );
