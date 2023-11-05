@@ -2,7 +2,7 @@ import React from 'react';
 import { Badge, Box, Image } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons';
 
-function listingPreview (listing) {
+function ListingPreview (listing) {
   // Get review information
   let totalRatings = 0;
 
@@ -77,4 +77,4 @@ function listingPreview (listing) {
   )
 }
 
-export default listingPreview;
+export default ListingPreview;
