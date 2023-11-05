@@ -42,7 +42,7 @@ function Login () {
         </VStack>
       </Box>
       {showPopup && (
-        <Popup title="Error" body={error} primaryButtonText="OK" onClose={setShowPopup(false)}/>
+        <Popup title="Error" body={error} primaryButtonText="OK" onClose={() => setShowPopup(false)}/>
       )}
     </Flex>
   );

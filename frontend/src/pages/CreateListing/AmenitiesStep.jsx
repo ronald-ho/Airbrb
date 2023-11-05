@@ -4,16 +4,16 @@ import { Box, Button, Flex, FormControl, FormLabel, Input, VStack } from '@chakr
 
 const AmenitiesStep = ({ onSubmit, onBack, handleSubmit }) => {
   const { listingData } = useContext(ListingContext);
-  const [amenities, setAmenities] = useState(listingData.amenities || '');
+  const [amenitiesInput, setAmenitiesInput] = useState(listingData.amenities?.join(', ') || '');
 
   useEffect(() => {
-    setAmenities(listingData.amenities || '');
+    setAmenitiesInput(listingData.amenities?.join(', ') || '');
   }, [listingData.amenities]);
 
   const handleAmenitiesSubmit = (event) => {
     event.preventDefault();
-    onSubmit({ amenities });
-    handleSubmit();
+    const amenitiesArray = amenitiesInput.split(',').map(item => item.trim());
+    onSubmit({ amenities: amenitiesArray });
   };
 
   return (
@@ -23,7 +23,8 @@ const AmenitiesStep = ({ onSubmit, onBack, handleSubmit }) => {
           <h1>Amenities</h1>
           <FormControl id="amenities" isRequired>
             <FormLabel>Amenities</FormLabel>
-            <Input type="text" value={amenities} onChange={(e) => setAmenities(e.target.value)}/>
+            <Input type="text" value={amenitiesInput} onChange={(e) => setAmenitiesInput(e.target.value)}
+                   placeholder="Enter amenities separated by commas"/>
           </FormControl>
         </VStack>
         <Flex justify="space-between" mt={4}>
@@ -35,4 +36,4 @@ const AmenitiesStep = ({ onSubmit, onBack, handleSubmit }) => {
   );
 }
 
-export default AmenitiesStep
+export default AmenitiesStep;

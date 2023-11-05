@@ -15,9 +15,14 @@ const ThumbnailStep = ({ onSubmit, onBack }) => {
   const handleThumbnailChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      const fileURL = URL.createObjectURL(file);
-      setThumbnail(fileURL);
-      setThumbnailPreview(fileURL);
+      // FileReader for reading the file as a Base64 string
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        const base64String = reader.result;
+        setThumbnail(base64String);
+        setThumbnailPreview(base64String);
+      };
+      reader.readAsDataURL(file);
     }
   };
 

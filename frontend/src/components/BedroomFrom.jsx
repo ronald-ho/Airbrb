@@ -13,9 +13,9 @@ const BedroomForm = ({ index, bedroom, handleBedroomChange }) => {
         <FormLabel>{`Bedroom ${index + 1} - Bed Type`}</FormLabel>
         <Select value={bedroom.bedType} onChange={(event) => handleBedroomChange(index, 'bedType', event.target.value)}>
           <option value="">Select Bed Type</option>
-          <option value="king">King</option>
-          <option value="queen">Queen</option>
-          <option value="single">Single</option>
+          <option value="King">King</option>
+          <option value="Queen">Queen</option>
+          <option value="Single">Single</option>
         </Select>
       </FormControl>
     </VStack>

@@ -23,12 +23,18 @@ const PropertyTypeStep = ({ onSubmit, onBack }) => {
         <VStack spacing={4}>
           <h1>Property Type</h1>
           <Flex justify="space-around" width="100%">
-            <Image src={houseIcon} boxSize="150px" cursor="pointer" onClick={() => setPropertyType('house')}
-                   border={propertyType === 'house' ? '1px solid black' : 'none'}
-                   borderRadius="lg"/>
-            <Image src={apartmentIcon} boxSize="150px" cursor="pointer" onClick={() => setPropertyType('apartment')}
-                   border={propertyType === 'apartment' ? '1px solid black' : 'none'}
-                   borderRadius="lg"/>
+            <VStack spacing={4}>
+              <Image src={houseIcon} boxSize="150px" cursor="pointer" onClick={() => setPropertyType('House')}
+                     border={propertyType === 'House' ? '1px solid black' : 'none'}
+                     borderRadius="lg"/>
+              <h1>House</h1>
+            </VStack>
+            <VStack spacing={4}>
+              <Image src={apartmentIcon} boxSize="150px" cursor="pointer" onClick={() => setPropertyType('Apartment')}
+                     border={propertyType === 'Apartment' ? '1px solid black' : 'none'}
+                     borderRadius="lg"/>
+              <h1>Apartment</h1>
+            </VStack>
           </Flex>
         </VStack>
         <Flex justify="space-between" mt={4}>

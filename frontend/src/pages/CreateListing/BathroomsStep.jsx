@@ -12,7 +12,7 @@ const BathroomsStep = ({ onSubmit, onBack }) => {
 
   const handleNext = (event) => {
     event.preventDefault();
-    onSubmit({ bathrooms });
+    onSubmit({ bathrooms: parseInt(bathrooms) });
   };
 
   return (

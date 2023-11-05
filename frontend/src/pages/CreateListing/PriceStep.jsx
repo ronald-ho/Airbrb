@@ -17,7 +17,7 @@ const PriceStep = ({ onSubmit, onBack }) => {
 
   const handleNext = (event) => {
     event.preventDefault();
-    onSubmit({ price });
+    onSubmit({ price: parseInt(price) });
   };
 
   return (

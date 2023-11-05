@@ -49,6 +49,12 @@ const CreateListing = () => {
     console.log('Current Listing Data:', listingData);
   }, [listingData]);
 
+  useEffect(() => {
+    if (step === 'amenities' && listingData.amenities) {
+      handleSubmit().then(r => console.log(r));
+    }
+  }, [listingData.amenities, step]);
+
   const handleSubmit = async () => {
     try {
       await createNewListing(restructureData());
@@ -63,13 +69,14 @@ const CreateListing = () => {
     return {
       title: listingData.title,
       address: listingData.address,
-      price: listingData.price,
+      price: parseInt(listingData.price),
       thumbnail: listingData.thumbnail,
       metadata: {
         propertyType: listingData.propertyType,
-        bathrooms: listingData.bathrooms,
+        bathrooms: parseInt(listingData.bathrooms),
         bedrooms: listingData.bedrooms,
-        amenities: listingData.amenities
+        amenities: listingData.amenities,
+        images: []
       }
     };
   }
@@ -97,7 +104,7 @@ const CreateListing = () => {
     <div>
       {StepComponent}
       {showPopup && (
-        <Popup title="Error" body={error} primaryButtonText="OK" onClose={setShowPopup(false)}/>
+        <Popup title="Error" body={error} primaryButtonText="OK" onClose={() => setShowPopup(false)}/>
       )}
     </div>
   );

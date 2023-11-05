@@ -5,16 +5,16 @@
  * @property {string} street
  * @property {string} city
  * @property {string} state
- * @property {string} postalCode
+ * @property {string} postCode
  * @property {string} country
  */
 class AddressDto {
-  constructor (number, street, city, state, postalCode, country) {
+  constructor (number, street, city, state, postCode, country) {
     this.number = number;
     this.street = street;
     this.city = city;
     this.state = state;
-    this.postalCode = postalCode;
+    this.postCode = postCode;
     this.country = country;
   }
 }
@@ -25,7 +25,7 @@ export function convertToAddressDTO (addressJson) {
     addressJson.street,
     addressJson.city,
     addressJson.state,
-    addressJson.postalCode,
+    addressJson.postCode,
     addressJson.country
   );
 }
