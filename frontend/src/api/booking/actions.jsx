@@ -11,7 +11,7 @@ export const createNewBooking = async (listingId, bookingDetails) => {
     ...bookingDetails
   };
 
-  const response = await apiCall(`/bookings/new/${listingId}`, 'POST', body);
+  const response = await apiCall(`bookings/new/${listingId}`, 'POST', body);
 
   if (response.success) {
     return response.data;
@@ -26,7 +26,7 @@ export const createNewBooking = async (listingId, bookingDetails) => {
  * @returns {Promise<*>}
  */
 export const acceptBooking = async (bookingId) => {
-  const response = await apiCall(`/bookings/accept/${bookingId}`, 'PUT');
+  const response = await apiCall(`bookings/accept/${bookingId}`, 'PUT');
 
   if (response.success) {
     return response.data;
@@ -41,7 +41,7 @@ export const acceptBooking = async (bookingId) => {
  * @returns {Promise<*>}
  */
 export const declineBooking = async (bookingId) => {
-  const response = await apiCall(`/bookings/decline/${bookingId}`, 'PUT');
+  const response = await apiCall(`bookings/decline/${bookingId}`, 'PUT');
 
   if (response.success) {
     return response.data;
@@ -56,7 +56,7 @@ export const declineBooking = async (bookingId) => {
  * @returns {Promise<*>}
  */
 export const deleteBooking = async (bookingId) => {
-  const response = await apiCall(`/bookings/delete/${bookingId}`, 'DELETE');
+  const response = await apiCall(`bookings/delete/${bookingId}`, 'DELETE');
 
   if (response.success) {
     return response.data;
