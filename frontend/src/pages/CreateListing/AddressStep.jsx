@@ -12,7 +12,7 @@ const AddressStep = ({ onSubmit, onBack }) => {
     street: listingData.address?.street || '',
     city: listingData.address?.city || '',
     state: listingData.address?.state || '',
-    postCode: listingData.address?.postCode || '',
+    postcode: listingData.address?.postcode || '',
     country: listingData.address?.country || ''
   });
 
@@ -35,7 +35,7 @@ const AddressStep = ({ onSubmit, onBack }) => {
       address.street,
       address.city,
       address.state,
-      address.postCode,
+      address.postcode,
       address.country
     );
     onSubmit({ address: addressDto });
@@ -50,7 +50,7 @@ const AddressStep = ({ onSubmit, onBack }) => {
           <FormInput name="street" label="Street" type="text" value={address.street} onChange={handleInputChange}/>
           <FormInput name="city" label="City" type="text" value={address.city} onChange={handleInputChange}/>
           <FormInput name="state" label="State" type="text" value={address.state} onChange={handleInputChange}/>
-          <FormInput name="postCode" label="Post Code" type="text" value={address.postCode}
+          <FormInput name="postcode" label="Post Code" type="text" value={address.postcode}
                      onChange={handleInputChange}/>
           <FormInput name="country" label="Country" type="text" value={address.country} onChange={handleInputChange}/>
         </VStack>

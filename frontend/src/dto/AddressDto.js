@@ -9,12 +9,12 @@
  * @property {string} country
  */
 class AddressDto {
-  constructor (number, street, city, state, postCode, country) {
+  constructor (number, street, city, state, postcode, country) {
     this.number = number;
     this.street = street;
     this.city = city;
     this.state = state;
-    this.postCode = postCode;
+    this.postcode = postcode;
     this.country = country;
   }
 }
@@ -25,7 +25,7 @@ export function convertToAddressDTO (addressJson) {
     addressJson.street,
     addressJson.city,
     addressJson.state,
-    addressJson.postCode,
+    addressJson.postcode,
     addressJson.country
   );
 }
