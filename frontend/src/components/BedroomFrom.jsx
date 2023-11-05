@@ -7,7 +7,7 @@ const BedroomForm = ({ index, bedroom, handleBedroomChange }) => {
       <FormControl id={`beds-${index}`} isRequired>
         <FormLabel>{`Bedroom ${index + 1} - Number of Beds`}</FormLabel>
         <Input type="number" value={bedroom.bedCount}
-               onChange={(e) => handleBedroomChange(index, 'bedCount', parseInt(e.target.value))}/>
+               onChange={(event) => handleBedroomChange(index, 'bedCount', parseInt(event.target.value))}/>
       </FormControl>
       <FormControl id={`bedType-${index}`} isRequired>
         <FormLabel>{`Bedroom ${index + 1} - Bed Type`}</FormLabel>

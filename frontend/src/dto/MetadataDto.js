@@ -1,19 +1,19 @@
-import { convertToBedroomDTOs } from './BedroomDto';
-
 /**
  * MetadataDto DTO
  * @class MetadataDto
  * @property {string} propertyType
  * @property {number} bathrooms
- * @property {BedroomDto} bedrooms
+ * @property {number} bedrooms
+ * @property {number} beds
  * @property {string[]} amenities
  * @property {string[]} images
  */
 class MetadataDto {
-  constructor (propertyType, bathrooms, bedrooms, amenities, images) {
+  constructor (propertyType, bathrooms, bedrooms, beds, amenities, images) {
     this.propertyType = propertyType;
     this.bathrooms = bathrooms;
     this.bedrooms = bedrooms;
+    this.beds = beds;
     this.amenities = amenities;
     this.images = images;
   }
@@ -25,12 +25,11 @@ class MetadataDto {
  * @returns {MetadataDto}
  */
 export function convertToMetadataDTO (metadataJson) {
-  const bedrooms = convertToBedroomDTOs(metadataJson.bedrooms || []);
-
   return new MetadataDto(
     metadataJson.propertyType,
     metadataJson.bathrooms,
-    bedrooms,
+    metadataJson.bedrooms,
+    metadataJson.beds,
     metadataJson.amenities,
     metadataJson.images
   );
