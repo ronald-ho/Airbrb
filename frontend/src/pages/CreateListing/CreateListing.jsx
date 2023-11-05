@@ -6,11 +6,10 @@ import AddressStep from './AddressStep';
 import PriceStep from './PriceStep';
 import ThumbnailStep from './ThumbnailStep';
 import PropertyTypeStep from './PropertyTypeStep';
-import BathroomsStep from './BathroomsStep';
-import BedroomsStep from './BedroomsStep';
 import AmenitiesStep from './AmenitiesStep';
 import { createNewListing } from '../../api/listings/actions';
 import Popup from '../../components/Popup';
+import DetailsStep from './DetailsStep';
 
 const CreateListing = () => {
   const { step } = useParams();
@@ -22,7 +21,7 @@ const CreateListing = () => {
   const saveStepData = (stepData) => {
     updateListingData(stepData);
 
-    const stepOrder = ['title', 'address', 'price', 'thumbnail', 'property-type', 'bathrooms', 'bedrooms', 'amenities'];
+    const stepOrder = ['title', 'address', 'price', 'thumbnail', 'property-type', 'details', 'amenities'];
     const currentStepIndex = stepOrder.indexOf(step);
     const nextStep = stepOrder[currentStepIndex + 1];
 
@@ -34,7 +33,7 @@ const CreateListing = () => {
   };
 
   const navigateToPreviousStep = () => {
-    const stepOrder = ['title', 'address', 'price', 'thumbnail', 'property-type', 'bathrooms', 'bedrooms', 'amenities'];
+    const stepOrder = ['title', 'address', 'price', 'thumbnail', 'property-type', 'details', 'amenities'];
     const currentStepIndex = stepOrder.indexOf(step);
     const previousStep = stepOrder[currentStepIndex - 1];
 
@@ -74,7 +73,8 @@ const CreateListing = () => {
       metadata: {
         propertyType: listingData.propertyType,
         bathrooms: parseInt(listingData.bathrooms),
-        bedrooms: listingData.bedrooms,
+        bedrooms: parseInt(listingData.bedrooms),
+        beds: parseInt(listingData.beds),
         amenities: listingData.amenities,
         images: []
       }
@@ -87,8 +87,7 @@ const CreateListing = () => {
     price: <PriceStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
     thumbnail: <ThumbnailStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
     'property-type': <PropertyTypeStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
-    bathrooms: <BathroomsStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
-    bedrooms: <BedroomsStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
+    details: <DetailsStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
     amenities: <AmenitiesStep onSubmit={saveStepData} onBack={navigateToPreviousStep} handleSubmit={handleSubmit}/>,
   };
 
