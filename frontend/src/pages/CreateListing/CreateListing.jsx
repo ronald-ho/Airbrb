@@ -1,4 +1,4 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { ListingContext } from './ListingContext';
 import TitleStep from './TitleStep';
@@ -9,11 +9,15 @@ import PropertyTypeStep from './PropertyTypeStep';
 import BathroomsStep from './BathroomsStep';
 import BedroomsStep from './BedroomsStep';
 import AmenitiesStep from './AmenitiesStep';
+import { createNewListing } from '../../api/listings/actions';
+import Popup from '../../components/Popup';
 
 const CreateListing = () => {
   const { step } = useParams();
   const { listingData, updateListingData } = useContext(ListingContext);
   const navigate = useNavigate();
+  const [error, setError] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
 
   const saveStepData = (stepData) => {
     updateListingData(stepData);
@@ -45,10 +49,30 @@ const CreateListing = () => {
     console.log('Current Listing Data:', listingData);
   }, [listingData]);
 
-  const handleSubmit = () => {
-    // Post the data to server
-    // and handle the response (e.g., showing success message, navigating to dashboard)
+  const handleSubmit = async () => {
+    try {
+      await createNewListing(restructureData());
+      navigate('/my-listings');
+    } catch (error) {
+      setError(error.message);
+      setShowPopup(true);
+    }
   };
+
+  const restructureData = () => {
+    return {
+      title: listingData.title,
+      address: listingData.address,
+      price: listingData.price,
+      thumbnail: listingData.thumbnail,
+      metadata: {
+        propertyType: listingData.propertyType,
+        bathrooms: listingData.bathrooms,
+        bedrooms: listingData.bedrooms,
+        amenities: listingData.amenities
+      }
+    };
+  }
 
   const stepComponents = {
     title: <TitleStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
@@ -58,7 +82,7 @@ const CreateListing = () => {
     'property-type': <PropertyTypeStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
     bathrooms: <BathroomsStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
     bedrooms: <BedroomsStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
-    amenities: <AmenitiesStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
+    amenities: <AmenitiesStep onSubmit={saveStepData} onBack={navigateToPreviousStep} handleSubmit={handleSubmit}/>,
   };
 
   useEffect(() => {
@@ -72,8 +96,8 @@ const CreateListing = () => {
   return (
     <div>
       {StepComponent}
-      {step === 'amenities' && (
-        <button onClick={handleSubmit}>Submit Listing</button>
+      {showPopup && (
+        <Popup title="Error" body={error} primaryButtonText="OK" onClose={setShowPopup(false)}/>
       )}
     </div>
   );

@@ -2,7 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ListingContext } from './ListingContext';
 import { Box, Button, Flex, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
 
-const AmenitiesStep = ({ onSubmit, onBack }) => {
+const AmenitiesStep = ({ onSubmit, onBack, handleSubmit }) => {
   const { listingData } = useContext(ListingContext);
   const [amenities, setAmenities] = useState(listingData.amenities || '');
 
@@ -10,9 +10,10 @@ const AmenitiesStep = ({ onSubmit, onBack }) => {
     setAmenities(listingData.amenities || '');
   }, [listingData.amenities]);
 
-  const handleNext = (event) => {
+  const handleAmenitiesSubmit = (event) => {
     event.preventDefault();
     onSubmit({ amenities });
+    handleSubmit();
   };
 
   return (
@@ -27,7 +28,7 @@ const AmenitiesStep = ({ onSubmit, onBack }) => {
         </VStack>
         <Flex justify="space-between" mt={4}>
           <Button colorScheme="gray" onClick={onBack}>Back</Button>
-          <Button colorScheme="blue" onClick={handleNext}>Next</Button>
+          <Button colorScheme="blue" onClick={handleAmenitiesSubmit}>Submit</Button>
         </Flex>
       </Box>
     </Flex>
