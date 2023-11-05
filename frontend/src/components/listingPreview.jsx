@@ -24,7 +24,7 @@ function listingPreview (listing) {
             {metadata.propertyType}
           </Badge>
           {
-            listing.bookingStatus !== 'zzz'
+            listing.bookingStatus && listing.bookingStatus !== 'zzz'
               ? (<Badge borderRadius='full' px='2' colorScheme='red'>
                 {listing.bookingStatus}
               </Badge>)

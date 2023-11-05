@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { getAllListings } from '../api/listings';
 import { Container, Flex, Box } from '@chakra-ui/react';
 import listingPreview from '../components/listingPreview';
+import searchBar from '../components/searchBar';
 import { getListing } from '../api/listings/actions';
 import { getAllBookings } from '../api/booking';
 
@@ -130,6 +131,7 @@ function AllListings () {
       <div>
         <h1>All Listings</h1>
       </div>
+      {searchBar()}
       <Flex>
         {!loading && listings.map((listing) => (
           <Box key={listing.id}>{listingPreview(listing)}</Box>
