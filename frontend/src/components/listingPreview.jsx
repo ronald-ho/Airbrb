@@ -23,16 +23,23 @@ function listingPreview (listing) {
           <Badge borderRadius='full' px='2' colorScheme='teal'>
             {metadata.propertyType}
           </Badge>
-          <Box
-            color='gray.500'
-            fontWeight='semibold'
-            letterSpacing='wide'
-            fontSize='xs'
-            textTransform='uppercase'
-            ml='2'
-          >
-            {metadata.bedrooms.length} beds &bull; {metadata.bathrooms} baths
-          </Box>
+          {
+            listing.bookingStatus !== 'zzz'
+              ? (<Badge borderRadius='full' px='2' colorScheme='red'>
+                {listing.bookingStatus}
+              </Badge>)
+              : null
+          }
+        </Box>
+        <Box
+          color='gray.500'
+          fontWeight='semibold'
+          letterSpacing='wide'
+          fontSize='xs'
+          textTransform='uppercase'
+          ml='2'
+        >
+          {metadata.bedrooms.length} beds &bull; {metadata.bathrooms} baths
         </Box>
 
         <Box
