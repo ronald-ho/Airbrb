@@ -23,13 +23,13 @@ const AmenitiesStep = ({ onSubmit, onBack, handleSubmit }) => {
         <h1>Amenities</h1>
         <FormControl id="amenities" isRequired>
           <FormLabel>Amenities</FormLabel>
-          <Input type="text" value={amenitiesInput} onChange={(e) => setAmenitiesInput(e.target.value)}
+          <Input type="text" value={amenitiesInput} onChange={(event) => setAmenitiesInput(event.target.value)}
                  placeholder="Enter amenities separated by commas"/>
         </FormControl>
       </VStack>
       <Flex justify="space-between" mt={4}>
         <Button colorScheme="gray" onClick={onBack}>Back</Button>
-        <Button colorScheme="blue" onClick={handleAmenitiesSubmit}>Submit</Button>
+        <Button colorScheme="blue" onClick={handleAmenitiesSubmit} disabled={!amenitiesInput.trim()}>Submit</Button>
       </Flex>
     </CenteredBox>
   );

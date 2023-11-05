@@ -39,7 +39,7 @@ const PropertyTypeStep = ({ onSubmit, onBack }) => {
       </VStack>
       <Flex justify="space-between" mt={4}>
         <Button colorScheme="gray" onClick={onBack}>Back</Button>
-        <Button colorScheme="blue" onClick={handleNext}>Next</Button>
+        <Button colorScheme="blue" onClick={handleNext} disabled={!propertyType}>Next</Button>
       </Flex>
     </CenteredBox>
   )

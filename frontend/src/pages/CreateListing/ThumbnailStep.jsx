@@ -46,7 +46,7 @@ const ThumbnailStep = ({ onSubmit, onBack }) => {
       </VStack>
       <Flex justify="space-between" mt={4}>
         <Button colorScheme="gray" onClick={onBack}>Back</Button>
-        <Button colorScheme="blue" onClick={handleNext}>Next</Button>
+        <Button colorScheme="blue" onClick={handleNext} disabled={!thumbnail}>Next</Button>
       </Flex>
     </CenteredBox>
   )
