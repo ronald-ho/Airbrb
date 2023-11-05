@@ -14,8 +14,9 @@ function AllListings () {
   const [bookings, setBookings] = useState({});
 
   useEffect(() => {
-    const fetchData = async () => {
+    const fetchBookings = async () => {
       try {
+        console.log(localStorage.token);
         if (localStorage.token) {
           const bookingsResponse = await getAllBookings();
 
@@ -32,7 +33,38 @@ function AllListings () {
           }
 
           setBookings(bookingsDict);
+          console.log('end', bookings)
         }
+      } catch (error) {
+        console.error('Error fetching listings:', error);
+      }
+    };
+
+    fetchBookings();
+  }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // console.log(localStorage.token);
+        // if (localStorage.token) {
+        //   const bookingsResponse = await getAllBookings();
+
+        //   if (!bookingsResponse.success) {
+        //     console.error('Error fetching bookings');
+        //     return null;
+        //   }
+
+        //   const bookingsDict = {};
+
+        //   for (const booking of bookingsResponse.data.bookings) {
+        //     console.log('booking', booking);
+        //     bookingsDict[booking.listingId] = booking.status;
+        //   }
+
+        //   setBookings(bookingsDict);
+        //   console.log('end', bookings)
+        // }
 
         const listingsResponse = await getAllListings();
 
@@ -87,7 +119,11 @@ function AllListings () {
     };
 
     fetchData();
-  }, []);
+  }, [bookings]);
+
+  // useEffect(() => {
+  //   setLoading(false);
+  // }, [listings]);
 
   return (
     <Container>
