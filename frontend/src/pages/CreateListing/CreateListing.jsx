@@ -82,7 +82,7 @@ const CreateListing = () => {
   }
 
   const stepComponents = {
-    title: <TitleStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
+    title: <TitleStep onSubmit={saveStepData}/>,
     address: <AddressStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
     price: <PriceStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
     thumbnail: <ThumbnailStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,

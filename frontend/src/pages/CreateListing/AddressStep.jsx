@@ -29,6 +29,10 @@ const AddressStep = ({ onSubmit, onBack }) => {
     }));
   };
 
+  const areAllFieldsFilled = () => {
+    return Object.values(address).every(value => value.trim() !== '');
+  };
+
   const handleNext = (event) => {
     event.preventDefault();
     const addressDto = new AddressDto(
@@ -56,7 +60,7 @@ const AddressStep = ({ onSubmit, onBack }) => {
       </VStack>
       <Flex justify="space-between" mt={4}>
         <Button colorScheme="gray" onClick={onBack}>Back</Button>
-        <Button colorScheme="blue" onClick={handleNext}>Next</Button>
+        <Button colorScheme="blue" onClick={handleNext} disabled={!areAllFieldsFilled()}>Next</Button>
       </Flex>
     </CenteredBox>
   );

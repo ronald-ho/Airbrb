@@ -4,7 +4,7 @@ import { Button, Flex, VStack } from '@chakra-ui/react';
 import FormInput from '../../components/FormInput';
 import CenteredBox from '../../components/CenteredBox';
 
-const TitleStep = ({ onSubmit, onBack }) => {
+const TitleStep = ({ onSubmit }) => {
   const { listingData } = useContext(ListingContext);
   const [title, setTitle] = useState(listingData.title || '');
 
@@ -27,9 +27,8 @@ const TitleStep = ({ onSubmit, onBack }) => {
         <h1>Choose a Title for your Airbrb!</h1>
         <FormInput name="title" label="Title" type="text" value={title} onChange={handleInputChange}/>
       </VStack>
-      <Flex justify="space-between" mt={4}>
-        <Button colorScheme="gray" onClick={onBack}>Back</Button>
-        <Button colorScheme="blue" onClick={handleNext}>Next</Button>
+      <Flex justify="flex-end" mt={4}>
+        <Button colorScheme="blue" onClick={handleNext} disabled={!title.trim()}>Next</Button>
       </Flex>
     </CenteredBox>
   );
