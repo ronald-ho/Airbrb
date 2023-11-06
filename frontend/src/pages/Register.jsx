@@ -3,6 +3,7 @@ import register from '../api/auth/register';
 import { Button, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
 import Popup from '../components/Popup';
 import CenteredBox from '../components/CenteredBox';
+import { useNavigate } from 'react-router-dom';
 
 function Register () {
   const [email, setEmail] = React.useState('');
@@ -11,6 +12,7 @@ function Register () {
   const [name, setName] = React.useState('');
   const [error, setError] = React.useState('');
   const [showPopup, setShowPopup] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -23,7 +25,7 @@ function Register () {
 
     try {
       await register(email, password, name);
-      // Handle successful registration here (e.g., redirect to login page)
+      navigate('/login');
     } catch (error) {
       setError(error.message);
       setShowPopup(true);

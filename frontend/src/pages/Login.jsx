@@ -3,17 +3,20 @@ import login from '../api/auth/login';
 import { Button, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
 import Popup from '../components/Popup';
 import CenteredBox from '../components/CenteredBox';
+import { Link, useNavigate } from 'react-router-dom';
 
 function Login () {
   const [email, setEmail] = React.useState('');
   const [password, setPassword] = React.useState('');
   const [error, setError] = React.useState('');
   const [showPopup, setShowPopup] = React.useState(false);
+  const navigate = useNavigate();
 
   const handleSubmit = async () => {
     try {
       await login(email, password);
       localStorage.setItem('email', email);
+      navigate('/');
     } catch (error) {
       setError(error.message);
       setShowPopup(true);
@@ -36,6 +39,7 @@ function Login () {
           <FormLabel>Password</FormLabel>
           <Input type="password" value={password} onChange={handleChange(setPassword)}/>
         </FormControl>
+        <Link to="/register">Register</Link>
         <Button colorScheme="blue" onClick={handleSubmit}>
           Login
         </Button>
