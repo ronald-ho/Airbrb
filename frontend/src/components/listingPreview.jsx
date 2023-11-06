@@ -3,7 +3,6 @@ import { Badge, Box, Image } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons';
 
 function listingPreview (listing) {
-  // Get review information
   let totalRatings = 0;
 
   for (const review of listing.reviews) {
@@ -17,7 +16,7 @@ function listingPreview (listing) {
 
   return (
     <Box>
-      <Image src={listing.thumbnail} />
+      <Image src={listing.thumbnail}/>
       <Box p='6'>
         <Box display='flex' alignItems='baseline'>
           <Badge borderRadius='full' px='2' colorScheme='teal'>
