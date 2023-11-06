@@ -1,24 +1,33 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { getAllListingDetailsByUser } from '../api/listings';
+import listingPreview from '../components/listingPreview';
+import { Box, Flex } from '@chakra-ui/react';
 
 function HostedListings () {
+  const [listings, setListings] = useState([]);
+
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const listings = getAllListingDetailsByUser();
-        console.log(listings);
+        const listings = await getAllListingDetailsByUser();
+        setListings(listings);
       } catch (error) {
         console.error('Error fetching listings:', error);
       }
     };
 
-    fetchData().then(r => console.log(r));
+    fetchData();
   }, []);
 
   return (
-    <div>
+    <Flex justify="center" minH="100vh">
       <h1>Hosted Listings</h1>
-    </div>
+      <Box>
+        {listings.map(listing => (
+          <Box key={listing.id}>{listingPreview(listing)}</Box>
+        ))}
+      </Box>
+    </Flex>
   )
 }
 
