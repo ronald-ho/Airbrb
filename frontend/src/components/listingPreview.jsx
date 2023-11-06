@@ -39,7 +39,7 @@ function ListingPreview (listing) {
           textTransform='uppercase'
           ml='2'
         >
-          {metadata.bedrooms.length} beds &bull; {metadata.bathrooms} baths
+          {metadata.bedrooms} beds &bull; {metadata.bathrooms} baths
         </Box>
 
         <Box

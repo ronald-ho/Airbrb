@@ -202,13 +202,33 @@ function AllListings () {
   //   )
   // })
 
+  // const handleFocus = () => {
+  //   setIsFiltersVisible(true);
+  //   setIsSearchVisible(false);
+  //   console.log('focus');
+  // }
+
+  const handleFocusOut = (event) => {
+    const searchArea = document.getElementById('search-bar');
+    if (searchArea.contains(event.target)) {
+      console.log('inside');
+      setIsFiltersVisible(true);
+      setIsSearchVisible(false);
+    } else {
+      console.log('outside');
+      setIsFiltersVisible(false);
+      setIsSearchVisible(true);
+    }
+  }
+
   return (
-    <Container>
+    <Container onMouseDown={event => handleFocusOut(event)}>
       <div>
         <h1>All Listings</h1>
       </div>
       {/* Navbar will go here */}
-      <Box>
+      {/* <Box id='search-bar' onFocus={handleFocus}> */}
+      <Box id='search-bar'>
         {
           isSearchVisible
             ? <SearchBar onClickHandler={handleSearchClick} />
