@@ -22,24 +22,32 @@ function SearchBar ({ onClickHandler }) {
   );
 }
 
-function InputBar ({ onClickHandler }) {
-  const [searchInput, setSearchInput] = useState(null);
-  const [selectedDates, setSelectedDates] = useState([new Date(), new Date()]);
+function InputBar ({ onClickHandler, callReset, stopReset }) {
+  const [selectedDates, setSelectedDates] = useState([undefined, undefined]);
 
-  const submitSearch = () => {
-    // console.log(document.getElementById('location-search').value);
-    console.log(searchInput);
-    setSearchInput('info');
-    const searchFilters = {
-      textSearch: document.getElementById('location-search').value,
-      dateSearch: selectedDates,
+  const textSearch = document.getElementById('location-search');
+
+  // Reset the text input and daterangepicker field
+  if (callReset) {
+    textSearch.value = '';
+
+    // We don't set state to prevent infinite re-rendering
+    if (selectedDates[0] !== undefined && selectedDates[1] !== undefined) {
+      setSelectedDates([undefined, undefined]);
     }
-    onClickHandler(searchFilters);
+
+    stopReset();
   }
 
-  // const handleClick = () => {
+  // Pass search parameters upwards
+  const submitSearch = () => {
+    const searchFilters = {
+      textSearch: textSearch.value,
+      dateSearch: selectedDates,
+    }
 
-  // };
+    onClickHandler(searchFilters);
+  }
 
   return (
     <Box py='2' alignItems='center' borderWidth='1px' borderRadius='40px' display='flex' height='70px'>
@@ -86,6 +94,7 @@ function InputBar ({ onClickHandler }) {
                 size: 'sm',
                 borderWidth: '0px',
                 focusBorderColor: 'black',
+                placeholder: 'Check-in / Check-out',
               },
             }}
           />

@@ -1,6 +1,7 @@
+/* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import { getAllListings } from '../api/listings';
-import { Container, Flex, Box, RangeSlider, RangeSliderTrack, RangeSliderFilledTrack, Text, RangeSliderThumb } from '@chakra-ui/react';
+import { Container, Grid, GridItem, Box, RangeSlider, RangeSliderTrack, RangeSliderFilledTrack, Text, RangeSliderThumb, Button, Select } from '@chakra-ui/react';
 import ListingPreview from '../components/ListingPreview';
 import { SearchBar, InputBar } from '../components/SearchBar';
 import { getListing } from '../api/listings/actions';
@@ -30,6 +31,9 @@ function AllListings () {
   // Search filters
   // const [filters, setFilters] = useState(null);
 
+  // Elements
+  const reviewSelector = document.getElementById('sort-reviews');
+
   const handleSearchClick = () => {
     // Toggle the visibility state when SearchBar is clicked
     setIsFiltersVisible(!isFiltersVisible);
@@ -41,6 +45,37 @@ function AllListings () {
     // console.log(filters);
     // api call for info
     console.log('inputbar', searchInput);
+    console.log('filter listing', listings);
+
+    // Helper function to check if listing availabilities meet search
+    const isAvailable = (start, end, availabilities) => {
+      for (const [s, e] of availabilities) {
+        const s_parsed = new Date(s);
+        const e_parsed = new Date(e);
+
+        if (start >= s_parsed && end <= e_parsed) {
+          console.log('available');
+          return 1;
+        }
+      }
+
+      return 0;
+    }
+    
+    // Helper function to calculate average review for listing
+    const averageRating = (reviews) => {
+      let totalRatings = 0;
+
+      for (const review of reviews) {
+        totalRatings += review.rating;
+      }
+
+      return totalRatings / reviews.length;
+    }
+
+    // Determine ranges for dates
+    let floorDate = searchInput.dateSearch[0];
+    let ceilDate = searchInput.dateSearch[1];
 
     // Determine ranges for bedrooms
     let floorBedroom;
@@ -68,21 +103,44 @@ function AllListings () {
     }
 
     const newFiltered = listings.filter((listing) => {
-      // console.log('filter', listing.title.toLowerCase().includes(searchInput.textSearch));
-      const filterByFloorBedroom = floorBedroom === undefined || listing.bedrooms >= floorBedroom;
-      const filterByCeilBedroom = ceilBedroom === undefined || listing.bedrooms <= ceilBedroom;
+      const metadata = listing.metadata;
+
+      const filterDate = floorDate === undefined || ceilDate === undefined || isAvailable(floorDate, ceilDate, listing.availability);
+      console.log(listing.title, filterDate);
+
+      const filterByFloorBedroom = floorBedroom === undefined || metadata.bedrooms >= floorBedroom;
+      const filterByCeilBedroom = ceilBedroom === undefined || metadata.bedrooms <= ceilBedroom;
 
       const filterByFloorPrice = floorPrice === undefined || listing.price >= floorPrice;
       const filterByCeilPrice = ceilPrice === undefined || listing.price <= ceilPrice;
-      console.log(filterByFloorBedroom, filterByCeilBedroom, filterByFloorPrice, filterByCeilPrice);
+
+      // Calculate average rating and add to listing
+      listing.avgRating = averageRating(listing.reviews);
+      console.log('review', listing.avgRating);
+
+      // console.log(filterByFloorBedroom, filterByCeilBedroom, filterByFloorPrice, filterByCeilPrice);
       return (
         listing.title.toLowerCase().includes(searchInput.textSearch) &&
+          filterDate &&
           filterByFloorBedroom &&
           filterByCeilBedroom &&
           filterByFloorPrice &&
           filterByCeilPrice
       );
     });
+
+    // Sort reviews if selected
+    const simpleCompare = (a, b) => {
+      if (a > b) return 1;
+      if (a < b) return -1;
+      return 0;
+    }
+
+    if (reviewSelector.value == 'ascending') {
+      newFiltered.sort((a, b) => simpleCompare(a.avgRating, b.avgRating))
+    } else if ((reviewSelector.value == 'descending')) {
+      newFiltered.sort((b, a) => simpleCompare(a.avgRating, b.avgRating))
+    }
 
     setFilteredListings(newFiltered);
   }
@@ -219,7 +277,22 @@ function AllListings () {
       setIsFiltersVisible(false);
       setIsSearchVisible(true);
     }
-  }
+  };
+
+  const [callReset, setCallReset] = useState(false);
+
+  const clearFilters = () => {
+    setCallReset(true);
+    setBedroomFilter(defaultBedrooms);
+    setPriceFilter(defaultPrices);
+    reviewSelector.value = 'none';
+  };
+
+  // We need to reset the callReset to false to stop InputBar from infinitely re-rendering as it would otherwise
+  // keep seeing callReset == true
+  const stopReset = () => {
+    setCallReset(false);
+  };
 
   return (
     <Container onMouseDown={event => handleFocusOut(event)}>
@@ -227,12 +300,11 @@ function AllListings () {
         <h1>All Listings</h1>
       </div>
       {/* Navbar will go here */}
-      {/* <Box id='search-bar' onFocus={handleFocus}> */}
       <Box id='search-bar'>
         {
           isSearchVisible
             ? <SearchBar onClickHandler={handleSearchClick} />
-            : <InputBar onClickHandler={handleSubmitClick} />
+            : <InputBar onClickHandler={handleSubmitClick} callReset={callReset} stopReset={stopReset} />
         }
 
         <Box display={isFiltersVisible ? 'block' : 'none'}>
@@ -241,7 +313,7 @@ function AllListings () {
             <Box display='flex'>
               {bedroomFilter[0]} - {bedroomFilter[1]}
             </Box>
-            <RangeSlider defaultValue={[0, 8]} min={0} max={8} step={1} onChange={(val) => setBedroomFilter(val)}>
+            <RangeSlider value={bedroomFilter} min={0} max={8} step={1} onChange={(val) => setBedroomFilter(val)}>
               <RangeSliderTrack bg='red.100'>
                 <RangeSliderFilledTrack bg='tomato' />
               </RangeSliderTrack>
@@ -254,7 +326,7 @@ function AllListings () {
             <Box display='flex'>
               {priceFilter[0]} - {priceFilter[1]}
             </Box>
-            <RangeSlider defaultValue={[0, 10000]} min={0} max={10000} step={1} onChange={(val) => setPriceFilter(val)}>
+            <RangeSlider value={priceFilter} min={0} max={10000} step={1} onChange={(val) => setPriceFilter(val)}>
               <RangeSliderTrack bg='red.100'>
                 <RangeSliderFilledTrack bg='tomato' />
               </RangeSliderTrack>
@@ -265,21 +337,27 @@ function AllListings () {
           <Box>
             <Text>Reviews</Text>
           </Box>
+          <Box display='flex'>
+            <Text>Sort Reviews</Text>
+            <Select id='sort-reviews' defaultValue='none'>
+              <option value='none'>None</option>
+              <option value='ascending'>Ascending</option>
+              <option value='descending'>Descending</option>
+            </Select>
+          </Box>
+          <Button onClick={clearFilters}>Clear All</Button>
         </Box>
       </Box>
 
-      <Flex>
+      <Grid templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}>
         {
         !loading
           ? filteredListings.map((listing, index) => (
-            <Box key={index}>{ListingPreview(listing)}</Box>
+            <GridItem key={index}>{ListingPreview(listing)}</GridItem>
           ))
           : null
         }
-        {/* {!loading && listings.map((listing) => (
-          <Box key={listing.id}>{listingPreview(listing)}</Box>
-        ))} */}
-      </Flex>
+      </Grid>
     </Container>
   )
 }
