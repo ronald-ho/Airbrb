@@ -18,7 +18,7 @@ const AmenitiesStep = ({ onSubmit, onBack, handleSubmit }) => {
   };
 
   return (
-    <CenteredBox>
+    <CenteredBox customStyles={{ minW: '500px' }}>
       <VStack spacing={4}>
         <h1>Amenities</h1>
         <FormControl id="amenities" isRequired>

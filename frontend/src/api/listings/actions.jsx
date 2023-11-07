@@ -27,7 +27,7 @@ export const getListing = async (listingId) => {
 /**
  * Update a Listing
  * @param listingId
- * @param {NewListingDto} newListingDto
+ * @param {{}} newListingDto
  * @returns {Promise<*>}
  */
 export const updateListing = async (listingId, newListingDto) => {

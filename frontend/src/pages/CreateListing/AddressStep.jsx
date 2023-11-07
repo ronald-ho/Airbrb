@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { Button, Flex, VStack } from '@chakra-ui/react';
-import AddressDto from '../../dto/AddressDto';
 import { ListingContext } from './ListingContext';
 import FormInput from '../../components/FormInput';
 import CenteredBox from '../../components/CenteredBox';
@@ -35,19 +34,11 @@ const AddressStep = ({ onSubmit, onBack }) => {
 
   const handleNext = (event) => {
     event.preventDefault();
-    const addressDto = new AddressDto(
-      address.number,
-      address.street,
-      address.city,
-      address.state,
-      address.postcode,
-      address.country
-    );
-    onSubmit({ address: addressDto });
+    onSubmit({ address });
   };
 
   return (
-    <CenteredBox>
+    <CenteredBox customStyles={{ minW: '500px' }}>
       <VStack spacing={4}>
         <h1>Address</h1>
         <FormInput name="number" label="Number" type="text" value={address.number} onChange={handleInputChange}/>

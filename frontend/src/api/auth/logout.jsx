@@ -8,7 +8,7 @@ const logout = async () => {
   const response = await apiCall('user/auth/logout', 'POST');
 
   if (response.success) {
-    localStorage.removeItem('token');
+    localStorage.clear();
   } else {
     throw new Error(response.error);
   }
