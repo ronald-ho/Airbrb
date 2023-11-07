@@ -42,7 +42,7 @@ function InputBar ({ onClickHandler, callReset, stopReset }) {
   // Pass search parameters upwards
   const submitSearch = () => {
     const searchFilters = {
-      textSearch: textSearch.value,
+      textSearch: textSearch ? textSearch.value : '',
       dateSearch: selectedDates,
     }
 
