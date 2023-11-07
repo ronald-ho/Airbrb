@@ -18,7 +18,7 @@ const PropertyTypeStep = ({ onSubmit, onBack }) => {
   };
 
   return (
-    <CenteredBox>
+    <CenteredBox customStyles={{ minW: '500px' }}>
       <VStack spacing={4}>
         <h1>Property Type</h1>
         <PropertyTypeSelector

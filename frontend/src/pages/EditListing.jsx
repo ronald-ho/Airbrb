@@ -132,11 +132,15 @@ function EditListing () {
     }
   };
 
+  const customStyles = {
+    maxW: { base: '100%', md: '50%' }
+  }
+
   if (isLoading) return null;
   if (error) return <div>Error: {error}</div>;
 
   return (
-    <CenteredBox>
+    <CenteredBox customStyles={customStyles}>
       <VStack>
         <Text fontSize='3xl'>Editing {listing.title}</Text>
         <Image src={listing.thumbnail} alt={listing.title} objectFit="contain"/>
