@@ -16,7 +16,6 @@ const ThumbnailStep = ({ onSubmit, onBack }) => {
   const handleThumbnailChange = (event) => {
     const file = event.target.files[0];
     if (file) {
-      // FileReader for reading the file as a Base64 string
       const reader = new FileReader();
       reader.onloadend = () => {
         const base64String = reader.result;
