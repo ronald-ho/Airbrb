@@ -25,7 +25,7 @@ const PriceStep = ({ onSubmit, onBack }) => {
     <CenteredBox>
       <VStack spacing={4}>
         <h1>Price</h1>
-        <FormInput name="price" label="Price" type="number" value={price} onChange={handleInputChange}/>
+        <FormInput name="price" label="Price per night" type="number" value={price} onChange={handleInputChange}/>
       </VStack>
       <Flex justify="space-between" mt={4}>
         <Button colorScheme="gray" onClick={onBack}>Back</Button>

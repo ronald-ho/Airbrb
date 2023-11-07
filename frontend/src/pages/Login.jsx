@@ -1,6 +1,6 @@
 import React from 'react';
 import login from '../api/auth/login';
-import { Button, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
+import { Button, FormControl, FormLabel, Input, useToast, VStack } from '@chakra-ui/react';
 import Popup from '../components/Popup';
 import CenteredBox from '../components/CenteredBox';
 import { Link, useNavigate } from 'react-router-dom';
@@ -11,12 +11,19 @@ function Login () {
   const [error, setError] = React.useState('');
   const [showPopup, setShowPopup] = React.useState(false);
   const navigate = useNavigate();
+  const toast = useToast();
 
   const handleSubmit = async () => {
     try {
       await login(email, password);
       localStorage.setItem('email', email);
       navigate('/');
+      toast({
+        title: 'Login Successful',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
     } catch (error) {
       setError(error.message);
       setShowPopup(true);
