@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { getAllListingDetailsByUser } from '../api/listings';
-import listingPreview from '../components/listingPreview';
+import listingPreview from '../components/ListingPreview';
 import { Box, Flex } from '@chakra-ui/react';
 
 function HostedListings () {
