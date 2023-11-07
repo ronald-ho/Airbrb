@@ -15,6 +15,7 @@ import {
   TabPanels,
   Tabs,
   Text,
+  useToast,
   VStack
 } from '@chakra-ui/react';
 import NumberInputFieldCustom from '../components/NumberInputFieldCustom';
@@ -44,6 +45,7 @@ function EditListing () {
       amenities: [],
     },
   });
+  const toast = useToast();
 
   const [error, setError] = useState('');
 
@@ -119,6 +121,12 @@ function EditListing () {
     try {
       const response = await updateListing(listingId, updatedListing);
       console.log('Updated listing: ', response);
+      toast({
+        title: 'Listing updated successfully',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
     } catch (err) {
       setError(err.message);
     }

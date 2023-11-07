@@ -1,6 +1,6 @@
 import React from 'react';
 import register from '../api/auth/register';
-import { Button, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
+import { Button, FormControl, FormLabel, Input, useToast, VStack } from '@chakra-ui/react';
 import Popup from '../components/Popup';
 import CenteredBox from '../components/CenteredBox';
 import { useNavigate } from 'react-router-dom';
@@ -13,6 +13,7 @@ function Register () {
   const [error, setError] = React.useState('');
   const [showPopup, setShowPopup] = React.useState(false);
   const navigate = useNavigate();
+  const toast = useToast();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
@@ -26,6 +27,12 @@ function Register () {
     try {
       await register(email, password, name);
       navigate('/login');
+      toast({
+        title: 'Registration Successful please login',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
     } catch (error) {
       setError(error.message);
       setShowPopup(true);
