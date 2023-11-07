@@ -120,15 +120,17 @@ function EditListing () {
     };
     try {
       const response = await updateListing(listingId, updatedListing);
-      console.log('Updated listing: ', response);
-      toast({
-        title: 'Listing updated successfully',
-        status: 'success',
-        duration: 3000,
-        isClosable: true,
-      })
+
+      if (response.success) {
+        console.log('Updated listing: ', response);
+        toast({ title: 'Listing updated successfully', status: 'success', duration: 3000, isClosable: true, })
+      } else {
+        setError(response.error || 'Error updating listing');
+        toast({ title: error, status: 'error', duration: 3000, isClosable: true, })
+      }
     } catch (err) {
-      setError(err.message);
+      setError(error.message);
+      toast({ title: error, status: 'error', duration: 3000, isClosable: true, })
     }
   };
 
@@ -137,7 +139,6 @@ function EditListing () {
   }
 
   if (isLoading) return null;
-  if (error) return <div>Error: {error}</div>;
 
   return (
     <CenteredBox customStyles={customStyles}>
