@@ -6,6 +6,7 @@ import ListingPreview from '../components/ListingPreview';
 import { SearchBar, InputBar } from '../components/SearchBar';
 import { getListing } from '../api/listings/actions';
 import { getAllBookings } from '../api/booking';
+import { averageRating } from '../helpers';
 
 function AllListings () {
   // Get listings data
@@ -62,17 +63,6 @@ function AllListings () {
       return 0;
     }
     
-    // Helper function to calculate average review for listing
-    const averageRating = (reviews) => {
-      let totalRatings = 0;
-
-      for (const review of reviews) {
-        totalRatings += review.rating;
-      }
-
-      return totalRatings / reviews.length;
-    }
-
     // Determine ranges for dates
     let floorDate = searchInput.dateSearch[0];
     let ceilDate = searchInput.dateSearch[1];
@@ -148,7 +138,6 @@ function AllListings () {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        console.log(localStorage.token);
         if (localStorage.token) {
           const bookingsResponse = await getAllBookings();
 
@@ -178,26 +167,6 @@ function AllListings () {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // console.log(localStorage.token);
-        // if (localStorage.token) {
-        //   const bookingsResponse = await getAllBookings();
-
-        //   if (!bookingsResponse.success) {
-        //     console.error('Error fetching bookings');
-        //     return null;
-        //   }
-
-        //   const bookingsDict = {};
-
-        //   for (const booking of bookingsResponse.data.bookings) {
-        //     console.log('booking', booking);
-        //     bookingsDict[booking.listingId] = booking.status;
-        //   }
-
-        //   setBookings(bookingsDict);
-        //   console.log('end', bookings)
-        // }
-
         const listingsResponse = await getAllListings();
 
         if (!listingsResponse.success) {
@@ -219,6 +188,9 @@ function AllListings () {
               } else {
                 propertyData.bookingStatus = 'zzz';
               }
+
+              // Add listing id
+              propertyData.listingId = property.id;
 
               console.log('property', propertyData.bookingStatus);
               return propertyData;
@@ -334,9 +306,6 @@ function AllListings () {
               <RangeSliderThumb boxSize={6} index={1} />
             </RangeSlider>
           </Box>
-          <Box>
-            <Text>Reviews</Text>
-          </Box>
           <Box display='flex'>
             <Text>Sort Reviews</Text>
             <Select id='sort-reviews' defaultValue='none'>
@@ -349,7 +318,10 @@ function AllListings () {
         </Box>
       </Box>
 
-      <Grid templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}>
+      <Grid
+        templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}
+        gap='3'
+      >
         {
         !loading
           ? filteredListings.map((listing, index) => (
