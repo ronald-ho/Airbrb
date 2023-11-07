@@ -29,6 +29,9 @@ function AllListings () {
   const defaultPrices = [0, 10000]
   const [priceFilter, setPriceFilter] = useState(defaultPrices);
 
+  // Passes search dates into listing previews
+  const [searchDates, setSearchDates] = useState(null);
+
   // Search filters
   // const [filters, setFilters] = useState(null);
 
@@ -110,7 +113,8 @@ function AllListings () {
 
       // console.log(filterByFloorBedroom, filterByCeilBedroom, filterByFloorPrice, filterByCeilPrice);
       return (
-        listing.title.toLowerCase().includes(searchInput.textSearch) &&
+        (listing.title.toLowerCase().includes(searchInput.textSearch) ||
+          listing.address.city.toLowerCase().includes(searchInput.textSearch)) &&
           filterDate &&
           filterByFloorBedroom &&
           filterByCeilBedroom &&
@@ -130,6 +134,10 @@ function AllListings () {
       newFiltered.sort((a, b) => simpleCompare(a.avgRating, b.avgRating))
     } else if ((reviewSelector.value == 'descending')) {
       newFiltered.sort((b, a) => simpleCompare(a.avgRating, b.avgRating))
+    }
+
+    if (floorDate !== undefined || ceilDate !== undefined) {
+      setSearchDates([floorDate, ceilDate]);
     }
 
     setFilteredListings(newFiltered);
@@ -325,7 +333,7 @@ function AllListings () {
         {
         !loading
           ? filteredListings.map((listing, index) => (
-            <GridItem key={index}>{ListingPreview(listing)}</GridItem>
+            <GridItem key={index}>{ListingPreview(listing, searchDates)}</GridItem>
           ))
           : null
         }

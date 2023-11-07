@@ -24,7 +24,7 @@ function App () {
             <Route path="/my-listings" element={<HostedListings/>}/>
             <Route path="/my-listings/edit/:listingId" element={<EditListing/>}/>
             <Route path="/listings" element={<AllListings/>}/>
-            <Route path="/listing/:id" element={<ViewListing/>}/>
+            <Route path="/listing/:data" element={<ViewListing/>}/>
             <Route path="/booking-history/:id" element={<BookingHistory/>}/>
             <Route path={'/create-listing/:step'} element={<CreateListing/>}/>
           </Routes>
