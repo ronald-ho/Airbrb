@@ -322,10 +322,24 @@ function AllListings () {
       >
         {
         !loading
-          ? filteredListings.map((listing, index) => (
-            // console.log('hi');
-            <GridItem key={index}>{ListingPreview(listing, searchDates)}</GridItem>
-          ))
+          ? filteredListings.map((listing, index) => {
+              // Serialise listingId and search dates (if present)
+              const routeData = {
+                listingId: listing.listingId
+              }
+
+              if (searchDates) {
+                routeData.floorDate = searchDates[0];
+                routeData.ceilDate = searchDates[1];
+              }
+
+              const serialisedRouteData = JSON.stringify(routeData); 
+              const url = encodeURIComponent(serialisedRouteData);
+
+              return (
+                <GridItem key={index}>{ListingPreview(listing, url)}</GridItem>
+              );
+          })
           : null
         }
       </Grid>

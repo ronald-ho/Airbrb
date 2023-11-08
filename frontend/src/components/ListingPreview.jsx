@@ -3,7 +3,7 @@ import { Badge, Box, Image } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
 
-function ListingPreview (listing, searchDates) {
+function ListingPreview (listing, url) {
   // Get review information
   let totalRatings = 0;
 
@@ -16,22 +16,10 @@ function ListingPreview (listing, searchDates) {
   // Get metadata for listing
   const metadata = listing.metadata;
 
-  // Serialise listingId and search dates (if present)
-  const routeData = {
-    listingId: listing.listingId
-  }
-
-  if (searchDates) {
-    routeData.floorDate = searchDates[0];
-    routeData.ceilDate = searchDates[1];
-  }
-
-  const serialisedRouteData = JSON.stringify(routeData);
-
   return (
-    <Link to={`/listing/${encodeURIComponent(serialisedRouteData)}/`}>
+    <Link to={`/listing/${url}/`}>
       <Box>
-        <Image src={listing.thumbnail} />
+        <Image src={listing.thumbnail} objectFit='contain' />
         <Box p='6'>
           <Box display='flex' alignItems='baseline'>
             <Badge borderRadius='full' px='2' colorScheme='teal'>
