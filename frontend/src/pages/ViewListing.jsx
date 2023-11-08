@@ -3,11 +3,13 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { getListing } from '../api/listings/actions';
-import { Box, Button, Container, FormControl, FormLabel, Image, ListItem, Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, useDisclosure, Stack, Text, UnorderedList } from '@chakra-ui/react';
+import { Box, Button, Container, FormControl, FormLabel, Image, ListItem, Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, useDisclosure, Stack, Text, UnorderedList, Textarea, Select } from '@chakra-ui/react';
 import { averageRating, addressToString } from '../helpers';
 import { StarIcon } from '@chakra-ui/icons';
 import { RangeDatepicker } from 'chakra-dayzed-datepicker';
 import { createNewBooking } from '../api/booking/actions';
+import { reviewListing } from '../api/listings/review';
+import { getAllBookings } from '../api/booking';
 
 function ViewListing () {
   const { data } = useParams();
@@ -15,7 +17,9 @@ function ViewListing () {
   const [listingData, setListingData] = useState(null);
   const [loading, setLoading] = useState(true);
   const [selectedDates, setSelectedDates] = useState([undefined, undefined]);
-  const [confirmModal, setConfirmModal] = useState(false);
+  const [reviewText, setReviewText] = useState('');
+  const [reviewRating, setReviewRating] = useState(null);
+  const [updateReviews, setUpdateReviews] = useState(false);
 
   const { isOpen, onOpen, onClose } = useDisclosure()
 
@@ -77,10 +81,50 @@ function ViewListing () {
 
     if (bookingResponse.bookingId) {
       onOpen();
-      setConfirmModal(true);
-      console.log('confirmed');
     }
   };
+
+  const handleReviewTextChange = (e) => setReviewText(e.target.value);
+  const handleRatingChange = (e) => setReviewRating(e.target.value);
+
+  const submitReview = async () => {
+    console.log(reviewText);
+    console.log(reviewRating);
+    // Get all bookings for listing and check if user has made an accepted booking
+    const allBookingsResponse = await getAllBookings();
+
+    let bookingId;
+    if (allBookingsResponse.success) {
+      console.log('bookings', allBookingsResponse.data.bookings);
+      for (const booking of allBookingsResponse.data.bookings) {
+        console.log(booking.owner, booking.status);
+        if (booking.owner === localStorage.getItem('email') && booking.status === 'accepted') {
+          bookingId = booking.id;
+          break;
+        }
+      }
+    }
+
+    if (!bookingId) {
+      console.log('user has not made any accepted bookings');
+      return;
+    }
+
+    console.log(bookingId);
+
+    
+    const body = {
+      review: {
+        rating: reviewRating,
+        message: reviewText,
+      }
+    };
+
+    const reviewResponse = await reviewListing(parsedData.listingId, bookingId, body);
+    console.log(reviewResponse);
+    listingData.reviews.push(body.review);
+    setUpdateReviews(!updateReviews);
+  }
 
   return (
     <Container>
@@ -109,6 +153,33 @@ function ViewListing () {
       </Box>
       <Box display='flex' flexDirection='column'>
         <Text>Reviews</Text>
+        {
+          localStorage.getItem('token')
+            ? <Box>
+              <Text>Leave a review</Text>
+              {/* {Array(5)
+                .fill('')
+                .map((_, i) => (
+                  <StarIcon
+                    key={i}
+                    color={i < avgRating ? 'teal.500' : 'gray.300'}
+                  />
+                ))}               */}
+                <Select onChange={handleRatingChange} defaultValue='none'>
+                  <option value='none'>None</option>
+                  <option value='1'>1 Star</option>
+                  <option value='2'>2 Star</option>
+                  <option value='3'>3 Star</option>
+                  <option value='4'>4 Star</option>
+                  <option value='5'>5 Star</option>
+                </Select>                
+                
+
+                <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange}></Textarea>
+                <Button onClick={submitReview}>Submit Review</Button>
+              </Box>
+            : null
+        }
         {listingData.reviews.map((review, index) => (
           <Box key={index}>
             {review.rating} {review.message}

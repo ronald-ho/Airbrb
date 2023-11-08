@@ -35,8 +35,10 @@ function AllListings () {
   // Search filters
   // const [filters, setFilters] = useState(null);
 
-  // Elements
-  const reviewSelector = document.getElementById('sort-reviews');
+  // Handle sort review selector
+  const [sortReviews, setSortReviews] = useState('none');
+
+  const handleSelectReviews = (e) => setSortReviews(e.target.value);
 
   const handleSearchClick = () => {
     // Toggle the visibility state when SearchBar is clicked
@@ -130,9 +132,9 @@ function AllListings () {
       return 0;
     }
 
-    if (reviewSelector.value == 'ascending') {
+    if (sortReviews === 'ascending') {
       newFiltered.sort((a, b) => simpleCompare(a.avgRating, b.avgRating))
-    } else if ((reviewSelector.value == 'descending')) {
+    } else if (sortReviews === 'descending') {
       newFiltered.sort((b, a) => simpleCompare(a.avgRating, b.avgRating))
     }
 
@@ -234,18 +236,6 @@ function AllListings () {
     fetchData();
   }, [bookings]);
 
-  // listings.filter((listing) => {
-  //   return (
-  //     listing.title.toLowerCase().includes('new')
-  //   )
-  // })
-
-  // const handleFocus = () => {
-  //   setIsFiltersVisible(true);
-  //   setIsSearchVisible(false);
-  //   console.log('focus');
-  // }
-
   const handleFocusOut = (event) => {
     const searchArea = document.getElementById('search-bar');
     if (searchArea.contains(event.target)) {
@@ -265,7 +255,7 @@ function AllListings () {
     setCallReset(true);
     setBedroomFilter(defaultBedrooms);
     setPriceFilter(defaultPrices);
-    reviewSelector.value = 'none';
+    setSortReviews('none');
   };
 
   // We need to reset the callReset to false to stop InputBar from infinitely re-rendering as it would otherwise
@@ -316,7 +306,7 @@ function AllListings () {
           </Box>
           <Box display='flex'>
             <Text>Sort Reviews</Text>
-            <Select id='sort-reviews' defaultValue='none'>
+            <Select onChange={handleSelectReviews} defaultValue='none'>
               <option value='none'>None</option>
               <option value='ascending'>Ascending</option>
               <option value='descending'>Descending</option>
@@ -333,6 +323,7 @@ function AllListings () {
         {
         !loading
           ? filteredListings.map((listing, index) => (
+            // console.log('hi');
             <GridItem key={index}>{ListingPreview(listing, searchDates)}</GridItem>
           ))
           : null
