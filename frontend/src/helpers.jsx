@@ -3,10 +3,12 @@ const averageRating = (reviews) => {
   let totalRatings = 0;
 
   for (const review of reviews) {
-    totalRatings += review.rating;
+    totalRatings += Number(review.rating);
   }
 
-  return totalRatings / reviews.length;
+  console.log(totalRatings, reviews.length);
+
+  return Math.round((totalRatings / reviews.length) * 10) / 10;
 };
 
 // Converts address json to a string

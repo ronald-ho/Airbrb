@@ -334,7 +334,8 @@ function AllListings () {
               }
 
               const serialisedRouteData = JSON.stringify(routeData); 
-              const url = encodeURIComponent(serialisedRouteData);
+              const url = `/listing/${encodeURIComponent(serialisedRouteData)}/`;
+              
 
               return (
                 <GridItem key={index}>{ListingPreview(listing, url)}</GridItem>
