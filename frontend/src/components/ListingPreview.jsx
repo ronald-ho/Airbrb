@@ -3,7 +3,7 @@ import { Badge, Box, Image } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
 
-function ListingPreview (listing) {
+function ListingPreview (listing, url) {
   // Get review information
   let totalRatings = 0;
 
@@ -17,9 +17,9 @@ function ListingPreview (listing) {
   const metadata = listing.metadata;
 
   return (
-    <Link to={`/listing/${listing.listingId}`}>
+    <Link to={`/listing/${url}/`}>
       <Box>
-        <Image src={listing.thumbnail} />
+        <Image src={listing.thumbnail} objectFit='contain' />
         <Box p='6'>
           <Box display='flex' alignItems='baseline'>
             <Badge borderRadius='full' px='2' colorScheme='teal'>

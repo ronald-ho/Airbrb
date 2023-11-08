@@ -9,7 +9,17 @@ function SearchBar ({ onClickHandler }) {
   };
 
   return (
-    <Box px='2' py='2' as='button' alignItems='center' borderWidth='1px' borderRadius='40px' display='flex' height='50px' onClick={handleClick}>
+    <Box
+      px='2'
+      py='2'
+      as='button'
+      alignItems='center'
+      borderWidth='1px'
+      borderRadius='40px'
+      display='flex'
+      height='50px'
+      onClick={handleClick}
+    >
       <Text px='2' fontWeight='semibold'>Anywhere</Text>
       <Divider orientation='vertical' />
       <Text px='2' fontWeight='semibold'>Any week</Text>

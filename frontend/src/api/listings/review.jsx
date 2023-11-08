@@ -4,7 +4,7 @@ import { apiCall } from '../../services/api';
  * Review a listing
  * @param listingId
  * @param bookingId
- * @param {ReviewDto} review
+ * @param review
  * @returns {Promise<*>}
  */
 export const reviewListing = async (listingId, bookingId, review) => {
