@@ -17,7 +17,7 @@ function ListingPreview (listing, url) {
   const metadata = listing.metadata;
 
   return (
-    <Link to={`/listing/${url}/`}>
+    <Link to={url}>
       <Box>
         <Image src={listing.thumbnail} objectFit='contain' />
         <Box p='6'>

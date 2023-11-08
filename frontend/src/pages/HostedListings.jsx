@@ -23,8 +23,8 @@ function HostedListings () {
     <Flex justify="center" minH="100vh">
       <h1>Hosted Listings</h1>
       <Box>
-        {listings.map(listing => (
-          <Box key={listing.id}>{listingPreview(listing)}</Box>
+        {listings.map((listing, index) => (
+          <Box key={index}>{listingPreview(listing, `/my-listings/edit/${listing.id}`)}</Box>
         ))}
       </Box>
     </Flex>
