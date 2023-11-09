@@ -24,9 +24,10 @@ function SearchBar ({ onClickHandler }) {
       onClick={handleClick}
       position='fixed'
       left="50%"
-      top="3"
+      top="2"
       // transform={{ base: 'translate(-50%, 0%)', md: 'translate(-80%, 0%)', lg: 'translate(-50%, 0%)' }}
       transform='translate(-50%, 0%)'
+      zIndex={400}
     >
       <Text px='2' fontWeight='semibold'>Anywhere</Text>
       <Divider orientation='vertical' />
@@ -79,19 +80,24 @@ function InputBar ({ onClickHandler, callReset, stopReset }) {
         left="50%"
         top="3"
         transform='translate(-50%, 65px)'
-        width={{ base: '90%', md: '60%' }}
+        width={{ base: '95%', md: '70%' }}
         bg={'white'}
+        zIndex={500}
       >
-        <Box px='3' _hover={{ bg: 'gray.100', borderWidth: '1px', borderLeftRadius: '40px' }}>
+        <Box px='3' _hover={{ bg: 'gray.100', borderWidth: '1px', borderLeftRadius: '40px' }} flexGrow='2'>
           <FormControl>
-            <FormLabel px='3' mb='1'>Where</FormLabel>
-            <Input id='location-search' type='text' placeholder='Search title or city' borderWidth='0px' focusBorderColor='transparent' defaultValue='' />
+            <FormLabel px='3' mt='1' mb='0'>Where</FormLabel>
+            <Input id='location-search' type='text' placeholder='Search title or city'
+              size='sm'
+              my='1'
+              borderWidth='0px'
+              focusBorderColor='transparent' defaultValue='' />
           </FormControl>
         </Box>
         <Divider orientation='vertical' />
-        <Box px='3' _hover={{ bg: 'gray.100', borderWidth: '1px' }}>
+        <Box px='3' _hover={{ bg: 'gray.100', borderWidth: '1px' }} >
           <FormControl>
-            <FormLabel px='3' mb='1'>When</FormLabel>
+            <FormLabel px='3' mt='1' mb='0'>When</FormLabel>
             <RangeDatepicker
               selectedDates={selectedDates}
               onDateChange={setSelectedDates}
@@ -126,6 +132,7 @@ function InputBar ({ onClickHandler, callReset, stopReset }) {
                   borderWidth: '0px',
                   focusBorderColor: 'black',
                   placeholder: 'Check-in / Check-out',
+                  my: '1',
                 },
               }}
             />

@@ -4,6 +4,11 @@ import { HamburgerIcon } from '@chakra-ui/icons';
 import airbnbLogo from '../assets/airbnb.svg'
 import airbnbIcon from '../assets/airbnb-icon.svg'
 
+const logout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('email');
+}
+
 const NavBar = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
@@ -24,19 +29,40 @@ const NavBar = (props) => {
       <Drawer placement='left' onClose={onClose} isOpen={isOpen} size='xs'>
         <DrawerOverlay />
           <DrawerContent>
-            <DrawerHeader>Logo</DrawerHeader>
+            <DrawerHeader>
+              <Image src={airbnbLogo} alt='Logo' height="30px" />
+            </DrawerHeader>
             <DrawerBody>
-              {/* hi */}
-              <MenuLink to="/">View Listings</MenuLink>
-              <MenuLink to="/my-listings">My Listings</MenuLink>
-              <MenuLink to="/login">
-                <Button
-                  size="sm"
-                  rounded="md"
-                >
-                  Login
-                </Button>
-              </MenuLink>
+              <MenuLink to="/" py='2' fontWeight='semibold' width='100%'>Home</MenuLink>
+              <MenuLink to="/my-listings" py='2' fontWeight='semibold' width='100%'>My Listings</MenuLink>
+              {
+                localStorage.getItem('token')
+                  ? <MenuLink to="/" alignContents='center' py='2'>
+                      <Button
+                        size="sm"
+                        rounded="md"
+                        bg='red.400'
+                        color='white'
+                        width='100%'
+                        _hover={{ bg: 'red.600' }}
+                        onClick={logout}
+                      >
+                        Sign Out
+                      </Button>
+                    </MenuLink>
+                  : <MenuLink to="/login" alignContents='center' py='2'>
+                    <Button
+                        size="sm"
+                        rounded="md"
+                        bg='black'
+                        color='white'
+                        width='100%'
+                        _hover={{ bg: 'gray.600' }}
+                      >
+                        Sign In
+                      </Button>
+                    </MenuLink>
+              }
             </DrawerBody>
           </DrawerContent>
       </Drawer>
@@ -45,10 +71,10 @@ const NavBar = (props) => {
   );
 };
 
-const MenuLink = ({ children, to = '/' }) => {
+const MenuLink = ({ children, to = '/', ...rest }) => {
   return (
     <Link href={to}>
-      <Text display="block">
+      <Text display="flex" {...rest}>
         {children}
       </Text>
     </Link>
@@ -59,22 +85,39 @@ const MenuLinks = () => {
   return (
     <Box display={{ base: 'none', md: 'block' }}>
       <Stack
-        spacing={4}
-        // align="center"
+        spacing={5}
+        align="center"
         justify='flex-end'
         direction='row'
-        pt={2}
       >
-        <MenuLink to="/">View Listings</MenuLink>
-        <MenuLink to="/my-listings">My Listings</MenuLink>
-        <MenuLink to="/login" isLast>
-          <Button
-            size="sm"
-            rounded="md"
-          >
-            Login
-          </Button>
-        </MenuLink>
+        <MenuLink to="/" fontSize='md' fontWeight='semibold'>Home</MenuLink>
+        <MenuLink to="/my-listings" fontSize='md' fontWeight='semibold'>My Listings</MenuLink>
+        {
+          localStorage.getItem('token')
+            ? <MenuLink to="/" alignContents='center'>
+                <Button
+                  size="sm"
+                  rounded="md"
+                  bg='red.400'
+                  color='white'
+                  _hover={{ bg: 'red.600' }}
+                  onClick={logout}
+                >
+                  Sign Out
+                </Button>
+              </MenuLink>
+            : <MenuLink to="/login" alignContents='center'>
+               <Button
+                  size="sm"
+                  rounded="md"
+                  bg='black'
+                  color='white'
+                  _hover={{ bg: 'gray.600' }}
+                >
+                  Sign In
+                </Button>
+              </MenuLink>
+        }
       </Stack>
     </Box>
   );
@@ -89,11 +132,13 @@ const NavBarContainer = ({ children }) => {
       wrap="wrap"
       w="100%"
       mb={8}
-      px={{ base: '4', md: '8' }}
+      px={{ base: '4', md: '4' }}
       py={4}
       position='fixed'
       zIndex={400}
       bg={'white'}
+      borderBottomColor='gray.200'
+      borderBottomWidth='1px'
     >
       {children}
     </Flex>

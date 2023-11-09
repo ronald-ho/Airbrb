@@ -22,7 +22,7 @@ function App () {
       <ListingProvider>
           <BrowserRouter>
             <NavBar />
-            <Center pt='4rem' mx='2.5%'>
+            <Center pt='5rem' mx='2.5%'>
             {/* <Container> */}
               <Routes>
                 <Route path="/" element={<AllListings/>}/>

@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import { getAllListings } from '../api/listings';
-import { Flex, useDisclosure, Grid, GridItem, Box, RangeSlider, RangeSliderTrack, RangeSliderFilledTrack, Text, RangeSliderThumb, Button, Select, Modal, ModalOverlay } from '@chakra-ui/react';
+import { Flex, useDisclosure, Grid, GridItem, Box, RangeSlider, RangeSliderTrack, RangeSliderFilledTrack, Text, RangeSliderThumb, Button, Select, Modal, ModalOverlay, Stack, Divider, StackDivider } from '@chakra-ui/react';
 import ListingPreview from '../components/ListingPreview';
 import { SearchBar, InputBar } from '../components/SearchBar';
 import { getListing } from '../api/listings/actions';
@@ -280,7 +280,7 @@ function AllListings () {
         <Box
           py='2'
           id='search-bar'
-          zIndex={400}
+          // zIndex={400}
         >
           {
             isSearchVisible
@@ -293,55 +293,93 @@ function AllListings () {
           </Modal>
           
 
-          <Box
+          <Stack
             display={isFiltersVisible ? 'block' : 'none'}
             bg={'white'}
-            p='3'
+            py='3'
+            px='8'
             borderWidth='1px'
             borderRadius='20px'
             borderColor='gray.200'
             boxShadow='lg'
             position='fixed'
             left="50%"
-            width={{ base: '90%', md: '60%' }}
-            transform='translate(-50%, 80px)'
+            width={{ base: '95%', md: '70%' }}
+            transform='translate(-50%, 65px)'
+            zIndex={400}
+            divider={<StackDivider />}
+            spacing={4}
           >
-            <Box>
-              <Text>Bedrooms</Text>
-              <Box display='flex'>
-                {bedroomFilter[0]} - {bedroomFilter[1]}
-              </Box>
-              <RangeSlider value={bedroomFilter} min={0} max={8} step={1} onChange={(val) => setBedroomFilter(val)}>
-                <RangeSliderTrack bg='red.100'>
-                  <RangeSliderFilledTrack bg='tomato' />
-                </RangeSliderTrack>
-                <RangeSliderThumb boxSize={6} index={0} />
-                <RangeSliderThumb boxSize={6} index={1} />
-              </RangeSlider>
-            </Box>
-            <Box>
-              <Text>Price</Text>
-              <Box display='flex'>
-                {priceFilter[0]} - {priceFilter[1]}
-              </Box>
-              <RangeSlider value={priceFilter} min={0} max={10000} step={1} onChange={(val) => setPriceFilter(val)}>
-                <RangeSliderTrack bg='red.100'>
-                  <RangeSliderFilledTrack bg='tomato' />
-                </RangeSliderTrack>
-                <RangeSliderThumb boxSize={6} index={0} />
-                <RangeSliderThumb boxSize={6} index={1} />
-              </RangeSlider>
-            </Box>
-            <Box display='flex'>
-              <Text>Sort Reviews</Text>
-              <Select onChange={handleSelectReviews} defaultValue='none'>
+            <Stack direction='column' spacing={4}>
+              <Text fontWeight='bold'>Bedrooms</Text>
+              <Stack direction='column' spacing={4}>
+                <RangeSlider value={bedroomFilter} min={0} max={8} step={1} onChange={(val) => setBedroomFilter(val)}>
+                  <RangeSliderTrack bg='red.100'>
+                    <RangeSliderFilledTrack bg='#ff385c' />
+                  </RangeSliderTrack>
+                  <RangeSliderThumb boxSize={5} index={0} borderColor='gray.300' />
+                  <RangeSliderThumb boxSize={5} index={1} borderColor='gray.300' />
+                </RangeSlider>
+                <Stack direction='row' align={'center'}>
+                  <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
+                    <Text fontWeight='semibold'>Minimum</Text>
+                    <Text>{bedroomFilter[0]}</Text>
+                  </Stack>
+                  <Divider />
+                  <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
+                    <Text fontWeight='semibold'>Maximum</Text>
+                    <Text>
+                      {bedroomFilter[1]}
+                      {
+                        bedroomFilter[0] == defaultBedrooms[0] && bedroomFilter[1] == defaultBedrooms[1]
+                          ? '+'
+                          : ''
+                      }                      
+                    </Text>
+                  </Stack>                  
+                </Stack>
+              </Stack>
+            </Stack>
+            <Stack direction='column' spacing={4}>
+              <Text fontWeight='bold'>Price</Text>
+              <Stack direction='column' spacing={4}>
+                <RangeSlider value={priceFilter} min={0} max={10000} step={1} onChange={(val) => setPriceFilter(val)}>
+                  <RangeSliderTrack bg='red.100'>
+                    <RangeSliderFilledTrack bg='#ff385c' />
+                  </RangeSliderTrack>
+                  <RangeSliderThumb boxSize={5} index={0} borderColor='gray.300' />
+                  <RangeSliderThumb boxSize={5} index={1} borderColor='gray.300' />
+                </RangeSlider>
+                <Stack direction='row' align={'center'}>
+                  <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
+                    <Text fontWeight='semibold'>Minimum</Text>
+                    <Text>${priceFilter[0]}</Text>
+                  </Stack>
+                  <Divider />
+                  <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
+                    <Text fontWeight='semibold'>Maximum</Text>
+                    <Text>
+                      ${priceFilter[1]}
+                      {
+                        priceFilter[0] == defaultPrices[0] && priceFilter[1] == defaultPrices[1]
+                          ? '+'
+                          : ''
+                      }
+                    </Text>
+                  </Stack>                  
+                </Stack>
+              </Stack>
+            </Stack>
+            <Box display='flex' alignItems='center' justifyContent='space-between'>
+              <Text fontWeight='bold' whiteSpace='nowrap'>Sort Reviews</Text>
+              <Select onChange={handleSelectReviews} defaultValue='none' width='30%'>
                 <option value='none'>None</option>
                 <option value='ascending'>Ascending</option>
                 <option value='descending'>Descending</option>
               </Select>
             </Box>
-            <Button onClick={clearFilters}>Clear All</Button>
-          </Box>
+            <Button onClick={clearFilters} width='100%'>Clear All</Button>
+          </Stack>
         </Box>
 
         <Grid
