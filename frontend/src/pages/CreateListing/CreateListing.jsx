@@ -1,112 +1,42 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
-import { ListingContext } from './ListingContext';
-import TitleStep from './TitleStep';
-import AddressStep from './AddressStep';
-import PriceStep from './PriceStep';
-import ThumbnailStep from './ThumbnailStep';
-import PropertyTypeStep from './PropertyTypeStep';
-import AmenitiesStep from './AmenitiesStep';
-import { createNewListing } from '../../api/listings/actions';
-import Popup from '../../components/Popup';
-import DetailsStep from './DetailsStep';
+import { Box, Flex, Image, Text, VStack } from '@chakra-ui/react';
+import CenteredBox from '../../components/CenteredBox';
+import React from 'react';
+import rocketIcon from '../../assets/rocket.png';
+import jsonIcon from '../../assets/json.png';
+import { useNavigate } from 'react-router-dom';
 
-const CreateListing = () => {
-  const { step } = useParams();
-  const { listingData, updateListingData } = useContext(ListingContext);
+function CreateListing () {
   const navigate = useNavigate();
-  const [error, setError] = useState('');
-  const [showPopup, setShowPopup] = useState(false);
-
-  const saveStepData = (stepData) => {
-    updateListingData(stepData);
-
-    const stepOrder = ['title', 'address', 'price', 'thumbnail', 'property-type', 'details', 'amenities'];
-    const currentStepIndex = stepOrder.indexOf(step);
-    const nextStep = stepOrder[currentStepIndex + 1];
-
-    if (nextStep) {
-      navigate(`/create-listing/${nextStep}`);
-    } else {
-      console.error('No next step defined');
-    }
-  };
-
-  const navigateToPreviousStep = () => {
-    const stepOrder = ['title', 'address', 'price', 'thumbnail', 'property-type', 'details', 'amenities'];
-    const currentStepIndex = stepOrder.indexOf(step);
-    const previousStep = stepOrder[currentStepIndex - 1];
-
-    if (previousStep) {
-      navigate(`/create-listing/${previousStep}`);
-    } else {
-      console.error('No previous step defined');
-    }
-  };
-
-  useEffect(() => {
-    console.log('Current Listing Data:', listingData);
-  }, [listingData]);
-
-  useEffect(() => {
-    if (step === 'amenities' && listingData.amenities) {
-      handleSubmit().then(r => console.log(r));
-    }
-  }, [listingData.amenities, step]);
-
-  const handleSubmit = async () => {
-    try {
-      await createNewListing(restructureData());
-      navigate('/my-listings');
-    } catch (error) {
-      setError(error.message);
-      setShowPopup(true);
-    }
-  };
-
-  const restructureData = () => {
-    return {
-      title: listingData.title,
-      address: listingData.address,
-      price: parseInt(listingData.price),
-      thumbnail: listingData.thumbnail,
-      metadata: {
-        propertyType: listingData.propertyType,
-        bathrooms: parseInt(listingData.bathrooms),
-        bedrooms: parseInt(listingData.bedrooms),
-        beds: parseInt(listingData.beds),
-        amenities: listingData.amenities,
-        images: []
-      }
-    };
-  }
-
-  const stepComponents = {
-    title: <TitleStep onSubmit={saveStepData}/>,
-    address: <AddressStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
-    price: <PriceStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
-    thumbnail: <ThumbnailStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
-    'property-type': <PropertyTypeStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
-    details: <DetailsStep onSubmit={saveStepData} onBack={navigateToPreviousStep}/>,
-    amenities: <AmenitiesStep onSubmit={saveStepData} onBack={navigateToPreviousStep} handleSubmit={handleSubmit}/>,
-  };
-
-  useEffect(() => {
-    if (!step || !stepComponents[step]) {
-      navigate('/create-listing/title');
-    }
-  }, [step, navigate, stepComponents]);
-
-  const StepComponent = React.cloneElement(stepComponents[step], { onBack: navigateToPreviousStep });
 
   return (
-    <div>
-      {StepComponent}
-      {showPopup && (
-        <Popup title="Error" body={error} primaryButtonText="OK" onClose={() => setShowPopup(false)}/>
-      )}
-    </div>
-  );
-};
+    <CenteredBox>
+      <VStack spacing={8}>
+        <Text>Choose how to create your listing!</Text>
+        <Flex justify="space-between" width="100%">
+          <Box p={8} marginRight={2} borderWidth={1} borderRadius={25} boxShadow="lg">
+            <VStack spacing={4}>
+              <h1>Express Creation</h1>
+              <Image
+                src={rocketIcon}
+                boxSize="150px"
+                cursor="pointer"
+                onClick={() => navigate('/create-listing/title')}/>
+            </VStack>
+          </Box>
+          <Box p={8} marginLeft={2} borderWidth={1} borderRadius={25} boxShadow="lg">
+            <VStack spacing={4}>
+              <h1>Json upload</h1>
+              <Image
+                src={jsonIcon}
+                boxSize="150px"
+                cursor="pointer"
+                onClick={() => navigate('/create-listing/json')}/>
+            </VStack>
+          </Box>
+        </Flex>
+      </VStack>
+    </CenteredBox>
+  )
+}
 
 export default CreateListing;

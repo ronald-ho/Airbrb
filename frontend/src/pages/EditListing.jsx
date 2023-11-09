@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { getListing, updateListing } from '../api/listings/actions';
-import { useParams } from 'react-router-dom';
+import { deleteListing, getListing, updateListing } from '../api/listings/actions';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   Button,
   Flex,
@@ -21,6 +21,8 @@ import {
 import NumberInputFieldCustom from '../components/NumberInputFieldCustom';
 import PropertyTypeSelector from '../components/PropertyTypeSelector';
 import CenteredBox from '../components/CenteredBox';
+import Popup from '../components/Popup';
+import DefaultAirbnbImage from '../assets/default-airbnb-image.webp'
 
 function EditListing () {
   const { listingId } = useParams();
@@ -48,11 +50,12 @@ function EditListing () {
   const toast = useToast();
 
   const [error, setError] = useState('');
+  const [showPopup, setShowPopup] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchListing = async () => {
       try {
-        setIsLoading(true);
         const response = await getListing(listingId);
         if (response.success) {
           const listingData = response.data.listing;
@@ -80,6 +83,7 @@ function EditListing () {
       ...prevListing,
       [name]: value,
     }));
+    handleSubmit();
   };
 
   const handleAddressChange = (name, value) => {
@@ -90,6 +94,7 @@ function EditListing () {
         [name]: value,
       }
     }));
+    handleSubmit();
   };
 
   const handleMetadataChange = (name, value) => {
@@ -100,6 +105,7 @@ function EditListing () {
         [name]: value,
       }
     }));
+    handleSubmit();
   };
 
   const handleImageUpload = (e) => {
@@ -120,14 +126,25 @@ function EditListing () {
     };
     try {
       const response = await updateListing(listingId, updatedListing);
-
       console.log('Updated listing: ', response);
-      toast({ title: 'Listing updated successfully', status: 'success', duration: 3000, isClosable: true, })
     } catch (err) {
       setError(error.message);
       toast({ title: error, status: 'error', duration: 3000, isClosable: true, })
     }
   };
+
+  const handleDelete = async () => {
+    try {
+      setShowPopup(false);
+      const response = await deleteListing(listingId);
+      console.log('Deleted listing: ', response);
+      toast({ title: 'Listing deleted', status: 'success', duration: 3000, isClosable: true, })
+      navigate('/my-listings');
+    } catch (err) {
+      setError(error.message);
+      toast({ title: error, status: 'error', duration: 3000, isClosable: true, })
+    }
+  }
 
   const customStyles = {
     maxW: { base: '100%', md: '50%' }
@@ -139,7 +156,13 @@ function EditListing () {
     <CenteredBox customStyles={customStyles}>
       <VStack>
         <Text fontSize='3xl'>Editing {listing.title}</Text>
-        <Image src={listing.thumbnail} alt={listing.title} objectFit="contain"/>
+        {listing.thumbnail === ''
+          ? (
+            <Image src={DefaultAirbnbImage} alt="Default Photo" objectFit="contain"/>
+            )
+          : (
+            <Image src={listing.thumbnail} alt={listing.title} objectFit="contain"/>
+            )}
         <Tabs maxWidth="100%">
           {/* Tab navigation */}
           <Flex justify="space-between" style={{ overflowX: 'auto' }}>
@@ -264,9 +287,19 @@ function EditListing () {
             </TabPanel>
           </TabPanels>
         </Tabs>
-        <Button colorScheme="blue" onClick={handleSubmit}>
-          Update Listing
+        <Text>Changes are autosaved</Text>
+        <Button colorScheme="red" onClick={() => setShowPopup(true)}>
+          Delete Listing
         </Button>
+        {showPopup && (
+          <Popup
+            title="Confirm Deletion"
+            body="Are you sure you want to delete this listing ? This action cannot be undone."
+            primaryButtonText="Delete"
+            onClose={() => setShowPopup(false)}
+            onConfirm={handleDelete}
+          />
+        )}
       </VStack>
     </CenteredBox>
   );
