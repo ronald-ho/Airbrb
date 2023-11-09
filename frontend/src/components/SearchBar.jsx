@@ -86,7 +86,7 @@ function InputBar ({ onClickHandler, callReset, stopReset }) {
       <Box px='3' _hover={{ bg: 'gray.100', borderWidth: '1px', borderLeftRadius: '40px' }} flexGrow='2'>
         <FormControl>
           <FormLabel px='3' mt='1' mb='0'>Where</FormLabel>
-          <Input id='location-search' type='text' placeholder='Search title or city'
+          <Input id='location-search' type='text' placeholder='By title or city'
             size='sm'
             my='1'
             borderWidth='0px'
@@ -130,36 +130,16 @@ function InputBar ({ onClickHandler, callReset, stopReset }) {
                 size: 'sm',
                 borderWidth: '0px',
                 focusBorderColor: 'black',
-                placeholder: 'Check-in / Check-out',
+                placeholder: 'Check In / Out',
                 my: '1',
               },
             }}
           />
         </FormControl>
       </Box>
-
-      {/* <Box px='3' _hover={{ bg: 'gray.100', borderWidth: '1px' }}>
-        <FormControl>
-          <FormLabel px='3' mb='1'>Where</FormLabel>
-          <Input type='text' placeholder='Search title or city' borderWidth='0px' focusBorderColor='transparent' />
-        </FormControl>
-      </Box> */}
-      {/* <Divider orientation='vertical' />
-      <Text px='2' >Add guests</Text> */}
-      {/* <Circle bg='gray.100' size='30px'>
-        <SearchIcon color='black' boxSize='15px'/>
-      </Circle> */}
       <Button leftIcon={<SearchIcon />} onClick={submitSearch} borderRadius='20px' mr='2'>
         Search
       </Button>
-      {/* <IconButton
-        // colorScheme='teal'
-        isRound={true}
-        aria-label='Submit Search'
-        size='sm'
-        icon={<SearchIcon />}
-        onClick={submitSearch}
-      /> */}
     </Box>
   )
 }
