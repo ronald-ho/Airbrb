@@ -43,10 +43,6 @@ function Register () {
     setter(event.target.value);
   };
 
-  const handleClosePopup = () => {
-    setShowPopup(false);
-  };
-
   return (
     <CenteredBox>
       <VStack spacing={4}>
@@ -72,7 +68,8 @@ function Register () {
         </Button>
       </VStack>
       {showPopup && (
-        <Popup title="Error" body={error} primaryButtonText="OK" onClose={handleClosePopup}/>
+        <Popup title="Error" body={error} primaryButtonText="OK" onClose={() => setShowPopup(false)}
+               onConfirm={() => setShowPopup(false)}/>
       )}
     </CenteredBox>
   );

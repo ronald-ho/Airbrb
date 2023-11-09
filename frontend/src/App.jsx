@@ -10,7 +10,9 @@ import EditListing from './pages/EditListing';
 import ViewListing from './pages/ViewListing';
 import BookingHistory from './pages/BookingHistory';
 import { ListingProvider } from './pages/CreateListing/ListingContext';
+import CreateListingSteps from './pages/CreateListing/CreateListingSteps';
 import CreateListing from './pages/CreateListing/CreateListing';
+import JsonUpload from './pages/CreateListing/JsonUpload';
 
 function App () {
   return (
@@ -26,7 +28,9 @@ function App () {
             <Route path="/listings" element={<AllListings/>}/>
             <Route path="/listing/:data" element={<ViewListing/>}/>
             <Route path="/booking-history/:id" element={<BookingHistory/>}/>
-            <Route path={'/create-listing/:step'} element={<CreateListing/>}/>
+            <Route path="/create-listing/:step" element={<CreateListingSteps/>}/>
+            <Route path="/create-listing" element={<CreateListing/>}/>
+            <Route path="/create-listing/json" element={<JsonUpload/>}/>
           </Routes>
         </BrowserRouter>
       </ListingProvider>

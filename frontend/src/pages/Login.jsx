@@ -52,7 +52,8 @@ function Login () {
         </Button>
       </VStack>
       {showPopup && (
-        <Popup title="Error" body={error} primaryButtonText="OK" onClose={() => setShowPopup(false)}/>
+        <Popup title="Error" body={error} primaryButtonText="OK" onClose={() => setShowPopup(false)}
+               onConfirm={() => setShowPopup(false)}/>
       )}
     </CenteredBox>
   );
