@@ -141,7 +141,7 @@ function EditListing () {
       toast({ title: 'Listing deleted', status: 'success', duration: 3000, isClosable: true, })
       navigate('/my-listings');
     } catch (err) {
-      setError(error.message);
+      setError(err.message);
       toast({ title: error, status: 'error', duration: 3000, isClosable: true, })
     }
   }

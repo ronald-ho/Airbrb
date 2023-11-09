@@ -42,8 +42,11 @@ export const apiCall = async (endpoint, method, data = null) => {
     headers: {
       'Content-Type': 'application/json',
     },
-    data
   };
+
+  if (['POST', 'PUT', 'PATCH'].includes(method.toUpperCase())) {
+    config.data = data;
+  }
 
   try {
     const response = await axios(config);
