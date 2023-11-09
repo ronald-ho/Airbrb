@@ -292,7 +292,6 @@ function AllListings () {
             <ModalOverlay zIndex={300}/>
           </Modal>
           
-
           <Stack
             display={isFiltersVisible ? 'block' : 'none'}
             bg={'white'}
@@ -305,7 +304,7 @@ function AllListings () {
             position='fixed'
             left="50%"
             width={{ base: '95%', md: '70%' }}
-            transform='translate(-50%, 65px)'
+            transform='translate(-50%, 60px)'
             zIndex={400}
             divider={<StackDivider />}
             spacing={4}

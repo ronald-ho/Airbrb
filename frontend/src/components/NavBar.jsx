@@ -19,18 +19,19 @@ const NavBar = (props) => {
 
   return (
     <NavBarContainer {...props}>
-      <Image src={imageSrc} alt='Logo' height="25px" />
+      <Image src={imageSrc} alt='Logo' height="28px" />
       <IconButton
         display={{ base: 'block', md: 'none' }}
         variant='ghost'
         onClick={onOpen}
+        height='32px'
         icon={<HamburgerIcon />}
       />
       <Drawer placement='left' onClose={onClose} isOpen={isOpen} size='xs'>
         <DrawerOverlay />
           <DrawerContent>
             <DrawerHeader>
-              <Image src={airbnbLogo} alt='Logo' height="30px" />
+              <Image src={airbnbLogo} alt='Logo' height="28px" />
             </DrawerHeader>
             <DrawerBody>
               <MenuLink to="/" py='2' fontWeight='semibold' width='100%'>Home</MenuLink>
@@ -131,9 +132,7 @@ const NavBarContainer = ({ children }) => {
       justify="space-between"
       wrap="wrap"
       w="100%"
-      mb={8}
-      px={{ base: '4', md: '4' }}
-      py={4}
+      p={4}
       position='fixed'
       zIndex={400}
       bg={'white'}
