@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import { getAllListings } from '../api/listings';
-import { Flex, useDisclosure, Grid, GridItem, Box, RangeSlider, RangeSliderTrack, RangeSliderFilledTrack, Text, RangeSliderThumb, Button, Select, Modal, ModalOverlay, Stack, Divider, StackDivider } from '@chakra-ui/react';
+import { Flex, Grid, GridItem, Box, RangeSlider, RangeSliderTrack, RangeSliderFilledTrack, Text, RangeSliderThumb, Button, Select, Modal, ModalOverlay, Stack, Divider, StackDivider } from '@chakra-ui/react';
 import ListingPreview from '../components/ListingPreview';
 import { SearchBar, InputBar } from '../components/SearchBar';
 import { getListing } from '../api/listings/actions';
@@ -32,13 +32,11 @@ function AllListings () {
   // Passes search dates into listing previews
   const [searchDates, setSearchDates] = useState(null);
 
-  // Search filters
-  // const [filters, setFilters] = useState(null);
-  
-  const { isOpen, onClose } = useDisclosure();
-
   // Handle sort review selector
   const [sortReviews, setSortReviews] = useState('none');
+
+  // Handles resetting search
+  const [callReset, setCallReset] = useState(false);
 
   const handleSelectReviews = (e) => setSortReviews(e.target.value);
 
@@ -256,8 +254,6 @@ function AllListings () {
     }
   };
 
-  const [callReset, setCallReset] = useState(false);
-
   const clearFilters = () => {
     setCallReset(true);
     setBedroomFilter(defaultBedrooms);
@@ -378,6 +374,7 @@ function AllListings () {
 
         <Grid
           templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}
+          width='100%'
           gap='3'
         >
           {
@@ -395,10 +392,14 @@ function AllListings () {
 
                 const serialisedRouteData = JSON.stringify(routeData); 
                 const url = `/listing/${encodeURIComponent(serialisedRouteData)}/`;
-                
 
                 return (
-                  <GridItem key={index}>{ListingPreview(listing, url)}</GridItem>
+                  <GridItem
+                    width={{ base: '300px', sm: '200px', md: '225px' }}
+                    key={index}
+                  >
+                   {ListingPreview(listing, url)}
+                  </GridItem>
                 );
             })
             : null

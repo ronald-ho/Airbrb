@@ -1,8 +1,11 @@
-import React from 'react';
-import { Badge, Box, Image } from '@chakra-ui/react'
+/* eslint-disable */
+
+import React, { useState } from 'react';
+import { AspectRatio, Badge, Box, Image, LinkBox, LinkOverlay } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
 import { averageRating } from '../helpers';
+import ImageCarousel from './ImageCarousel';
 
 function ListingPreview (listing, url) {
   // Get review information
@@ -11,13 +14,46 @@ function ListingPreview (listing, url) {
   // Get metadata for listing
   const metadata = listing.metadata;
 
+  // // Image Carousel
+  // const allImages = [listing.thumbnail, ...metadata.images];
+  // // let imageIndex = 0
+  // const [imageIndex, setImageIndex] = useState(0);
+
+  // const handlePrev = () => {
+  //   setImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+  //   // if (imageIndex === 0) {
+  //   //   imageIndex = allImages.length - 1;
+  //   // } else {
+  //   //   imageIndex -= 1;
+  //   // }
+  // };
+
+  // const handleNext = () => {
+  //   setImageIndex((next) => (next === allImages.length - 1 ? 0 : next + 1));
+  //   // if (imageIndex === allImages.length) {
+  //   //   imageIndex = 0;
+  //   // } else {
+  //   //   imageIndex += 1;
+  //   // }    
+  // };
+
   return (
     <Link to={url}>
       <Box>
-        <Image src={listing.thumbnail} objectFit='contain' />
-        <Box p='6'>
+        <AspectRatio ratio={4 / 3}>
+          <Image src={listing.thumbnail} objectFit='contain' />
+        </AspectRatio>        
+        
+        {/* <ImageCarousel
+          thumbnail={listing.thumbnail}
+          allImages={allImages}
+          index={imageIndex}
+          handlePrev={handlePrev}
+          handleNext={handleNext}
+        /> */}
+        <Box p='1'>
           <Box display='flex' alignItems='baseline'>
-            <Badge borderRadius='full' px='2' colorScheme='teal'>
+            <Badge borderRadius='md' px='2'>
               {metadata.propertyType}
             </Badge>
             {
@@ -34,7 +70,7 @@ function ListingPreview (listing, url) {
             letterSpacing='wide'
             fontSize='xs'
             textTransform='uppercase'
-            ml='2'
+            ml='1'
           >
             {metadata.bedrooms} beds &bull; {metadata.bathrooms} baths
           </Box>
@@ -42,7 +78,6 @@ function ListingPreview (listing, url) {
           <Box
             mt='1'
             fontWeight='semibold'
-            as='h4'
             lineHeight='tight'
             isTruncated
           >
@@ -52,17 +87,16 @@ function ListingPreview (listing, url) {
           <Box>
             ${listing.price}
             <Box as='span' color='gray.600' fontSize='sm'>
-              / wk
+              /night
             </Box>
           </Box>
 
           <Box display='flex' mt='2' alignItems='center'>
-            {Array(5)
-              .fill('')
+            {Array(5).fill('')
               .map((_, i) => (
                 <StarIcon
                   key={i}
-                  color={i < avgRating ? 'teal.500' : 'gray.300'}
+                  color={i < avgRating ? 'black' : 'gray.300'}
                 />
               ))}
             <Box as='span' ml='2' color='gray.600' fontSize='sm'>

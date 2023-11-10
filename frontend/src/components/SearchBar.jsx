@@ -25,7 +25,6 @@ function SearchBar ({ onClickHandler }) {
       position='fixed'
       left="50%"
       top="2"
-      // transform={{ base: 'translate(-50%, 0%)', md: 'translate(-80%, 0%)', lg: 'translate(-50%, 0%)' }}
       transform='translate(-50%, 0%)'
       zIndex={400}
     >
@@ -102,28 +101,28 @@ function InputBar ({ onClickHandler, callReset, stopReset }) {
             onDateChange={setSelectedDates}
             propsConfigs={{
               dateNavBtnProps: {
-                colorScheme: 'blue',
+                colorScheme: 'red',
                 variant: 'outline',
               },
               dayOfMonthBtnProps: {
                 defaultBtnProps: {
                   borderColor: 'red.300',
                   _hover: {
-                    background: 'blue.400',
+                    background: 'red.400',
                   },
                 },
                 isInRangeBtnProps: {
-                  color: 'purple.800',
-                  borderColor: 'blue.300',
+                  color: 'red.800',
+                  borderColor: 'red.300',
                 },
                 selectedBtnProps: {
-                  background: 'blue.200',
-                  borderColor: 'blue.300',
-                  color: 'blue.600',
+                  background: 'red.200',
+                  borderColor: 'red.300',
+                  color: 'black',
                 },
                 todayBtnProps: {
-                  background: 'teal.200',
-                  color: 'teal.700',
+                  background: 'black',
+                  color: 'white',
                 },
               },
               inputProps: {
