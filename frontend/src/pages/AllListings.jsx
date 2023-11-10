@@ -272,15 +272,10 @@ function AllListings () {
   };
 
   return (
-    <Flex onMouseDown={event => handleFocusOut(event)} flexDirection='column' align='center'>
-        {/* <div>
-          <h1>All Listings</h1>
-        </div> */}
-        {/* Navbar will go here */}
+    <Flex onMouseDown={event => handleFocusOut(event)} flexDirection='column' align='center' px={8}>
         <Box
           py='2'
           id='search-bar'
-          // zIndex={400}
         >
           {
             isSearchVisible
