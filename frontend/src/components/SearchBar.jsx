@@ -1,7 +1,5 @@
-/* eslint-disable */
-
 import React, { useState } from 'react';
-import { Box, Text, Divider, Circle, Input, FormControl, FormLabel, Button, Container } from '@chakra-ui/react'
+import { Box, Text, Divider, Circle, Input, FormControl, FormLabel, Button } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons';
 import { RangeDatepicker } from 'chakra-dayzed-datepicker';
 

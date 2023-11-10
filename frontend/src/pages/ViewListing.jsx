@@ -1,22 +1,21 @@
-/* eslint-disable */
-
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { getListing } from '../api/listings/actions';
-import { Box, Heading, Button, Container, FormControl, FormLabel, Image, ListItem, Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, useDisclosure, Stack, Text, UnorderedList, Textarea, Select, StackDivider, Flex, IconButton, AspectRatio } from '@chakra-ui/react';
+import { Box, Heading, Button, Container, FormControl, FormLabel, ListItem, Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, useDisclosure, Stack, Text, UnorderedList, Textarea, Select, StackDivider, Badge, useToast } from '@chakra-ui/react';
 import { averageRating, addressToString } from '../helpers';
 import { StarIcon } from '@chakra-ui/icons';
 import { RangeDatepicker } from 'chakra-dayzed-datepicker';
 import { createNewBooking } from '../api/booking/actions';
 import { reviewListing } from '../api/listings/review';
 import { getAllBookings } from '../api/booking';
-import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
 import ImageCarousel from '../components/ImageCarousel';
+import StarRating from '../components/StarRating';
 
 function ViewListing () {
   // URL Information
   const { data } = useParams();
   const parsedData = JSON.parse(data);
+  const toast = useToast();
 
   // Initial load for listing data
   useEffect(() => {
@@ -30,7 +29,7 @@ function ViewListing () {
     }
 
     fetchListing();
-  }, []);  
+  }, []);
 
   // Modal
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -69,7 +68,7 @@ function ViewListing () {
     avgRating = averageRating(listingData.reviews);
     metadata = listingData.metadata;
     console.log(listingData);
-    
+
     if (!allImages) {
       setAllImages([listingData.thumbnail, ...metadata.images]);
     }
@@ -122,7 +121,10 @@ function ViewListing () {
       console.log('bookings', allBookingsResponse.data.bookings);
       for (const booking of allBookingsResponse.data.bookings) {
         console.log(booking.owner, booking.status);
-        if (booking.owner === localStorage.getItem('email') && booking.status === 'accepted') {
+        if (booking.owner === localStorage.getItem('email') &&
+              booking.status === 'accepted' &&
+              booking.listingId === parsedData.listingId
+        ) {
           bookingId = booking.id;
           break;
         }
@@ -131,9 +133,18 @@ function ViewListing () {
 
     if (!bookingId) {
       console.log('user has not made any accepted bookings');
-      return;
+      // TOAST
+      toast({
+        title: "Can't submit review.",
+        description: 'You have not made any accepted bookings for this listing',
+        status: 'error',
+        variant: 'subtle',
+        position: 'top',
+        isClosable: true,
+      });
+      // return;
     }
-    
+
     const body = {
       review: {
         rating: reviewRating,
@@ -142,10 +153,11 @@ function ViewListing () {
     };
 
     const reviewResponse = await reviewListing(parsedData.listingId, bookingId, body);
-    console.log(reviewResponse);
-    // Update list of reviews immediately
-    listingData.reviews.push(body.review);
-    setUpdateReviews(!updateReviews);
+    if (reviewResponse.success) {
+      // Update list of reviews immediately
+      listingData.reviews.push(body.review);
+      setUpdateReviews(!updateReviews);
+    }
   }
 
   return (
@@ -154,7 +166,9 @@ function ViewListing () {
       <Stack>
         <Box display='flex' alignItems='center'>
           <StarIcon aria-label='Star' />
-          <Text px={1}>{avgRating}</Text>
+          <Text px={1}>
+            {avgRating || 'No reviews'}
+          </Text>
         </Box>
         <Text>{addressToString(listingData.address)}</Text>
       </Stack>
@@ -166,14 +180,14 @@ function ViewListing () {
         handleNext={handleNext}
       />
       <Stack
-        direction={{ base: 'column', md: 'row'}}
+        direction={{ base: 'column', md: 'row' }}
         justifyContent='space-between'
         my='3'
       >
         <Box>
-          <Heading fontSize='xl'>{metadata.propertyType}</Heading>
-          <Text>{metadata.bedrooms} bedrooms / {metadata.beds} beds / {metadata.bathrooms} baths</Text>
-          <Heading fontSize='xl'>What this place offers</Heading>
+          <Badge fontSize='xl' my='1' borderRadius='md'>{metadata.propertyType}</Badge>
+          <Text textTransform='uppercase' fontSize='sm'>{metadata.bedrooms} bedrooms &bull; {metadata.beds} beds &bull; {metadata.bathrooms} baths</Text>
+          <Heading fontSize='lg' my='1'>Amenities</Heading>
           <UnorderedList pl={6}>
             {metadata.amenities.map((amenity, index) => (
               <ListItem key={index}>{amenity}</ListItem>
@@ -195,14 +209,8 @@ function ViewListing () {
                 onDateChange={setSelectedDates}
               />
             </FormControl>
-            {/* <Flex>
-              <Text>Total</Text>
-              <Text>
-                
-              </Text>
-            </Flex> */}
-          <Button onClick={sendBookingRequest} width='100%'>Request to book</Button>
-        </Stack>        
+          <Button onClick={sendBookingRequest} width='100%' colorScheme='red'>Request to book</Button>
+        </Stack>
       </Stack>
 
       <Box display='flex' flexDirection='column'>
@@ -218,10 +226,10 @@ function ViewListing () {
                   <option value='3'>3 Star</option>
                   <option value='4'>4 Star</option>
                   <option value='5'>5 Star</option>
-                </Select>                
-                
+                </Select>
+
                 <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange}></Textarea>
-                <Button onClick={submitReview}>Submit Review</Button>
+                <Button onClick={submitReview} colorScheme='red'>Submit Review</Button>
               </Stack>
             : null
         }
@@ -230,31 +238,23 @@ function ViewListing () {
           {listingData.reviews.map((review, index) => (
             <Box key={index}>
               <Box>
-                {
-                  Array(5).fill('')
-                    .map((_, i) => (
-                      <StarIcon
-                        key={i}
-                        color={i < review.rating ? 'black.400' : 'gray.300'}
-                      />
-                    ))
-                  }
+                <StarRating rating={review.rating} />
               </Box>
               {review.message}
             </Box>
-          ))}          
+          ))}
         </Stack>
       </Box>
-      
+
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
-        <ModalContent>        
+        <ModalContent>
           <ModalBody>
             Booking Confirmed.
           </ModalBody>
 
           <ModalFooter>
-            <Button colorScheme='blue' mr={3} onClick={onClose}>
+            <Button colorScheme='red' mr={3} onClick={onClose}>
               Close
             </Button>
           </ModalFooter>
