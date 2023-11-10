@@ -81,10 +81,12 @@ function PublishListing () {
                   return null;
                 })}
               </Select>
-
               {listingId && (
                 <>
                   <Text mt="4">Please select your availability dates:</Text>
+                  <Button colorScheme="red" onClick={handleClearDates} mt="4">
+                    Clear Dates
+                  </Button>
                   <Center>
                     <Calendar
                       className="red"
@@ -104,9 +106,6 @@ function PublishListing () {
                   </List>
                 </>
               )}
-              <Button colorScheme="red" onClick={handleClearDates} mt="4">
-                Clear Dates
-              </Button>
               <Button colorScheme="blue" onClick={handleSubmit} mt="4">
                 Publish
               </Button>

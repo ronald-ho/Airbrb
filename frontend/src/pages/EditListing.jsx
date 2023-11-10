@@ -381,6 +381,9 @@ function EditListing () {
             onConfirm={handleDelete}
           />
         )}
+        <Button colorScheme="blue" onClick={() => navigate('/my-listings')}>
+          Done
+        </Button>
       </VStack>
     </CenteredBox>
   );
