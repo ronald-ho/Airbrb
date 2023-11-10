@@ -3,7 +3,7 @@ import { apiCall } from '../../services/api';
 /**
  * Publish a listing
  * @param listingId
- * @param {Array<object>} availability
+ * @param availability
  * @returns {Promise<*>}
  */
 export const publishListing = async (listingId, availability) => {

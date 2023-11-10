@@ -44,7 +44,7 @@ export const apiCall = async (endpoint, method, data = null) => {
     },
   };
 
-  if (['POST', 'PUT', 'PATCH'].includes(method.toUpperCase())) {
+  if (data) {
     config.data = data;
   }
 
