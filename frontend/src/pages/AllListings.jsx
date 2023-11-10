@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import { getAllListings } from '../api/listings';
-import { Container, Grid, GridItem, Box, RangeSlider, RangeSliderTrack, RangeSliderFilledTrack, Text, RangeSliderThumb, Button, Select } from '@chakra-ui/react';
+import { Flex, useDisclosure, Grid, GridItem, Box, RangeSlider, RangeSliderTrack, RangeSliderFilledTrack, Text, RangeSliderThumb, Button, Select, Modal, ModalOverlay, Stack, Divider, StackDivider } from '@chakra-ui/react';
 import ListingPreview from '../components/ListingPreview';
 import { SearchBar, InputBar } from '../components/SearchBar';
 import { getListing } from '../api/listings/actions';
@@ -34,6 +34,8 @@ function AllListings () {
 
   // Search filters
   // const [filters, setFilters] = useState(null);
+  
+  const { isOpen, onClose } = useDisclosure();
 
   // Handle sort review selector
   const [sortReviews, setSortReviews] = useState('none');
@@ -185,13 +187,18 @@ function AllListings () {
         }
 
         // Fetch details for each property in the listings
-        const propertyDetails = await Promise.all(
+        let propertyDetails = await Promise.all(
           listingsResponse.data.listings.map(async (property) => {
             // Make a separate API call to get details for each property
             const propertyResponse = await getListing(property.id);
 
             if (propertyResponse.success) {
               const propertyData = propertyResponse.data.listing;
+              
+              // Listing needs to be published
+              if (!propertyData.published) return null;
+              // console.log(propertyData.published);
+
               console.log(bookings, property.id);
               if (property.id in bookings) {
                 propertyData.bookingStatus = bookings[property.id];
@@ -212,7 +219,7 @@ function AllListings () {
           })
         );
 
-        console.log(propertyDetails);
+        propertyDetails = propertyDetails.filter(item => item != null);
         propertyDetails.sort((a, b) => {
           // Sort by booking status first - accepted, pending, and not booked (zzz)
           if (a.bookingStatus > b.bookingStatus) return 1;
@@ -265,86 +272,144 @@ function AllListings () {
   };
 
   return (
-    <Container onMouseDown={event => handleFocusOut(event)}>
-      <div>
-        <h1>All Listings</h1>
-      </div>
-      {/* Navbar will go here */}
-      <Box id='search-bar'>
-        {
-          isSearchVisible
-            ? <SearchBar onClickHandler={handleSearchClick} />
-            : <InputBar onClickHandler={handleSubmitClick} callReset={callReset} stopReset={stopReset} />
-        }
+    <Flex onMouseDown={event => handleFocusOut(event)} flexDirection='column' align='center'>
+        {/* <div>
+          <h1>All Listings</h1>
+        </div> */}
+        {/* Navbar will go here */}
+        <Box
+          py='2'
+          id='search-bar'
+          // zIndex={400}
+        >
+          {
+            isSearchVisible
+              ? <SearchBar onClickHandler={handleSearchClick} />
+              : <InputBar onClickHandler={handleSubmitClick} callReset={callReset} stopReset={stopReset} />
+          }
 
-        <Box display={isFiltersVisible ? 'block' : 'none'}>
-          <Box>
-            <Text>Bedrooms</Text>
-            <Box display='flex'>
-              {bedroomFilter[0]} - {bedroomFilter[1]}
+          <Modal isOpen={!isSearchVisible}>
+            <ModalOverlay zIndex={300}/>
+          </Modal>
+          
+          <Stack
+            display={isFiltersVisible ? 'block' : 'none'}
+            bg={'white'}
+            py='3'
+            px='8'
+            borderWidth='1px'
+            borderRadius='20px'
+            borderColor='gray.200'
+            boxShadow='lg'
+            position='fixed'
+            left="50%"
+            width={{ base: '95%', md: '70%' }}
+            transform='translate(-50%, 60px)'
+            zIndex={400}
+            divider={<StackDivider />}
+            spacing={4}
+          >
+            <Stack direction='column' spacing={4}>
+              <Text fontWeight='bold'>Bedrooms</Text>
+              <Stack direction='column' spacing={4}>
+                <RangeSlider value={bedroomFilter} min={0} max={8} step={1} onChange={(val) => setBedroomFilter(val)}>
+                  <RangeSliderTrack bg='red.100'>
+                    <RangeSliderFilledTrack bg='#ff385c' />
+                  </RangeSliderTrack>
+                  <RangeSliderThumb boxSize={5} index={0} borderColor='gray.300' />
+                  <RangeSliderThumb boxSize={5} index={1} borderColor='gray.300' />
+                </RangeSlider>
+                <Stack direction='row' align={'center'}>
+                  <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
+                    <Text fontWeight='semibold'>Minimum</Text>
+                    <Text>{bedroomFilter[0]}</Text>
+                  </Stack>
+                  <Divider />
+                  <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
+                    <Text fontWeight='semibold'>Maximum</Text>
+                    <Text>
+                      {bedroomFilter[1]}
+                      {
+                        bedroomFilter[0] == defaultBedrooms[0] && bedroomFilter[1] == defaultBedrooms[1]
+                          ? '+'
+                          : ''
+                      }                      
+                    </Text>
+                  </Stack>                  
+                </Stack>
+              </Stack>
+            </Stack>
+            <Stack direction='column' spacing={4}>
+              <Text fontWeight='bold'>Price</Text>
+              <Stack direction='column' spacing={4}>
+                <RangeSlider value={priceFilter} min={0} max={10000} step={1} onChange={(val) => setPriceFilter(val)}>
+                  <RangeSliderTrack bg='red.100'>
+                    <RangeSliderFilledTrack bg='#ff385c' />
+                  </RangeSliderTrack>
+                  <RangeSliderThumb boxSize={5} index={0} borderColor='gray.300' />
+                  <RangeSliderThumb boxSize={5} index={1} borderColor='gray.300' />
+                </RangeSlider>
+                <Stack direction='row' align={'center'}>
+                  <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
+                    <Text fontWeight='semibold'>Minimum</Text>
+                    <Text>${priceFilter[0]}</Text>
+                  </Stack>
+                  <Divider />
+                  <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
+                    <Text fontWeight='semibold'>Maximum</Text>
+                    <Text>
+                      ${priceFilter[1]}
+                      {
+                        priceFilter[0] == defaultPrices[0] && priceFilter[1] == defaultPrices[1]
+                          ? '+'
+                          : ''
+                      }
+                    </Text>
+                  </Stack>                  
+                </Stack>
+              </Stack>
+            </Stack>
+            <Box display='flex' alignItems='center' justifyContent='space-between'>
+              <Text fontWeight='bold' whiteSpace='nowrap'>Sort Reviews</Text>
+              <Select onChange={handleSelectReviews} defaultValue='none' width='30%'>
+                <option value='none'>None</option>
+                <option value='ascending'>Ascending</option>
+                <option value='descending'>Descending</option>
+              </Select>
             </Box>
-            <RangeSlider value={bedroomFilter} min={0} max={8} step={1} onChange={(val) => setBedroomFilter(val)}>
-              <RangeSliderTrack bg='red.100'>
-                <RangeSliderFilledTrack bg='tomato' />
-              </RangeSliderTrack>
-              <RangeSliderThumb boxSize={6} index={0} />
-              <RangeSliderThumb boxSize={6} index={1} />
-            </RangeSlider>
-          </Box>
-          <Box>
-            <Text>Price</Text>
-            <Box display='flex'>
-              {priceFilter[0]} - {priceFilter[1]}
-            </Box>
-            <RangeSlider value={priceFilter} min={0} max={10000} step={1} onChange={(val) => setPriceFilter(val)}>
-              <RangeSliderTrack bg='red.100'>
-                <RangeSliderFilledTrack bg='tomato' />
-              </RangeSliderTrack>
-              <RangeSliderThumb boxSize={6} index={0} />
-              <RangeSliderThumb boxSize={6} index={1} />
-            </RangeSlider>
-          </Box>
-          <Box display='flex'>
-            <Text>Sort Reviews</Text>
-            <Select onChange={handleSelectReviews} defaultValue='none'>
-              <option value='none'>None</option>
-              <option value='ascending'>Ascending</option>
-              <option value='descending'>Descending</option>
-            </Select>
-          </Box>
-          <Button onClick={clearFilters}>Clear All</Button>
+            <Button onClick={clearFilters} width='100%'>Clear All</Button>
+          </Stack>
         </Box>
-      </Box>
 
-      <Grid
-        templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}
-        gap='3'
-      >
-        {
-        !loading
-          ? filteredListings.map((listing, index) => {
-              // Serialise listingId and search dates (if present)
-              const routeData = {
-                listingId: listing.listingId
-              }
+        <Grid
+          templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}
+          gap='3'
+        >
+          {
+          !loading
+            ? filteredListings.map((listing, index) => {
+                // Serialise listingId and search dates (if present)
+                const routeData = {
+                  listingId: listing.listingId
+                }
 
-              if (searchDates) {
-                routeData.floorDate = searchDates[0];
-                routeData.ceilDate = searchDates[1];
-              }
+                if (searchDates) {
+                  routeData.floorDate = searchDates[0];
+                  routeData.ceilDate = searchDates[1];
+                }
 
-              const serialisedRouteData = JSON.stringify(routeData); 
-              const url = `/listing/${encodeURIComponent(serialisedRouteData)}/`;
-              
+                const serialisedRouteData = JSON.stringify(routeData); 
+                const url = `/listing/${encodeURIComponent(serialisedRouteData)}/`;
+                
 
-              return (
-                <GridItem key={index}>{ListingPreview(listing, url)}</GridItem>
-              );
-          })
-          : null
-        }
-      </Grid>
-    </Container>
+                return (
+                  <GridItem key={index}>{ListingPreview(listing, url)}</GridItem>
+                );
+            })
+            : null
+          }
+        </Grid>
+    </Flex>
   )
 }
 
