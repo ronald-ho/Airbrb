@@ -12,6 +12,7 @@ function HostedListings () {
       try {
         const listings = await getAllListingDetailsByUser();
         setListings(listings);
+        console.log(listings)
       } catch (error) {
         console.error('Error fetching listings:', error);
       }
@@ -33,6 +34,21 @@ function HostedListings () {
             <GridItem key={index}>{listingPreview(listing, `/my-listings/edit/${listing.id}`)}</GridItem>
           ))}
         </Grid>
+        <Link to="/publish-listing" state={{ listing: listings }}>
+          <Button
+            position="fixed"
+            bottom="5rem"
+            right="2rem"
+            backgroundColor="purple.500"
+            color="white"
+            borderRadius="full"
+            paddingX="4"
+            paddingY="2"
+            _hover={{ backgroundColor: 'purple.600' }}
+          >
+            Publish a Listing
+          </Button>
+        </Link>
         <Link to="/create-listing">
           <Button
             position="fixed"
