@@ -47,12 +47,6 @@ function AllListings () {
   };
 
   const handleSubmitClick = (searchInput) => {
-    // setFilters(searchInput);
-    // console.log(filters);
-    // api call for info
-    console.log('inputbar', searchInput);
-    console.log('filter listing', listings);
-
     // Helper function to check if listing availabilities meet search
     const isAvailable = (start, end, availabilities) => {
       for (const [s, e] of availabilities) {
@@ -60,7 +54,6 @@ function AllListings () {
         const e_parsed = new Date(e);
 
         if (start >= s_parsed && end <= e_parsed) {
-          console.log('available');
           return 1;
         }
       }
@@ -88,6 +81,7 @@ function AllListings () {
     // Determine ranges for prices
     let floorPrice;
     let ceilPrice;
+
     // We need to check if price filters are being used by comparing against default
     if (priceFilter.every((value, index) => value === defaultPrices[index])) {
       floorPrice = undefined;
@@ -101,7 +95,6 @@ function AllListings () {
       const metadata = listing.metadata;
 
       const filterDate = floorDate === undefined || ceilDate === undefined || isAvailable(floorDate, ceilDate, listing.availability);
-      console.log(listing.title, filterDate);
 
       const filterByFloorBedroom = floorBedroom === undefined || metadata.bedrooms >= floorBedroom;
       const filterByCeilBedroom = ceilBedroom === undefined || metadata.bedrooms <= ceilBedroom;
@@ -111,9 +104,7 @@ function AllListings () {
 
       // Calculate average rating and add to listing
       listing.avgRating = averageRating(listing.reviews);
-      console.log('review', listing.avgRating);
 
-      // console.log(filterByFloorBedroom, filterByCeilBedroom, filterByFloorPrice, filterByCeilPrice);
       return (
         (listing.title.toLowerCase().includes(searchInput.textSearch) ||
           listing.address.city.toLowerCase().includes(searchInput.textSearch)) &&
@@ -152,22 +143,19 @@ function AllListings () {
           const bookingsResponse = await getAllBookings();
 
           if (!bookingsResponse.success) {
-            console.error('Error fetching bookings');
             return null;
           }
 
           const bookingsDict = {};
 
           for (const booking of bookingsResponse.data.bookings) {
-            console.log('booking', booking);
             bookingsDict[booking.listingId] = booking.status;
           }
 
           setBookings(bookingsDict);
-          console.log('end', bookings)
         }
       } catch (error) {
-        console.error('Error fetching listings:', error);
+        return null;
       }
     };
 
@@ -180,7 +168,6 @@ function AllListings () {
         const listingsResponse = await getAllListings();
 
         if (!listingsResponse.success) {
-          console.error('Error fetching listings');
           return null;
         }
 
@@ -195,9 +182,7 @@ function AllListings () {
               
               // Listing needs to be published
               if (!propertyData.published) return null;
-              // console.log(propertyData.published);
 
-              console.log(bookings, property.id);
               if (property.id in bookings) {
                 propertyData.bookingStatus = bookings[property.id];
               } else {
@@ -207,11 +192,9 @@ function AllListings () {
               // Add listing id
               propertyData.listingId = property.id;
 
-              console.log('property', propertyData.bookingStatus);
               return propertyData;
             } else {
               // Handle error if the details fetch fails for a property
-              console.error('Error fetching details for property:', property.id);
               return null;
             }
           })
@@ -234,7 +217,7 @@ function AllListings () {
         setFilteredListings(propertyDetails);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching listings:', error);
+        return;
       }
     };
 
@@ -244,11 +227,9 @@ function AllListings () {
   const handleFocusOut = (event) => {
     const searchArea = document.getElementById('search-bar');
     if (searchArea.contains(event.target)) {
-      console.log('inside');
       setIsFiltersVisible(true);
       setIsSearchVisible(false);
     } else {
-      console.log('outside');
       setIsFiltersVisible(false);
       setIsSearchVisible(true);
     }
