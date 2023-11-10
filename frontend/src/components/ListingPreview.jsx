@@ -2,16 +2,11 @@ import React from 'react';
 import { Badge, Box, Image } from '@chakra-ui/react'
 import { StarIcon } from '@chakra-ui/icons';
 import { Link } from 'react-router-dom';
+import { averageRating } from '../helpers';
 
 function ListingPreview (listing, url) {
   // Get review information
-  let totalRatings = 0;
-
-  for (const review of listing.reviews) {
-    totalRatings += review.rating;
-  }
-
-  const avgRating = totalRatings / listing.reviews.length;
+  const avgRating = averageRating(listing.reviews);
 
   // Get metadata for listing
   const metadata = listing.metadata;

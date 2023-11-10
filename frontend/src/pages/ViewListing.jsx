@@ -3,32 +3,22 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import { getListing } from '../api/listings/actions';
-import { Box, Button, Container, FormControl, FormLabel, Image, ListItem, Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, useDisclosure, Stack, Text, UnorderedList, Textarea, Select } from '@chakra-ui/react';
+import { Box, Heading, Button, Container, FormControl, FormLabel, Image, ListItem, Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, useDisclosure, Stack, Text, UnorderedList, Textarea, Select, StackDivider, Flex, IconButton, AspectRatio } from '@chakra-ui/react';
 import { averageRating, addressToString } from '../helpers';
 import { StarIcon } from '@chakra-ui/icons';
 import { RangeDatepicker } from 'chakra-dayzed-datepicker';
 import { createNewBooking } from '../api/booking/actions';
 import { reviewListing } from '../api/listings/review';
 import { getAllBookings } from '../api/booking';
+import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
+import ImageCarousel from '../components/ImageCarousel';
 
 function ViewListing () {
+  // URL Information
   const { data } = useParams();
-
-  const [listingData, setListingData] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [selectedDates, setSelectedDates] = useState([undefined, undefined]);
-  const [reviewText, setReviewText] = useState('');
-  const [reviewRating, setReviewRating] = useState(null);
-  const [updateReviews, setUpdateReviews] = useState(false);
-
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
-  let avgRating;
-  let metadata;
-  let price;
-
   const parsedData = JSON.parse(data);
 
+  // Initial load for listing data
   useEffect(() => {
     const fetchListing = async () => {
       const listingResponse = await getListing(parsedData.listingId);
@@ -36,12 +26,40 @@ function ViewListing () {
       if (listingResponse.success) {
         setListingData(listingResponse.data.listing);
         setLoading(false);
-        console.log('changed loading', loading);
       }
     }
 
     fetchListing();
-  }, []);
+  }, []);  
+
+  // Modal
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
+  // Display Data
+  const [listingData, setListingData] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [selectedDates, setSelectedDates] = useState([undefined, undefined]);
+
+  let avgRating;
+  let metadata;
+  let price;
+
+  // Hooks to support review functionality
+  const [reviewText, setReviewText] = useState('');
+  const [reviewRating, setReviewRating] = useState(null);
+  const [updateReviews, setUpdateReviews] = useState(false);
+
+  // Image Carousel
+  const [imageIndex, setImageIndex] = useState(0);
+  const [allImages, setAllImages] = useState(null);
+
+  const handlePrev = () => {
+    setImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setImageIndex((next) => (next === allImages.length - 1 ? 0 : next + 1));
+  };
 
   if (loading) {
     return (
@@ -50,6 +68,11 @@ function ViewListing () {
   } else {
     avgRating = averageRating(listingData.reviews);
     metadata = listingData.metadata;
+    console.log(listingData);
+    
+    if (!allImages) {
+      setAllImages([listingData.thumbnail, ...metadata.images]);
+    }
 
     // Get prices by night or stay
     if (parsedData.floorDate && parsedData.ceilDate) {
@@ -84,6 +107,7 @@ function ViewListing () {
     }
   };
 
+  // Review Functions
   const handleReviewTextChange = (e) => setReviewText(e.target.value);
   const handleRatingChange = (e) => setReviewRating(e.target.value);
 
@@ -109,9 +133,6 @@ function ViewListing () {
       console.log('user has not made any accepted bookings');
       return;
     }
-
-    console.log(bookingId);
-
     
     const body = {
       review: {
@@ -122,51 +143,76 @@ function ViewListing () {
 
     const reviewResponse = await reviewListing(parsedData.listingId, bookingId, body);
     console.log(reviewResponse);
+    // Update list of reviews immediately
     listingData.reviews.push(body.review);
     setUpdateReviews(!updateReviews);
   }
 
   return (
-    <Container>
-      <Box>{listingData.title}</Box>
+    <Container px={1}>
+      <Heading fontSize='3xl'>{listingData.title}</Heading>
       <Stack>
-        <Box display='flex'>
-          <StarIcon />
-          <Text>{avgRating}</Text>
+        <Box display='flex' alignItems='center'>
+          <StarIcon aria-label='Star' />
+          <Text px={1}>{avgRating}</Text>
         </Box>
-        <Box>{addressToString(listingData.address)}</Box>
+        <Text>{addressToString(listingData.address)}</Text>
       </Stack>
-      <Box>
-        <Image src={listingData.thumbnail} />
-      </Box>
-      <Box>
-        <Text>{metadata.propertyType}</Text>
-        <Text>{metadata.bedrooms} bedrooms / {metadata.beds} beds / {metadata.bathrooms} baths</Text>
-      </Box>
-      <Box>
-        <Text>What this place offers</Text>
-        <UnorderedList>
-          {metadata.amenities.map((amenity, index) => (
-            <ListItem key={index}>{amenity}</ListItem>
-          ))}
-        </UnorderedList>
-      </Box>
+      <ImageCarousel
+        thumbnail={listingData.thumbnail}
+        allImages={allImages}
+        index={imageIndex}
+        handlePrev={handlePrev}
+        handleNext={handleNext}
+      />
+      <Stack
+        direction={{ base: 'column', md: 'row'}}
+        justifyContent='space-between'
+        my='3'
+      >
+        <Box>
+          <Heading fontSize='xl'>{metadata.propertyType}</Heading>
+          <Text>{metadata.bedrooms} bedrooms / {metadata.beds} beds / {metadata.bathrooms} baths</Text>
+          <Heading fontSize='xl'>What this place offers</Heading>
+          <UnorderedList pl={6}>
+            {metadata.amenities.map((amenity, index) => (
+              <ListItem key={index}>{amenity}</ListItem>
+            ))}
+          </UnorderedList>
+        </Box>
+        <Stack
+          borderWidth={1}
+          borderRadius={20}
+          width={{ base: '100%', md: '50%' }}
+          p={3}
+          bg={'white'}
+        >
+          <Heading fontSize='3xl'>${price}{(parsedData.floorDate && parsedData.ceilDate) ? '/stay' : '/night'}</Heading>
+            <FormControl>
+              <FormLabel>Confirm Dates</FormLabel>
+              <RangeDatepicker
+                selectedDates={selectedDates}
+                onDateChange={setSelectedDates}
+              />
+            </FormControl>
+            {/* <Flex>
+              <Text>Total</Text>
+              <Text>
+                
+              </Text>
+            </Flex> */}
+          <Button onClick={sendBookingRequest} width='100%'>Request to book</Button>
+        </Stack>        
+      </Stack>
+
       <Box display='flex' flexDirection='column'>
-        <Text>Reviews</Text>
+      <Heading fontSize='xl'>Reviews</Heading>
         {
           localStorage.getItem('token')
-            ? <Box>
-              <Text>Leave a review</Text>
-              {/* {Array(5)
-                .fill('')
-                .map((_, i) => (
-                  <StarIcon
-                    key={i}
-                    color={i < avgRating ? 'teal.500' : 'gray.300'}
-                  />
-                ))}               */}
+            ? <Stack spacing={1}>
+              <Heading fontWeight='semibold' fontSize='md' py='1'>Leave a review</Heading>
                 <Select onChange={handleRatingChange} defaultValue='none'>
-                  <option value='none'>None</option>
+                  <option value='none'>Select Rating</option>
                   <option value='1'>1 Star</option>
                   <option value='2'>2 Star</option>
                   <option value='3'>3 Star</option>
@@ -174,37 +220,37 @@ function ViewListing () {
                   <option value='5'>5 Star</option>
                 </Select>                
                 
-
                 <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange}></Textarea>
                 <Button onClick={submitReview}>Submit Review</Button>
-              </Box>
+              </Stack>
             : null
         }
-        {listingData.reviews.map((review, index) => (
-          <Box key={index}>
-            {review.rating} {review.message}
-          </Box>
-        ))}
+        <Stack spacing={3} divider={<StackDivider />}>
+          <Box></Box>
+          {listingData.reviews.map((review, index) => (
+            <Box key={index}>
+              <Box>
+                {
+                  Array(5).fill('')
+                    .map((_, i) => (
+                      <StarIcon
+                        key={i}
+                        color={i < review.rating ? 'black.400' : 'gray.300'}
+                      />
+                    ))
+                  }
+              </Box>
+              {review.message}
+            </Box>
+          ))}          
+        </Stack>
       </Box>
-      <Box>
-        <Text>${price}{(parsedData.floorDate && parsedData.ceilDate) ? '/stay' : '/night'}</Text>
-      </Box>
-      <Box>
-        <Text>Request to book</Text>
-        <FormControl>
-          <FormLabel>Dates</FormLabel>
-          <RangeDatepicker
-            selectedDates={selectedDates}
-            onDateChange={setSelectedDates}
-          />
-        </FormControl>
-        <Button onClick={sendBookingRequest}>Request to book</Button>
-      </Box>
+      
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent>        
           <ModalBody>
-            Booking Confirmed!
+            Booking Confirmed.
           </ModalBody>
 
           <ModalFooter>
