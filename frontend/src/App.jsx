@@ -15,6 +15,7 @@ import CreateListingSteps from './pages/CreateListing/CreateListingSteps';
 import CreateListing from './pages/CreateListing/CreateListing';
 import JsonUpload from './pages/CreateListing/JsonUpload';
 import NavBar from './components/NavBar';
+import PublishListing from './pages/PublishListing';
 
 function App () {
   return (
@@ -36,6 +37,7 @@ function App () {
                 <Route path="/create-listing/:step" element={<CreateListingSteps/>}/>
                 <Route path="/create-listing" element={<CreateListing/>}/>
                 <Route path="/create-listing/json" element={<JsonUpload/>}/>
+                <Route path="/publish-listing" element={<PublishListing/>}/>
               </Routes>
             </Center>
           </BrowserRouter>

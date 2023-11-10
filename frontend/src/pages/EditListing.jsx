@@ -3,6 +3,7 @@ import { deleteListing, getListing, updateListing } from '../api/listings/action
 import { useNavigate, useParams } from 'react-router-dom';
 import {
   Button,
+  Center,
   Flex,
   FormControl,
   FormLabel,
@@ -23,6 +24,9 @@ import PropertyTypeSelector from '../components/PropertyTypeSelector';
 import CenteredBox from '../components/CenteredBox';
 import Popup from '../components/Popup';
 import DefaultAirbnbImage from '../assets/default-airbnb-image.webp'
+import { publishListing, unpublishListing } from '../api/listings/publish';
+import { Calendar } from 'react-multi-date-picker';
+import 'react-multi-date-picker/styles/colors/red.css'
 
 function EditListing () {
   const { listingId } = useParams();
@@ -46,11 +50,14 @@ function EditListing () {
       bathrooms: 0,
       amenities: [],
     },
+    published: '',
+    availability: []
   });
   const toast = useToast();
 
   const [error, setError] = useState('');
-  const [showPopup, setShowPopup] = useState(false);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [showUnpublishPopup, setShowUnpublishPopup] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -65,6 +72,8 @@ function EditListing () {
             thumbnail: listingData.thumbnail,
             address: listingData.address,
             metadata: listingData.metadata,
+            published: listingData.published,
+            availability: listingData.availability
           });
           setIsLoading(false);
         } else {
@@ -108,6 +117,27 @@ function EditListing () {
     handleSubmit();
   };
 
+  const handleDateChanges = async (newDates) => {
+    const isValid = newDates.every(dateRange => Array.isArray(dateRange) && dateRange.length === 2);
+
+    if (!isValid) {
+      return;
+    }
+
+    setListing(prevListing => ({
+      ...prevListing,
+      availability: newDates
+    }));
+
+    try {
+      await unpublishListing(listingId);
+      await publishListing(listingId, { availability: newDates })
+    } catch (error) {
+      setError(error.message);
+      toast({ title: error.toString(), status: 'error', duration: 3000, isClosable: true, })
+    }
+  }
+
   const handleImageUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -129,20 +159,31 @@ function EditListing () {
       console.log('Updated listing: ', response);
     } catch (err) {
       setError(error.message);
-      toast({ title: error, status: 'error', duration: 3000, isClosable: true, })
+      toast({ title: error.toString(), status: 'error', duration: 3000, isClosable: true, })
     }
   };
 
+  const handleUnpublish = async () => {
+    try {
+      await unpublishListing(listingId);
+      navigate('/my-listings');
+      toast({ title: 'Sucessfully unpublished ', status: 'success', duration: 3000, isClosable: true, });
+    } catch (error) {
+      setError(error.message);
+      toast({ title: error.toString(), status: 'error', duration: 3000, isClosable: true, })
+    }
+  }
+
   const handleDelete = async () => {
     try {
-      setShowPopup(false);
+      setShowDeletePopup(false);
       const response = await deleteListing(listingId);
       console.log('Deleted listing: ', response);
       toast({ title: 'Listing deleted', status: 'success', duration: 3000, isClosable: true, })
       navigate('/my-listings');
     } catch (err) {
       setError(err.message);
-      toast({ title: error, status: 'error', duration: 3000, isClosable: true, })
+      toast({ title: error.toString(), status: 'error', duration: 3000, isClosable: true, })
     }
   }
 
@@ -172,6 +213,11 @@ function EditListing () {
               <Tab fontSize="sm">Property Type</Tab>
               <Tab fontSize="sm">Details</Tab>
               <Tab fontSize="sm">Amenities</Tab>
+              {listing.published
+                ? (
+                  <Tab fontSize="sm">Availability</Tab>
+                  )
+                : null}
             </TabList>
           </Flex>
           <TabPanels>
@@ -285,21 +331,59 @@ function EditListing () {
                 />
               </FormControl>
             </TabPanel>
+
+            {/* Availability Tab */}
+            {listing.published
+              ? (
+                <TabPanel>
+                  <Center>
+                    <Calendar
+                      className="red"
+                      value={listing.availability}
+                      onChange={handleDateChanges}
+                      multiple
+                      range
+                    />
+                  </Center>
+                </TabPanel>
+                )
+              : null}
           </TabPanels>
         </Tabs>
         <Text>Changes are autosaved</Text>
-        <Button colorScheme="red" onClick={() => setShowPopup(true)}>
-          Delete Listing
-        </Button>
-        {showPopup && (
+        <HStack>
+          {listing.published
+            ? (
+              <Button colorScheme="purple" onClick={() => setShowUnpublishPopup(true)}>
+                Unpublish Listing
+              </Button>
+              )
+            : null}
+          <Button colorScheme="red" onClick={() => setShowDeletePopup(true)}>
+            Delete Listing
+          </Button>
+        </HStack>
+        {showUnpublishPopup && (
           <Popup
             title="Confirm Deletion"
-            body="Are you sure you want to delete this listing ? This action cannot be undone."
+            body="Are you sure you want to unpublish this listing?"
+            primaryButtonText="Unpublish"
+            onClose={() => setShowUnpublishPopup(false)}
+            onConfirm={handleUnpublish}
+          />
+        )}
+        {showDeletePopup && (
+          <Popup
+            title="Confirm Deletion"
+            body="Are you sure you want to delete this listing? This action cannot be undone."
             primaryButtonText="Delete"
-            onClose={() => setShowPopup(false)}
+            onClose={() => setShowDeletePopup(false)}
             onConfirm={handleDelete}
           />
         )}
+        <Button colorScheme="blue" onClick={() => navigate('/my-listings')}>
+          Done
+        </Button>
       </VStack>
     </CenteredBox>
   );
