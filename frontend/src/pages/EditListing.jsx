@@ -26,6 +26,7 @@ import Popup from '../components/Popup';
 import DefaultAirbnbImage from '../assets/default-airbnb-image.webp'
 import { publishListing, unpublishListing } from '../api/listings/publish';
 import { Calendar } from 'react-multi-date-picker';
+import 'react-multi-date-picker/styles/colors/red.css'
 
 function EditListing () {
   const { listingId } = useParams();
@@ -337,6 +338,7 @@ function EditListing () {
                 <TabPanel>
                   <Center>
                     <Calendar
+                      className="red"
                       value={listing.availability}
                       onChange={handleDateChanges}
                       multiple

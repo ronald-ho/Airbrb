@@ -7,6 +7,7 @@ import { Calendar } from 'react-multi-date-picker';
 import { CheckCircleIcon } from '@chakra-ui/icons';
 import moment from 'moment';
 import Popup from '../components/Popup';
+import 'react-multi-date-picker/styles/colors/red.css'
 
 function PublishListing () {
   const { state } = useLocation();
@@ -86,6 +87,7 @@ function PublishListing () {
                   <Text mt="4">Please select your availability dates:</Text>
                   <Center>
                     <Calendar
+                      className="red"
                       value={availability}
                       onChange={handleDateChanges}
                       multiple
