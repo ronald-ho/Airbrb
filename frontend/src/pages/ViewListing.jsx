@@ -49,16 +49,16 @@ function ViewListing () {
   const [updateReviews, setUpdateReviews] = useState(false);
 
   // Image Carousel
-  const [imageIndex, setImageIndex] = useState(0);
+  // const [imageIndex, setImageIndex] = useState(0);
   const [allImages, setAllImages] = useState(null);
 
-  const handlePrev = () => {
-    setImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
-  };
+  // const handlePrev = () => {
+  //   setImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+  // };
 
-  const handleNext = () => {
-    setImageIndex((next) => (next === allImages.length - 1 ? 0 : next + 1));
-  };
+  // const handleNext = () => {
+  //   setImageIndex((next) => (next === allImages.length - 1 ? 0 : next + 1));
+  // };
 
   if (loading) {
     return (
@@ -172,13 +172,7 @@ function ViewListing () {
         </Box>
         <Text>{addressToString(listingData.address)}</Text>
       </Stack>
-      <ImageCarousel
-        thumbnail={listingData.thumbnail}
-        allImages={allImages}
-        index={imageIndex}
-        handlePrev={handlePrev}
-        handleNext={handleNext}
-      />
+      <ImageCarousel allImages={allImages} />
       <Stack
         direction={{ base: 'column', md: 'row' }}
         justifyContent='space-between'

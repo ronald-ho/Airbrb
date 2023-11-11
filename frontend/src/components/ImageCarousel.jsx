@@ -2,12 +2,22 @@ import React, { useState } from 'react';
 import { Box, Image, IconButton, AspectRatio } from '@chakra-ui/react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
 
-function ImageCarousel ({ thumbnail, allImages, index, handlePrev, handleNext }) {
+function ImageCarousel ({ allImages }) {
   const [style, setStyle] = useState(false);
+  const [imageIndex, setImageIndex] = useState(0);
 
   const toggleStyle = () => {
-    setStyle(!style);
+    // If there are no extra images, don't show button
+    if (allImages.length > 1) setStyle(!style);
   }
+
+  const handlePrev = () => {
+    setImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
+  };
+
+  const handleNext = () => {
+    setImageIndex((next) => (next === allImages.length - 1 ? 0 : next + 1));
+  };
 
   return (
     <Box
@@ -26,9 +36,10 @@ function ImageCarousel ({ thumbnail, allImages, index, handlePrev, handleNext })
         icon={<ArrowLeftIcon />}
         onClick={handlePrev}
         zIndex={100}
+        aria-label='Previous Image'
       />
       <AspectRatio ratio={4 / 3}>
-        <Image src={!allImages ? thumbnail : allImages[index]} width='100%' />
+        <Image src={allImages[imageIndex]} width='100%' alt={`Image ${imageIndex}`} />
       </AspectRatio>
       <IconButton
         position='absolute'
@@ -40,6 +51,7 @@ function ImageCarousel ({ thumbnail, allImages, index, handlePrev, handleNext })
         display={ style ? 'block' : 'none' }
         icon={<ArrowRightIcon />}
         onClick={handleNext}
+        aria-label='Next Image'
       />
     </Box>
   );
