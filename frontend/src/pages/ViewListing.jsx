@@ -195,7 +195,9 @@ function ViewListing () {
           p={3}
           bg={'white'}
         >
-          <Heading fontSize='3xl'>${price}{(parsedData.floorDate && parsedData.ceilDate) ? '/stay' : '/night'}</Heading>
+          <Heading fontSize='3xl'>${price}
+            <Box as='span'color='gray.600' fontSize='2xl'>{(parsedData.floorDate && parsedData.ceilDate) ? '/stay' : '/night'}</Box>
+          </Heading>
             <FormControl>
               <FormLabel>Confirm Dates</FormLabel>
               <RangeDatepicker
