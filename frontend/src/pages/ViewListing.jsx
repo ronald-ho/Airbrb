@@ -49,16 +49,7 @@ function ViewListing () {
   const [updateReviews, setUpdateReviews] = useState(false);
 
   // Image Carousel
-  // const [imageIndex, setImageIndex] = useState(0);
   const [allImages, setAllImages] = useState(null);
-
-  // const handlePrev = () => {
-  //   setImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
-  // };
-
-  // const handleNext = () => {
-  //   setImageIndex((next) => (next === allImages.length - 1 ? 0 : next + 1));
-  // };
 
   if (loading) {
     return (
@@ -67,7 +58,6 @@ function ViewListing () {
   } else {
     avgRating = averageRating(listingData.reviews);
     metadata = listingData.metadata;
-    console.log(listingData);
 
     if (!allImages) {
       setAllImages([listingData.thumbnail, ...metadata.images]);
@@ -111,16 +101,12 @@ function ViewListing () {
   const handleRatingChange = (e) => setReviewRating(e.target.value);
 
   const submitReview = async () => {
-    console.log(reviewText);
-    console.log(reviewRating);
     // Get all bookings for listing and check if user has made an accepted booking
     const allBookingsResponse = await getAllBookings();
 
     let bookingId;
     if (allBookingsResponse.success) {
-      console.log('bookings', allBookingsResponse.data.bookings);
       for (const booking of allBookingsResponse.data.bookings) {
-        console.log(booking.owner, booking.status);
         if (booking.owner === localStorage.getItem('email') &&
               booking.status === 'accepted' &&
               booking.listingId === parsedData.listingId
@@ -132,8 +118,6 @@ function ViewListing () {
     }
 
     if (!bookingId) {
-      console.log('user has not made any accepted bookings');
-      // TOAST
       toast({
         title: "Can't submit review.",
         description: 'You have not made any accepted bookings for this listing',
@@ -142,7 +126,6 @@ function ViewListing () {
         position: 'top',
         isClosable: true,
       });
-      // return;
     }
 
     const body = {
