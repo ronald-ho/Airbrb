@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
 import ImageCarousel from './ImageCarousel';
@@ -56,5 +55,5 @@ describe('ImageCarousel with multiple images', () => {
 
     const image = getByAltText('Image 2');
     expect(image).toBeInTheDocument();
-  });  
+  });
 });
