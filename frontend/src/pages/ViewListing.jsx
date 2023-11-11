@@ -1,8 +1,30 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router';
+import { useParams } from 'react-router-dom';
 import { getListing } from '../api/listings/actions';
-import { Box, Heading, Button, Container, FormControl, FormLabel, ListItem, Modal, ModalOverlay, ModalContent, ModalFooter, ModalBody, useDisclosure, Stack, Text, UnorderedList, Textarea, Select, StackDivider, Badge, useToast } from '@chakra-ui/react';
-import { averageRating, addressToString } from '../helpers';
+import {
+  Badge,
+  Box,
+  Button,
+  Container,
+  FormControl,
+  FormLabel,
+  Heading,
+  ListItem,
+  Modal,
+  ModalBody,
+  ModalContent,
+  ModalFooter,
+  ModalOverlay,
+  Select,
+  Stack,
+  StackDivider,
+  Text,
+  Textarea,
+  UnorderedList,
+  useDisclosure,
+  useToast
+} from '@chakra-ui/react';
+import { addressToString, averageRating } from '../helpers';
 import { StarIcon } from '@chakra-ui/icons';
 import { RangeDatepicker } from 'chakra-dayzed-datepicker';
 import { createNewBooking } from '../api/booking/actions';
@@ -108,8 +130,8 @@ function ViewListing () {
     if (allBookingsResponse.success) {
       for (const booking of allBookingsResponse.data.bookings) {
         if (booking.owner === localStorage.getItem('email') &&
-              booking.status === 'accepted' &&
-              booking.listingId === parsedData.listingId
+          booking.status === 'accepted' &&
+          booking.listingId === parsedData.listingId
         ) {
           bookingId = booking.id;
           break;
@@ -148,14 +170,14 @@ function ViewListing () {
       <Heading fontSize='3xl'>{listingData.title}</Heading>
       <Stack>
         <Box display='flex' alignItems='center'>
-          <StarIcon aria-label='Star' />
+          <StarIcon aria-label='Star'/>
           <Text px={1}>
             {avgRating || 'No reviews'}
           </Text>
         </Box>
         <Text>{addressToString(listingData.address)}</Text>
       </Stack>
-      <ImageCarousel allImages={allImages} />
+      <ImageCarousel allImages={allImages}/>
       <Stack
         direction={{ base: 'column', md: 'row' }}
         justifyContent='space-between'
@@ -163,7 +185,8 @@ function ViewListing () {
       >
         <Box>
           <Badge fontSize='xl' my='1' borderRadius='md'>{metadata.propertyType}</Badge>
-          <Text textTransform='uppercase' fontSize='sm'>{metadata.bedrooms} bedrooms &bull; {metadata.beds} beds &bull; {metadata.bathrooms} baths</Text>
+          <Text textTransform='uppercase'
+                fontSize='sm'>{metadata.bedrooms} bedrooms &bull; {metadata.beds} beds &bull; {metadata.bathrooms} baths</Text>
           <Heading fontSize='lg' my='1'>Amenities</Heading>
           <UnorderedList pl={6}>
             {metadata.amenities.map((amenity, index) => (
@@ -179,45 +202,46 @@ function ViewListing () {
           bg={'white'}
         >
           <Heading fontSize='3xl'>${price}
-            <Box as='span'color='gray.600' fontSize='2xl'>{(parsedData.floorDate && parsedData.ceilDate) ? '/stay' : '/night'}</Box>
+            <Box as='span' color='gray.600'
+                 fontSize='2xl'>{(parsedData.floorDate && parsedData.ceilDate) ? '/stay' : '/night'}</Box>
           </Heading>
-            <FormControl>
-              <FormLabel>Confirm Dates</FormLabel>
-              <RangeDatepicker
-                selectedDates={selectedDates}
-                onDateChange={setSelectedDates}
-              />
-            </FormControl>
+          <FormControl>
+            <FormLabel>Confirm Dates</FormLabel>
+            <RangeDatepicker
+              selectedDates={selectedDates}
+              onDateChange={setSelectedDates}
+            />
+          </FormControl>
           <Button onClick={sendBookingRequest} width='100%' colorScheme='red'>Request to book</Button>
         </Stack>
       </Stack>
 
       <Box display='flex' flexDirection='column'>
-      <Heading fontSize='xl'>Reviews</Heading>
+        <Heading fontSize='xl'>Reviews</Heading>
         {
           localStorage.getItem('token')
             ? <Stack spacing={1}>
               <Heading fontWeight='semibold' fontSize='md' py='1'>Leave a review</Heading>
-                <Select onChange={handleRatingChange} defaultValue='none'>
-                  <option value='none'>Select Rating</option>
-                  <option value='1'>1 Star</option>
-                  <option value='2'>2 Star</option>
-                  <option value='3'>3 Star</option>
-                  <option value='4'>4 Star</option>
-                  <option value='5'>5 Star</option>
-                </Select>
+              <Select onChange={handleRatingChange} defaultValue='none'>
+                <option value='none'>Select Rating</option>
+                <option value='1'>1 Star</option>
+                <option value='2'>2 Star</option>
+                <option value='3'>3 Star</option>
+                <option value='4'>4 Star</option>
+                <option value='5'>5 Star</option>
+              </Select>
 
-                <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange}></Textarea>
-                <Button onClick={submitReview} colorScheme='red'>Submit Review</Button>
-              </Stack>
+              <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange}></Textarea>
+              <Button onClick={submitReview} colorScheme='red'>Submit Review</Button>
+            </Stack>
             : null
         }
-        <Stack spacing={3} divider={<StackDivider />}>
+        <Stack spacing={3} divider={<StackDivider/>}>
           <Box></Box>
           {listingData.reviews.map((review, index) => (
             <Box key={index}>
               <Box>
-                <StarRating rating={review.rating} />
+                <StarRating rating={review.rating}/>
               </Box>
               {review.message}
             </Box>
@@ -226,7 +250,7 @@ function ViewListing () {
       </Box>
 
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
+        <ModalOverlay/>
         <ModalContent>
           <ModalBody>
             Booking Confirmed.
