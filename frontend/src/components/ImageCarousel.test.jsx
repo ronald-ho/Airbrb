@@ -23,7 +23,7 @@ describe('ImageCarousel with multiple images', () => {
     const { getByLabelText, getByAltText } = render(<ImageCarousel allImages={allImages} />);
     const previousButton = getByLabelText(/Previous Image/i);
     const nextButton = getByLabelText(/Next Image/i);
-    
+
     fireEvent.click(nextButton);
     fireEvent.click(previousButton);
 
