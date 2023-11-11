@@ -16,6 +16,17 @@ const addressToString = (address) => {
 
 export { averageRating, addressToString };
 
+const Ajv = require('ajv');
+export const customAjv = new Ajv({ allErrors: true });
+
+customAjv.addFormat('base64image', {
+  type: 'string',
+  validate: (data) => {
+    const regex = /^data:image\/(png|jpeg|jpg);base64,/;
+    return regex.test(data);
+  }
+});
+
 export const listingSchema = {
   type: 'object',
   properties: {
@@ -36,7 +47,8 @@ export const listingSchema = {
       type: 'number'
     },
     thumbnail: {
-      type: 'string'
+      type: 'string',
+      format: 'base64image'
     },
     metadata: {
       type: 'object',
@@ -51,7 +63,10 @@ export const listingSchema = {
         },
         images: {
           type: 'array',
-          items: { type: 'string' }
+          items: {
+            type: 'string',
+            format: 'base64image'
+          }
         }
       },
       required: ['propertyType', 'bathrooms', 'bedrooms', 'beds', 'amenities', 'images']

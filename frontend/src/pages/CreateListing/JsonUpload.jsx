@@ -1,10 +1,11 @@
 import CenteredBox from '../../components/CenteredBox';
-import { Button, Flex, Input, useToast, VStack } from '@chakra-ui/react';
+import { Button, Flex, Input, List, ListIcon, ListItem, useToast, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
 import { createNewListing } from '../../api/listings/actions';
 import { useNavigate } from 'react-router-dom';
-import { listingSchema } from '../../helpers';
+import { customAjv, listingSchema } from '../../helpers';
 import Popup from '../../components/Popup';
+import { WarningTwoIcon } from '@chakra-ui/icons';
 
 function JsonUpload () {
   const [jsonFile, setJsonFile] = useState(null);
@@ -13,9 +14,7 @@ function JsonUpload () {
   const [showPopup, setShowPopup] = React.useState(false);
   const [isValidJson, setIsValidJson] = React.useState(false);
   const toast = useToast();
-  const Ajv = require('ajv');
-  const ajv = new Ajv({ allErrors: true });
-  const validate = ajv.compile(listingSchema);
+  const validate = customAjv.compile(listingSchema);
 
   const handleFileInputChange = (event) => {
     const file = event.target.files[0];
@@ -75,12 +74,39 @@ function JsonUpload () {
     if (!errors || !errors.length) return 'No errors found.';
 
     if (typeof errors === 'string') {
-      return errors;
+      return (
+        <List>
+          <ListItem>
+            <ListIcon as={WarningTwoIcon} color='red.500'/>
+            {errors}
+          </ListItem>
+        </List>
+      );
     }
 
-    return errors.map(err => {
-      return `Error in ${err.instancePath}: ${err.message}. Expected ${err.params.type}.`;
-    }).join('\n');
+    return (
+      <List spacing={3}>
+        {errors.map((err, index) => {
+          let expectedType = '';
+          if (err.params.type) {
+            expectedType = `Expected ${err.params.type}.`;
+          } else if (err.keyword === 'required') {
+            expectedType = 'This field is required.';
+          } else if (err.keyword === 'format') {
+            expectedType = `Expected format: ${err.params.format}.`;
+          } else {
+            expectedType = 'Validation error.';
+          }
+
+          return (
+            <ListItem key={index}>
+              <ListIcon as={WarningTwoIcon} color='red.500'/>
+              {`Error in ${err.instancePath}: ${err.message}. ${expectedType}`}
+            </ListItem>
+          );
+        })}
+      </List>
+    );
   };
 
   return (
