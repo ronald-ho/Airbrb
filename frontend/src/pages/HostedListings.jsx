@@ -27,10 +27,14 @@ function HostedListings () {
       <VStack>
         <Grid
           templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}
+          width='100%'
           gap='3'
         >
           {listings.map((listing, index) => (
-            <GridItem key={index}>{listingPreview(listing, `/my-listings/edit/${listing.id}`)}</GridItem>
+            <GridItem
+              width={{ base: '300px', sm: '200px', md: '225px' }}
+              key={index}
+            >{listingPreview(listing, `/my-listings/edit/${listing.id}`)}</GridItem>
           ))}
         </Grid>
         <Link to="/publish-listing" state={{ listing: listings }}>
