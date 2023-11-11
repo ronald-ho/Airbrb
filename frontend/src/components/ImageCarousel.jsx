@@ -39,7 +39,7 @@ function ImageCarousel ({ allImages }) {
         aria-label='Previous Image'
       />
       <AspectRatio ratio={4 / 3}>
-        <Image src={allImages[imageIndex]} width='100%' alt={`Image ${imageIndex}`} />
+        <Image src={allImages[imageIndex]} width='100%' rounded='lg' alt={`Image ${imageIndex}`} />
       </AspectRatio>
       <IconButton
         position='absolute'

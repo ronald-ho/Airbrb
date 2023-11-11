@@ -14,7 +14,7 @@ function ListingPreview (listing, url) {
   return (
     <Link as={ReactLink} to={url}>
       <AspectRatio ratio={4 / 3}>
-        <Image src={listing.thumbnail} objectFit='contain' />
+        <Image src={listing.thumbnail} objectFit='contain' rounded='lg' />
       </AspectRatio>
       <Box p='1'>
         <Flex>
