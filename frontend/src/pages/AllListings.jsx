@@ -7,6 +7,7 @@ import { SearchBar, InputBar } from '../components/SearchBar';
 import { getListing } from '../api/listings/actions';
 import { getAllBookings } from '../api/booking';
 import { averageRating } from '../helpers';
+import QuantitySelector from '../components/QuantitySelector';
 
 function AllListings () {
   // Get listings data
@@ -281,7 +282,7 @@ function AllListings () {
             divider={<StackDivider />}
             spacing={4}
           >
-            <Stack direction='column' spacing={4}>
+            {/* <Stack direction='column' spacing={4}>
               <Text fontWeight='bold'>Bedrooms</Text>
               <Stack direction='column' spacing={4}>
                 <RangeSlider value={bedroomFilter} min={0} max={8} step={1} onChange={(val) => setBedroomFilter(val)}>
@@ -310,8 +311,10 @@ function AllListings () {
                   </Stack>                  
                 </Stack>
               </Stack>
-            </Stack>
-            <Stack direction='column' spacing={4}>
+            </Stack> */}
+            <QuantitySelector title={'Bedrooms'} defaults={defaultBedrooms} value={bedroomFilter} setter={setBedroomFilter} />
+            <QuantitySelector title={'Price'} defaults={defaultPrices} value={priceFilter} setter={setPriceFilter} />
+            {/* <Stack direction='column' spacing={4}>
               <Text fontWeight='bold'>Price</Text>
               <Stack direction='column' spacing={4}>
                 <RangeSlider value={priceFilter} min={0} max={10000} step={1} onChange={(val) => setPriceFilter(val)}>
@@ -340,7 +343,7 @@ function AllListings () {
                   </Stack>                  
                 </Stack>
               </Stack>
-            </Stack>
+            </Stack> */}
             <Box display='flex' alignItems='center' justifyContent='space-between'>
               <Text fontWeight='bold' whiteSpace='nowrap'>Sort Reviews</Text>
               <Select onChange={handleSelectReviews} defaultValue='none' width='30%'>
