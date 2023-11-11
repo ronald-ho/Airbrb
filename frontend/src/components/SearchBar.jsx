@@ -1,7 +1,5 @@
-/* eslint-disable */
-
 import React, { useState } from 'react';
-import { Box, Text, Divider, Circle, Input, FormControl, FormLabel, Button, Container } from '@chakra-ui/react'
+import { Box, Text, Divider, Circle, Input, FormControl, FormLabel, Button } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons';
 import { RangeDatepicker } from 'chakra-dayzed-datepicker';
 
@@ -25,7 +23,6 @@ function SearchBar ({ onClickHandler }) {
       position='fixed'
       left="50%"
       top="2"
-      // transform={{ base: 'translate(-50%, 0%)', md: 'translate(-80%, 0%)', lg: 'translate(-50%, 0%)' }}
       transform='translate(-50%, 0%)'
       zIndex={400}
     >
@@ -86,7 +83,7 @@ function InputBar ({ onClickHandler, callReset, stopReset }) {
       <Box px='3' _hover={{ bg: 'gray.100', borderWidth: '1px', borderLeftRadius: '40px' }} flexGrow='2'>
         <FormControl>
           <FormLabel px='3' mt='1' mb='0'>Where</FormLabel>
-          <Input id='location-search' type='text' placeholder='Search title or city'
+          <Input id='location-search' type='text' placeholder='By title or city'
             size='sm'
             my='1'
             borderWidth='0px'
@@ -102,64 +99,44 @@ function InputBar ({ onClickHandler, callReset, stopReset }) {
             onDateChange={setSelectedDates}
             propsConfigs={{
               dateNavBtnProps: {
-                colorScheme: 'blue',
+                colorScheme: 'red',
                 variant: 'outline',
               },
               dayOfMonthBtnProps: {
                 defaultBtnProps: {
                   borderColor: 'red.300',
                   _hover: {
-                    background: 'blue.400',
+                    background: 'red.400',
                   },
                 },
                 isInRangeBtnProps: {
-                  color: 'purple.800',
-                  borderColor: 'blue.300',
+                  color: 'red.800',
+                  borderColor: 'red.300',
                 },
                 selectedBtnProps: {
-                  background: 'blue.200',
-                  borderColor: 'blue.300',
-                  color: 'blue.600',
+                  background: 'red.200',
+                  borderColor: 'red.300',
+                  color: 'black',
                 },
                 todayBtnProps: {
-                  background: 'teal.200',
-                  color: 'teal.700',
+                  background: 'black',
+                  color: 'white',
                 },
               },
               inputProps: {
                 size: 'sm',
                 borderWidth: '0px',
                 focusBorderColor: 'black',
-                placeholder: 'Check-in / Check-out',
+                placeholder: 'Check In / Out',
                 my: '1',
               },
             }}
           />
         </FormControl>
       </Box>
-
-      {/* <Box px='3' _hover={{ bg: 'gray.100', borderWidth: '1px' }}>
-        <FormControl>
-          <FormLabel px='3' mb='1'>Where</FormLabel>
-          <Input type='text' placeholder='Search title or city' borderWidth='0px' focusBorderColor='transparent' />
-        </FormControl>
-      </Box> */}
-      {/* <Divider orientation='vertical' />
-      <Text px='2' >Add guests</Text> */}
-      {/* <Circle bg='gray.100' size='30px'>
-        <SearchIcon color='black' boxSize='15px'/>
-      </Circle> */}
       <Button leftIcon={<SearchIcon />} onClick={submitSearch} borderRadius='20px' mr='2'>
         Search
       </Button>
-      {/* <IconButton
-        // colorScheme='teal'
-        isRound={true}
-        aria-label='Submit Search'
-        size='sm'
-        icon={<SearchIcon />}
-        onClick={submitSearch}
-      /> */}
     </Box>
   )
 }

@@ -38,7 +38,7 @@ const NavBar = (props) => {
               <MenuLink to="/my-listings" py='2' fontWeight='semibold' width='100%'>My Listings</MenuLink>
               {
                 localStorage.getItem('token')
-                  ? <MenuLink to="/" alignContents='center' py='2'>
+                  ? <MenuLink to="/" py='2'>
                       <Button
                         size="sm"
                         rounded="md"
@@ -51,7 +51,7 @@ const NavBar = (props) => {
                         Sign Out
                       </Button>
                     </MenuLink>
-                  : <MenuLink to="/login" alignContents='center' py='2'>
+                  : <MenuLink to="/login" py='2'>
                     <Button
                         size="sm"
                         rounded="md"
@@ -95,7 +95,7 @@ const MenuLinks = () => {
         <MenuLink to="/my-listings" fontSize='md' fontWeight='semibold'>My Listings</MenuLink>
         {
           localStorage.getItem('token')
-            ? <MenuLink to="/" alignContents='center'>
+            ? <MenuLink to="/">
                 <Button
                   size="sm"
                   rounded="md"
@@ -107,7 +107,7 @@ const MenuLinks = () => {
                   Sign Out
                 </Button>
               </MenuLink>
-            : <MenuLink to="/login" alignContents='center'>
+            : <MenuLink to="/login">
                <Button
                   size="sm"
                   rounded="md"

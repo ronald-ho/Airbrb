@@ -1,4 +1,3 @@
-/* eslint-disable */
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
 import { Center, ChakraProvider } from '@chakra-ui/react'
@@ -23,7 +22,7 @@ function App () {
       <ListingProvider>
           <BrowserRouter>
             <NavBar />
-            <Center pt='5rem' mx='2.5%'>
+            <Center pt='5rem' mx={0}>
             {/* <Container> */}
               <Routes>
                 <Route path="/" element={<AllListings/>}/>

@@ -6,8 +6,6 @@ const averageRating = (reviews) => {
     totalRatings += Number(review.rating);
   }
 
-  console.log(totalRatings, reviews.length);
-
   return Math.round((totalRatings / reviews.length) * 10) / 10;
 };
 

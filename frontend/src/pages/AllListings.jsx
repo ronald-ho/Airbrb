@@ -1,12 +1,13 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import { getAllListings } from '../api/listings';
-import { Flex, useDisclosure, Grid, GridItem, Box, RangeSlider, RangeSliderTrack, RangeSliderFilledTrack, Text, RangeSliderThumb, Button, Select, Modal, ModalOverlay, Stack, Divider, StackDivider } from '@chakra-ui/react';
+import { Flex, Grid, GridItem, Box, Text, Button, Select, Modal, ModalOverlay, Stack, StackDivider } from '@chakra-ui/react';
 import ListingPreview from '../components/ListingPreview';
 import { SearchBar, InputBar } from '../components/SearchBar';
 import { getListing } from '../api/listings/actions';
 import { getAllBookings } from '../api/booking';
 import { averageRating } from '../helpers';
+import QuantitySelector from '../components/QuantitySelector';
 
 function AllListings () {
   // Get listings data
@@ -32,13 +33,11 @@ function AllListings () {
   // Passes search dates into listing previews
   const [searchDates, setSearchDates] = useState(null);
 
-  // Search filters
-  // const [filters, setFilters] = useState(null);
-  
-  const { isOpen, onClose } = useDisclosure();
-
   // Handle sort review selector
   const [sortReviews, setSortReviews] = useState('none');
+
+  // Handles resetting search
+  const [callReset, setCallReset] = useState(false);
 
   const handleSelectReviews = (e) => setSortReviews(e.target.value);
 
@@ -49,12 +48,6 @@ function AllListings () {
   };
 
   const handleSubmitClick = (searchInput) => {
-    // setFilters(searchInput);
-    // console.log(filters);
-    // api call for info
-    console.log('inputbar', searchInput);
-    console.log('filter listing', listings);
-
     // Helper function to check if listing availabilities meet search
     const isAvailable = (start, end, availabilities) => {
       for (const [s, e] of availabilities) {
@@ -62,7 +55,6 @@ function AllListings () {
         const e_parsed = new Date(e);
 
         if (start >= s_parsed && end <= e_parsed) {
-          console.log('available');
           return 1;
         }
       }
@@ -90,6 +82,7 @@ function AllListings () {
     // Determine ranges for prices
     let floorPrice;
     let ceilPrice;
+
     // We need to check if price filters are being used by comparing against default
     if (priceFilter.every((value, index) => value === defaultPrices[index])) {
       floorPrice = undefined;
@@ -103,7 +96,6 @@ function AllListings () {
       const metadata = listing.metadata;
 
       const filterDate = floorDate === undefined || ceilDate === undefined || isAvailable(floorDate, ceilDate, listing.availability);
-      console.log(listing.title, filterDate);
 
       const filterByFloorBedroom = floorBedroom === undefined || metadata.bedrooms >= floorBedroom;
       const filterByCeilBedroom = ceilBedroom === undefined || metadata.bedrooms <= ceilBedroom;
@@ -113,9 +105,7 @@ function AllListings () {
 
       // Calculate average rating and add to listing
       listing.avgRating = averageRating(listing.reviews);
-      console.log('review', listing.avgRating);
 
-      // console.log(filterByFloorBedroom, filterByCeilBedroom, filterByFloorPrice, filterByCeilPrice);
       return (
         (listing.title.toLowerCase().includes(searchInput.textSearch) ||
           listing.address.city.toLowerCase().includes(searchInput.textSearch)) &&
@@ -154,22 +144,19 @@ function AllListings () {
           const bookingsResponse = await getAllBookings();
 
           if (!bookingsResponse.success) {
-            console.error('Error fetching bookings');
             return null;
           }
 
           const bookingsDict = {};
 
           for (const booking of bookingsResponse.data.bookings) {
-            console.log('booking', booking);
             bookingsDict[booking.listingId] = booking.status;
           }
 
           setBookings(bookingsDict);
-          console.log('end', bookings)
         }
       } catch (error) {
-        console.error('Error fetching listings:', error);
+        return null;
       }
     };
 
@@ -182,7 +169,6 @@ function AllListings () {
         const listingsResponse = await getAllListings();
 
         if (!listingsResponse.success) {
-          console.error('Error fetching listings');
           return null;
         }
 
@@ -197,9 +183,7 @@ function AllListings () {
               
               // Listing needs to be published
               if (!propertyData.published) return null;
-              // console.log(propertyData.published);
 
-              console.log(bookings, property.id);
               if (property.id in bookings) {
                 propertyData.bookingStatus = bookings[property.id];
               } else {
@@ -209,11 +193,9 @@ function AllListings () {
               // Add listing id
               propertyData.listingId = property.id;
 
-              console.log('property', propertyData.bookingStatus);
               return propertyData;
             } else {
               // Handle error if the details fetch fails for a property
-              console.error('Error fetching details for property:', property.id);
               return null;
             }
           })
@@ -236,7 +218,7 @@ function AllListings () {
         setFilteredListings(propertyDetails);
         setLoading(false);
       } catch (error) {
-        console.error('Error fetching listings:', error);
+        return;
       }
     };
 
@@ -246,17 +228,13 @@ function AllListings () {
   const handleFocusOut = (event) => {
     const searchArea = document.getElementById('search-bar');
     if (searchArea.contains(event.target)) {
-      console.log('inside');
       setIsFiltersVisible(true);
       setIsSearchVisible(false);
     } else {
-      console.log('outside');
       setIsFiltersVisible(false);
       setIsSearchVisible(true);
     }
   };
-
-  const [callReset, setCallReset] = useState(false);
 
   const clearFilters = () => {
     setCallReset(true);
@@ -272,15 +250,10 @@ function AllListings () {
   };
 
   return (
-    <Flex onMouseDown={event => handleFocusOut(event)} flexDirection='column' align='center'>
-        {/* <div>
-          <h1>All Listings</h1>
-        </div> */}
-        {/* Navbar will go here */}
+    <Flex onMouseDown={event => handleFocusOut(event)} flexDirection='column' align='center' px={8}>
         <Box
           py='2'
           id='search-bar'
-          // zIndex={400}
         >
           {
             isSearchVisible
@@ -309,66 +282,8 @@ function AllListings () {
             divider={<StackDivider />}
             spacing={4}
           >
-            <Stack direction='column' spacing={4}>
-              <Text fontWeight='bold'>Bedrooms</Text>
-              <Stack direction='column' spacing={4}>
-                <RangeSlider value={bedroomFilter} min={0} max={8} step={1} onChange={(val) => setBedroomFilter(val)}>
-                  <RangeSliderTrack bg='red.100'>
-                    <RangeSliderFilledTrack bg='#ff385c' />
-                  </RangeSliderTrack>
-                  <RangeSliderThumb boxSize={5} index={0} borderColor='gray.300' />
-                  <RangeSliderThumb boxSize={5} index={1} borderColor='gray.300' />
-                </RangeSlider>
-                <Stack direction='row' align={'center'}>
-                  <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
-                    <Text fontWeight='semibold'>Minimum</Text>
-                    <Text>{bedroomFilter[0]}</Text>
-                  </Stack>
-                  <Divider />
-                  <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
-                    <Text fontWeight='semibold'>Maximum</Text>
-                    <Text>
-                      {bedroomFilter[1]}
-                      {
-                        bedroomFilter[0] == defaultBedrooms[0] && bedroomFilter[1] == defaultBedrooms[1]
-                          ? '+'
-                          : ''
-                      }                      
-                    </Text>
-                  </Stack>                  
-                </Stack>
-              </Stack>
-            </Stack>
-            <Stack direction='column' spacing={4}>
-              <Text fontWeight='bold'>Price</Text>
-              <Stack direction='column' spacing={4}>
-                <RangeSlider value={priceFilter} min={0} max={10000} step={1} onChange={(val) => setPriceFilter(val)}>
-                  <RangeSliderTrack bg='red.100'>
-                    <RangeSliderFilledTrack bg='#ff385c' />
-                  </RangeSliderTrack>
-                  <RangeSliderThumb boxSize={5} index={0} borderColor='gray.300' />
-                  <RangeSliderThumb boxSize={5} index={1} borderColor='gray.300' />
-                </RangeSlider>
-                <Stack direction='row' align={'center'}>
-                  <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
-                    <Text fontWeight='semibold'>Minimum</Text>
-                    <Text>${priceFilter[0]}</Text>
-                  </Stack>
-                  <Divider />
-                  <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
-                    <Text fontWeight='semibold'>Maximum</Text>
-                    <Text>
-                      ${priceFilter[1]}
-                      {
-                        priceFilter[0] == defaultPrices[0] && priceFilter[1] == defaultPrices[1]
-                          ? '+'
-                          : ''
-                      }
-                    </Text>
-                  </Stack>                  
-                </Stack>
-              </Stack>
-            </Stack>
+            <QuantitySelector title={'Bedrooms'} defaults={defaultBedrooms} value={bedroomFilter} setter={setBedroomFilter} />
+            <QuantitySelector title={'Price'} defaults={defaultPrices} value={priceFilter} setter={setPriceFilter} />
             <Box display='flex' alignItems='center' justifyContent='space-between'>
               <Text fontWeight='bold' whiteSpace='nowrap'>Sort Reviews</Text>
               <Select onChange={handleSelectReviews} defaultValue='none' width='30%'>
@@ -383,6 +298,7 @@ function AllListings () {
 
         <Grid
           templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}
+          width='100%'
           gap='3'
         >
           {
@@ -400,10 +316,14 @@ function AllListings () {
 
                 const serialisedRouteData = JSON.stringify(routeData); 
                 const url = `/listing/${encodeURIComponent(serialisedRouteData)}/`;
-                
 
                 return (
-                  <GridItem key={index}>{ListingPreview(listing, url)}</GridItem>
+                  <GridItem
+                    width={{ base: '300px', sm: '200px', md: '225px' }}
+                    key={index}
+                  >
+                   {ListingPreview(listing, url)}
+                  </GridItem>
                 );
             })
             : null
