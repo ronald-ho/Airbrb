@@ -25,7 +25,6 @@ function HostedListings () {
 
     <Flex justify="center" minH="100vh">
       <VStack>
-        <h1>Hosted Listings</h1>
         <Grid
           templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}
           gap='3'
