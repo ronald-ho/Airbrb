@@ -49,6 +49,7 @@ function EditListing () {
       beds: 0,
       bathrooms: 0,
       amenities: [],
+      images: []
     },
     published: '',
     availability: []
@@ -87,12 +88,21 @@ function EditListing () {
     fetchListing();
   }, [listingId]);
 
+  useEffect(() => {
+    handleSubmit();
+  }, [listing]);
+
+  useEffect(() => {
+    if (window.bootstrap) {
+      window.bootstrap.Carousel('#carouselExample');
+    }
+  }, []);
+
   const handleInputChange = (name, value) => {
     setListing(prevListing => ({
       ...prevListing,
       [name]: value,
     }));
-    handleSubmit();
   };
 
   const handleAddressChange = (name, value) => {
@@ -103,7 +113,6 @@ function EditListing () {
         [name]: value,
       }
     }));
-    handleSubmit();
   };
 
   const handleMetadataChange = (name, value) => {
@@ -114,7 +123,23 @@ function EditListing () {
         [name]: value,
       }
     }));
-    handleSubmit();
+  };
+
+  const handleImagesChange = (base64Strings) => {
+    console.log('Received base64Strings:', base64Strings); // Debugging line
+
+    setListing(prevListing => {
+      const updatedListing = {
+        ...prevListing,
+        metadata: {
+          ...prevListing.metadata,
+          images: [...prevListing.metadata.images, ...base64Strings]
+        }
+      };
+
+      console.log('Updated listing with new images:', updatedListing);
+      return updatedListing;
+    });
   };
 
   const handleDateChanges = async (newDates) => {
@@ -138,7 +163,7 @@ function EditListing () {
     }
   }
 
-  const handleImageUpload = (e) => {
+  const handleThumbnailUpload = (e) => {
     const file = e.target.files[0];
     if (file) {
       const reader = new FileReader();
@@ -150,13 +175,37 @@ function EditListing () {
     }
   };
 
+  const handleImagesUpload = (event) => {
+    const files = Array.from(event.target.files);
+
+    const promises = files.map(file => {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = (event) => {
+          resolve(event.target.result);
+        };
+
+        reader.onerror = reject;
+
+        reader.readAsDataURL(file);
+      });
+    });
+
+    Promise.all(promises).then(base64Strings => {
+      handleImagesChange(base64Strings);
+    }).catch(error => {
+      console.error('Error reading files: ', error);
+      setError('Error uploading images');
+    });
+  }
+
   const handleSubmit = async () => {
     const updatedListing = {
       ...listing,
     };
     try {
-      const response = await updateListing(listingId, updatedListing);
-      console.log('Updated listing: ', response);
+      await updateListing(listingId, updatedListing);
     } catch (err) {
       setError(error.message);
       toast({ title: error.toString(), status: 'error', duration: 3000, isClosable: true, })
@@ -188,7 +237,7 @@ function EditListing () {
   }
 
   const customStyles = {
-    maxW: { base: '100%', md: '50%' }
+    maxW: { base: '100%' }
   }
 
   if (isLoading) return null;
@@ -196,7 +245,7 @@ function EditListing () {
   return (
     <CenteredBox customStyles={customStyles}>
       <VStack>
-        <Text fontSize='3xl'>Editing {listing.title}</Text>
+        <Text fontSize='3xl'>{listing.title}</Text>
         {listing.thumbnail === ''
           ? (
             <Image src={DefaultAirbnbImage} alt="Default Photo" objectFit="contain"/>
@@ -206,12 +255,13 @@ function EditListing () {
             )}
         <Tabs maxWidth="100%">
           {/* Tab navigation */}
-          <Flex justify="space-between" style={{ overflowX: 'auto' }}>
+          <Flex position="relative">
             <TabList style={{ flex: 'none' }}>
               <Tab fontSize="sm">Basic</Tab>
               <Tab fontSize="sm">Address</Tab>
               <Tab fontSize="sm">Property Type</Tab>
               <Tab fontSize="sm">Details</Tab>
+              <Tab fontSize="sm">Images</Tab>
               <Tab fontSize="sm">Amenities</Tab>
               {listing.published
                 ? (
@@ -241,8 +291,7 @@ function EditListing () {
               </FormControl>
               <FormControl>
                 <FormLabel>Thumbnail</FormLabel>
-                <Input type="file" accept="image/*" onChange={handleImageUpload}
-                />
+                <Input type="file" accept="image/*" onChange={handleThumbnailUpload}/>
               </FormControl>
             </TabPanel>
 
@@ -313,6 +362,12 @@ function EditListing () {
                 value={listing.metadata.bathrooms}
                 onChange={(value) => handleMetadataChange('bathrooms', value)}
               />
+            </TabPanel>
+
+            {/* Images Tab */}
+            <TabPanel>
+              <FormLabel>Images</FormLabel>
+              <Input type="file" accept="image/*" multiple onChange={handleImagesUpload}/>
             </TabPanel>
 
             {/* Amenities Tab */}

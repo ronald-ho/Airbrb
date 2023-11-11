@@ -57,7 +57,7 @@ function PublishListing () {
   const allListingsPublished = listings.every(listing => listing.published);
 
   return (
-    <CenteredBox customStyles={{ minW: '500px' }}>
+    <CenteredBox>
       <VStack>
         {allListingsPublished
           ? (

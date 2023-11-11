@@ -14,13 +14,6 @@ function Popup (props) {
 
   const cancelRef = useRef();
 
-  const formattedBody = body.split('\n').map((line, index) => (
-    <React.Fragment key={index}>
-      {line}
-      <br/>
-    </React.Fragment>
-  ));
-
   return (
     <AlertDialog
       isOpen={true}
@@ -34,7 +27,7 @@ function Popup (props) {
             {title}
           </AlertDialogHeader>
           <AlertDialogBody id="alert-dialog-description">
-            {formattedBody}
+            {body}
           </AlertDialogBody>
           <AlertDialogFooter>
             <Button ref={cancelRef} onClick={onClose}>
