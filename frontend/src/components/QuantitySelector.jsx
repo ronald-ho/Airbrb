@@ -1,7 +1,7 @@
 import React from 'react';
 import { RangeSlider, RangeSliderTrack, RangeSliderFilledTrack, Text, RangeSliderThumb, Stack, Divider } from '@chakra-ui/react';
 
-function QuantitySelector ({ title, defaults, value, setter }) {
+function QuantitySelector ({ title, units, defaults, value, setter }) {
   return (
     <Stack direction='column' spacing={4}>
       <Text fontWeight='bold'>{title}</Text>
@@ -16,13 +16,13 @@ function QuantitySelector ({ title, defaults, value, setter }) {
         <Stack direction='row' align={'center'}>
           <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
             <Text fontWeight='semibold'>Minimum</Text>
-            <Text>${value[0]}</Text>
+            <Text>{units}{value[0]}</Text>
           </Stack>
           <Divider />
           <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
             <Text fontWeight='semibold'>Maximum</Text>
             <Text>
-              ${value[1]}
+              {units}{value[1]}
               {
                 value[0] === defaults[0] && defaults[1] === value[1]
                   ? '+'

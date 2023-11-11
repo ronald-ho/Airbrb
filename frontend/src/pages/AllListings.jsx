@@ -1,7 +1,7 @@
 /* eslint-disable */
 import React, { useEffect, useState } from 'react';
 import { getAllListings } from '../api/listings';
-import { Flex, Grid, GridItem, Box, RangeSlider, RangeSliderTrack, RangeSliderFilledTrack, Text, RangeSliderThumb, Button, Select, Modal, ModalOverlay, Stack, Divider, StackDivider } from '@chakra-ui/react';
+import { Flex, Grid, GridItem, Box, Text, Button, Select, Modal, ModalOverlay, Stack, StackDivider } from '@chakra-ui/react';
 import ListingPreview from '../components/ListingPreview';
 import { SearchBar, InputBar } from '../components/SearchBar';
 import { getListing } from '../api/listings/actions';
@@ -282,68 +282,8 @@ function AllListings () {
             divider={<StackDivider />}
             spacing={4}
           >
-            {/* <Stack direction='column' spacing={4}>
-              <Text fontWeight='bold'>Bedrooms</Text>
-              <Stack direction='column' spacing={4}>
-                <RangeSlider value={bedroomFilter} min={0} max={8} step={1} onChange={(val) => setBedroomFilter(val)}>
-                  <RangeSliderTrack bg='red.100'>
-                    <RangeSliderFilledTrack bg='#ff385c' />
-                  </RangeSliderTrack>
-                  <RangeSliderThumb boxSize={5} index={0} borderColor='gray.300' />
-                  <RangeSliderThumb boxSize={5} index={1} borderColor='gray.300' />
-                </RangeSlider>
-                <Stack direction='row' align={'center'}>
-                  <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
-                    <Text fontWeight='semibold'>Minimum</Text>
-                    <Text>{bedroomFilter[0]}</Text>
-                  </Stack>
-                  <Divider />
-                  <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
-                    <Text fontWeight='semibold'>Maximum</Text>
-                    <Text>
-                      {bedroomFilter[1]}
-                      {
-                        bedroomFilter[0] == defaultBedrooms[0] && bedroomFilter[1] == defaultBedrooms[1]
-                          ? '+'
-                          : ''
-                      }                      
-                    </Text>
-                  </Stack>                  
-                </Stack>
-              </Stack>
-            </Stack> */}
             <QuantitySelector title={'Bedrooms'} defaults={defaultBedrooms} value={bedroomFilter} setter={setBedroomFilter} />
             <QuantitySelector title={'Price'} defaults={defaultPrices} value={priceFilter} setter={setPriceFilter} />
-            {/* <Stack direction='column' spacing={4}>
-              <Text fontWeight='bold'>Price</Text>
-              <Stack direction='column' spacing={4}>
-                <RangeSlider value={priceFilter} min={0} max={10000} step={1} onChange={(val) => setPriceFilter(val)}>
-                  <RangeSliderTrack bg='red.100'>
-                    <RangeSliderFilledTrack bg='#ff385c' />
-                  </RangeSliderTrack>
-                  <RangeSliderThumb boxSize={5} index={0} borderColor='gray.300' />
-                  <RangeSliderThumb boxSize={5} index={1} borderColor='gray.300' />
-                </RangeSlider>
-                <Stack direction='row' align={'center'}>
-                  <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
-                    <Text fontWeight='semibold'>Minimum</Text>
-                    <Text>${priceFilter[0]}</Text>
-                  </Stack>
-                  <Divider />
-                  <Stack borderRadius='20px' borderWidth='1px' direction='column' alignItems='center' p='2'>
-                    <Text fontWeight='semibold'>Maximum</Text>
-                    <Text>
-                      ${priceFilter[1]}
-                      {
-                        priceFilter[0] == defaultPrices[0] && priceFilter[1] == defaultPrices[1]
-                          ? '+'
-                          : ''
-                      }
-                    </Text>
-                  </Stack>                  
-                </Stack>
-              </Stack>
-            </Stack> */}
             <Box display='flex' alignItems='center' justifyContent='space-between'>
               <Text fontWeight='bold' whiteSpace='nowrap'>Sort Reviews</Text>
               <Select onChange={handleSelectReviews} defaultValue='none' width='30%'>
