@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { getAllBookingDetails } from '../api/booking';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useParams } from 'react-router-dom';
 import Select from 'react-select';
 import { getAllListingDetailsByUser } from '../api/listings';
-import { Box, Flex, Text, VStack } from '@chakra-ui/react';
+import { Box, Text, VStack } from '@chakra-ui/react';
 import { customSelectStyles, formatOptionLabel } from '../helpers';
 
 function BookingHistory () {
@@ -11,8 +11,9 @@ function BookingHistory () {
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [listingBookings, setListingBookings] = useState([]);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState(null);
+  const location = useLocation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -35,6 +36,8 @@ function BookingHistory () {
         try {
           const response = await getAllBookingDetails(listingId);
           setListingBookings(response);
+          setLoading(false);
+          console.log('LISTING BOOKINGS', listingBookings)
         } catch (error) {
           console.error('Error fetching bookings', error);
         }
@@ -43,7 +46,7 @@ function BookingHistory () {
     } else {
       setLoading(false);
     }
-  }, [listingId]);
+  }, [location]);
 
   useEffect(() => {
     setLoading(false);
@@ -52,9 +55,24 @@ function BookingHistory () {
 
   const handleListingChange = (option) => {
     if (option) {
-      setSelectedOption(option)
-      navigate(`/booking-history/${option.value}`);
+      setSelectedOption(option);
+      // Update the URL without navigating
+      window.history.pushState({}, '', `/booking-history/${option.value}`);
+      // Manually trigger data fetching
+      fetchDataForListing(option.value);
     }
+  };
+
+  const fetchDataForListing = async (id) => {
+    setLoading(true);
+    try {
+      const response = await getAllBookingDetails(id);
+      setListingBookings(response);
+      console.log('listingBookings', listingBookings)
+    } catch (error) {
+      console.error('Error fetching bookings ', error);
+    }
+    setLoading(false);
   };
 
   const formatDuration = (duration) => {
@@ -82,16 +100,17 @@ function BookingHistory () {
   if (loading) return null;
 
   return (
-    <Flex flexDirection="column">
+    <VStack>
       <Select
         className="basic-single"
-        options={listings.map(listing => ({
-          value: listing.id,
-          label: listing.title,
-          photo: listing.thumbnail,
-          metadata: listing.metadata,
-          price: listing.price
-        }))}
+        options={
+          listings.filter(listing => listing.published).map(listing => ({
+            value: listing.id,
+            label: listing.title,
+            photo: listing.thumbnail,
+            metadata: listing.metadata,
+            price: listing.price
+          }))}
         formatOptionLabel={formatOptionLabel}
         onChange={handleListingChange}
         styles={customSelectStyles}
@@ -116,7 +135,7 @@ function BookingHistory () {
           </>
         )}
       </VStack>
-    </Flex>
+    </VStack>
   )
 }
 

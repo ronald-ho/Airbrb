@@ -11,11 +11,12 @@ export const getAllBookings = async () => {
 }
 
 export const getAllBookingDetails = async (listingId) => {
+  console.log('listingId', listingId)
   const bookingsResponse = await getAllBookings();
   const now = new Date();
 
   const filteredBookings = bookingsResponse.data.bookings.filter(
-    booking => booking.listingId === listingId
+    booking => parseInt(booking.listingId) === listingId
   );
 
   const bookingDetails = {
@@ -24,6 +25,8 @@ export const getAllBookingDetails = async (listingId) => {
     daysBookedThisYear: 0,
     profitThisYear: 0
   };
+
+  console.log('filtered Bookings', filteredBookings)
 
   for (const booking of filteredBookings) {
     const listingResponse = await getListing(booking.listingId);
@@ -55,10 +58,14 @@ export const getAllBookingDetails = async (listingId) => {
       bookingDetails.profitThisYear += booking.totalPrice;
     }
 
+    console.log('booking', booking);
+
     bookingDetails.detailedBookings.push({
       ...booking,
     });
   }
+
+  console.log('Booking Details', bookingDetails)
 
   return bookingDetails;
 }
