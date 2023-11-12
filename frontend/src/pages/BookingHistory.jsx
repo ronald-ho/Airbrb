@@ -3,7 +3,8 @@ import { getAllBookingDetails } from '../api/booking';
 import { useNavigate, useParams } from 'react-router-dom';
 import Select from 'react-select';
 import { getAllListingDetailsByUser } from '../api/listings';
-import { Badge, Box, Flex, HStack, Image, Text, VStack } from '@chakra-ui/react';
+import { Box, Flex, Text, VStack } from '@chakra-ui/react';
+import { customSelectStyles, formatOptionLabel } from '../helpers';
 
 function BookingHistory () {
   const { listingId } = useParams();
@@ -56,47 +57,32 @@ function BookingHistory () {
     }
   };
 
-  const customStyles = {
-    control: (provided) => ({
-      ...provided,
-      minWidth: '600px',
-      fontSize: '16px',
-    }),
-    option: (provided, state) => ({
-      ...provided,
-      padding: '20px',
-      fontSize: '16px',
-    }),
-  };
+  const formatDuration = (duration) => {
+    const parts = [];
 
-  const formatOptionLabel = (option) => (
-    <Flex align="center">
-      <Image src={option.photo} alt={option.label} boxSize="60px" mr="10px" rounded="lg"/>
-      <HStack justify="space-between" w="100%">
-        <Box>
-          <Text fontWeight="semibold" isTruncated>
-            {option.label}
-          </Text>
-          <Badge borderRadius="md" px="2" mr="1">
-            {option.metadata.propertyType}
-          </Badge>
-        </Box>
-        <Box>
-          <Box>
-            ${option.price}/night
-          </Box>
-          <Box color="gray.600" fontSize="xs">
-            {option.metadata.bedrooms} BEDS &bull; {option.metadata.bathrooms} BATHS
-          </Box>
-        </Box>
-      </HStack>
-    </Flex>
-  );
+    if (duration.years > 0) {
+      parts.push(duration.years + (duration.years === 1 ? ' year' : ' years'));
+    }
+
+    if (duration.months > 0) {
+      parts.push(duration.months + (duration.months === 1 ? ' month' : ' months'));
+    }
+
+    if (duration.days > 0) {
+      parts.push(duration.days + (duration.days === 1 ? ' day' : ' days'));
+    }
+
+    if (duration.hours > 0) {
+      parts.push(duration.hours + (duration.hours === 1 ? ' hour' : ' hours'));
+    }
+
+    return parts.length > 0 ? parts.join(', ') : 'Less than an hour';
+  }
 
   if (loading) return null;
 
   return (
-    <VStack>
+    <Flex flexDirection="column">
       <Select
         className="basic-single"
         options={listings.map(listing => ({
@@ -108,12 +94,29 @@ function BookingHistory () {
         }))}
         formatOptionLabel={formatOptionLabel}
         onChange={handleListingChange}
-        styles={customStyles}
+        styles={customSelectStyles}
         defaultValue={selectedOption}
       />
 
-      {/* Render booking details */}
-    </VStack>
+      <VStack>
+        {selectedOption && (
+          <>
+            <Text fontSize="xl">Listing Details:</Text>
+            <Text>Online Duration: {formatDuration(listingBookings.onlineDuration)}</Text>
+            <Text>Days Booked This Year: {listingBookings.daysBookedThisYear}</Text>
+            <Text>Profit This Year: ${listingBookings.profitThisYear}</Text>
+            <Text fontSize="xl">Booking History:</Text>
+            {listingBookings.detailedBookings.map(booking => (
+              <Box key={booking.id} p={2} borderWidth="1px">
+                <Text>Date Range: {booking.dateRange.toString()}</Text>
+                <Text>Total Price: ${booking.totalPrice}</Text>
+                <Text>Status: {booking.status}</Text>
+              </Box>
+            ))}
+          </>
+        )}
+      </VStack>
+    </Flex>
   )
 }
 

@@ -1,4 +1,7 @@
 // Helper function to calculate average review for listing
+import { Badge, Box, Flex, HStack, Image, Text } from '@chakra-ui/react';
+import React from 'react';
+
 const averageRating = (reviews) => {
   let totalRatings = 0;
 
@@ -74,3 +77,40 @@ export const listingSchema = {
   },
   required: ['title', 'address', 'price', 'thumbnail', 'metadata']
 }
+
+export const formatOptionLabel = (option) => (
+  <Flex align="center">
+    <Image src={option.photo} alt={option.label} boxSize="60px" mr="10px" rounded="xl"/>
+    <HStack justify="space-between" w="100%">
+      <Box>
+        <Text fontWeight="semibold" isTruncated>
+          {option.label}
+        </Text>
+        <Badge borderRadius="md" px="2" mr="1">
+          {option.metadata.propertyType}
+        </Badge>
+      </Box>
+      <Box>
+        <Box>
+          ${option.price}/night
+        </Box>
+        <Box color="gray.600" fontSize="xs">
+          {option.metadata.bedrooms} BEDS &bull; {option.metadata.bathrooms} BATHS
+        </Box>
+      </Box>
+    </HStack>
+  </Flex>
+);
+
+export const customSelectStyles = {
+  control: (baseStyles) => ({
+    ...baseStyles,
+    minWidth: '500px',
+    minHeight: '40px',
+    borderRadius: '15px',
+  }),
+  menu: (provided) => ({
+    ...provided,
+    zIndex: 2000
+  }),
+};

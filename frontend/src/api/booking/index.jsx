@@ -1,12 +1,6 @@
 import { apiCall } from '../../services/api';
 import { getListing } from '../listings/actions';
-import {
-  differenceInCalendarDays,
-  differenceInCalendarMonths,
-  differenceInCalendarYears,
-  differenceInHours,
-  parseISO
-} from 'date-fns';
+import { differenceInCalendarDays, parseISO } from 'date-fns';
 
 /**
  * Get all bookings
@@ -33,16 +27,24 @@ export const getAllBookingDetails = async (listingId) => {
 
   for (const booking of filteredBookings) {
     const listingResponse = await getListing(booking.listingId);
+    console.log('listingResponse', listingResponse)
     const postedOn = listingResponse.data.listing.postedOn;
     const postedOnISO = parseISO(postedOn);
+    console.log('postedOn', postedOn)
 
     // Calculate how long the listing has been up online
-    const years = differenceInCalendarYears(now, postedOnISO);
-    const months = differenceInCalendarMonths(now, postedOnISO);
-    const days = differenceInCalendarDays(now, postedOnISO);
-    const hours = differenceInHours(now, postedOnISO);
+    const diffTime = Math.abs(now - postedOnISO);
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
+    const diffMonths = Math.floor(diffDays / 30);
+    const diffYears = Math.floor(diffDays / 365);
 
-    bookingDetails.onlineDuration = { years, months, days, hours };
+    bookingDetails.onlineDuration = {
+      years: diffYears,
+      months: diffMonths % 12,
+      days: diffDays % 30,
+      hours: diffHours % 24
+    };
     bookingDetails.postedOn = postedOn;
 
     // Calculate days booked and profit for 'accepted' bookings this year

@@ -15,7 +15,7 @@ export const getAllListingDetailsByUser = async () => {
   const listingsResponse = await getAllListings();
 
   const userListings = listingsResponse.data.listings.filter(listing => {
-    return listing.owner === currentUserEmail;
+    return listing.owner === currentUserEmail
   });
 
   const listingIds = userListings.map(listing => listing.id);
