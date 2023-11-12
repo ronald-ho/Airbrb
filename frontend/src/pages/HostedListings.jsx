@@ -37,6 +37,21 @@ function HostedListings () {
             >{listingPreview(listing, `/my-listings/edit/${listing.id}`)}</GridItem>
           ))}
         </Grid>
+        <Link to="/booking-history" state={{ listing: listings }}>
+          <Button
+            position="fixed"
+            bottom="8rem"
+            right="2rem"
+            backgroundColor="blue.500"
+            color="white"
+            borderRadius="full"
+            paddingX="4"
+            paddingY="2"
+            _hover={{ backgroundColor: 'blue.600' }}
+          >
+            My Bookings
+          </Button>
+        </Link>
         <Link to="/publish-listing" state={{ listing: listings }}>
           <Button
             position="fixed"
