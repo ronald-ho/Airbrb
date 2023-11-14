@@ -1,19 +1,19 @@
 import React, { useEffect, useState } from 'react';
 import { getAllBookingDetails } from '../api/booking';
-import { useLocation, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import Select from 'react-select';
 import { getAllListingDetailsByUser } from '../api/listings';
-import { Box, Text, VStack } from '@chakra-ui/react';
-import { customSelectStyles, formatOptionLabel } from '../helpers';
+import { AbsoluteCenter, Badge, Box, Button, ButtonGroup, Center, Flex, Spinner, Text, VStack } from '@chakra-ui/react';
+import { customSelectStyles, formatOptionLabel, statusColourSchemes } from '../helpers';
+import moment from 'moment/moment';
+import { acceptBooking, declineBooking, deleteBooking } from '../api/booking/actions';
 
 function BookingHistory () {
   const { listingId } = useParams();
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [listingBookings, setListingBookings] = useState([]);
-  // const navigate = useNavigate();
   const [selectedOption, setSelectedOption] = useState(null);
-  const location = useLocation();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -50,16 +50,15 @@ function BookingHistory () {
 
   useEffect(() => {
     setLoading(false);
-    console.log('listings', listingBookings);
   }, [listingBookings]);
 
-  const handleListingChange = (option) => {
+  const handleListingChange = async (option) => {
     if (option) {
       setSelectedOption(option);
       // Update the URL without navigating
       window.history.pushState({}, '', `/booking-history/${option.value}`);
       // Manually trigger data fetching
-      fetchDataForListing(option.value);
+      await fetchDataForListing(option.value);
     }
   };
 
@@ -72,35 +71,34 @@ function BookingHistory () {
     } catch (error) {
       console.error('Error fetching bookings ', error);
     }
-    setLoading(false);
   };
 
-  const formatDuration = (duration) => {
-    const parts = [];
+  const formatDate = (milliseconds) => {
+    const date = new Date(milliseconds);
+    return moment(date).format('Do of MMMM YYYY');
+  };
 
-    if (duration.years > 0) {
-      parts.push(duration.years + (duration.years === 1 ? ' year' : ' years'));
-    }
-
-    if (duration.months > 0) {
-      parts.push(duration.months + (duration.months === 1 ? ' month' : ' months'));
-    }
-
-    if (duration.days > 0) {
-      parts.push(duration.days + (duration.days === 1 ? ' day' : ' days'));
-    }
-
-    if (duration.hours > 0) {
-      parts.push(duration.hours + (duration.hours === 1 ? ' hour' : ' hours'));
-    }
-
-    return parts.length > 0 ? parts.join(', ') : 'Less than an hour';
+  if (loading) {
+    return (
+      <AbsoluteCenter>
+        <Spinner/>
+      </AbsoluteCenter>
+    )
   }
+
+  const handleBookingAction = async (action, bookingId) => {
+    try {
+      await action(bookingId);
+      await fetchDataForListing(selectedOption.value);
+    } catch (error) {
+      console.error(`Error handling booking action: ${action.name}`, error);
+    }
+  };
 
   if (loading) return null;
 
   return (
-    <VStack>
+    <Flex flexDirection="column" maxHeight="100vh">
       <Select
         className="basic-single"
         options={
@@ -117,25 +115,56 @@ function BookingHistory () {
         defaultValue={selectedOption}
       />
 
-      <VStack>
+      <Flex flexDirection="column">
         {selectedOption && (
           <>
-            <Text fontSize="xl">Listing Details:</Text>
-            <Text>Online Duration: {formatDuration(listingBookings.onlineDuration)}</Text>
-            <Text>Days Booked This Year: {listingBookings.daysBookedThisYear}</Text>
-            <Text>Profit This Year: ${listingBookings.profitThisYear}</Text>
-            <Text fontSize="xl">Booking History:</Text>
-            {listingBookings.detailedBookings.map(booking => (
-              <Box key={booking.id} p={2} borderWidth="1px">
-                <Text>Date Range: {booking.dateRange.toString()}</Text>
-                <Text>Total Price: ${booking.totalPrice}</Text>
-                <Text>Status: {booking.status}</Text>
-              </Box>
-            ))}
+            <Center>
+              <VStack>
+                <Text fontSize="xl">Listing Details:</Text>
+                <Text>Online Duration: {listingBookings.onlineDuration}</Text>
+                <Text>Days Booked This Year: {listingBookings.daysBookedThisYear}</Text>
+                <Text>Profit This Year: ${listingBookings.profitThisYear}</Text>
+              </VStack>
+            </Center>
+
+            <Flex flexDirection="column" overflowY="auto" maxHeight="73vh">
+              {listingBookings.detailedBookings.length > 0
+                ? (
+                    listingBookings.detailedBookings.map(booking => (
+                    <Flex flexDirection="row" align="center" justify="space-between" key={booking.id} p={2}
+                          borderWidth="1px" minWidth="80vw">
+                      <Box>
+                        <Badge colorScheme={statusColourSchemes[booking.status] || statusColourSchemes.default}>
+                          {booking.status}
+                        </Badge>
+                        <Text>{booking.dateRange.map(date => formatDate(date)).join(' - ')}</Text>
+                        <Text>Total Price: ${booking.totalPrice}</Text>
+                      </Box>
+                      <Box>
+                      </Box>
+                      {booking.status === 'pending' && (
+                        <ButtonGroup spacing="2">
+                          <Button colorScheme="green" size="sm"
+                                  onClick={() => handleBookingAction(acceptBooking, booking.id)}>Accept</Button>
+                          <Button colorScheme="red" size="sm"
+                                  onClick={() => handleBookingAction(declineBooking, booking.id)}>Deny</Button>
+                          <Button colorScheme="gray" size="sm"
+                                  onClick={() => handleBookingAction(deleteBooking, booking.id)}>Delete</Button>
+                        </ButtonGroup>
+                      )}
+                    </Flex>
+                    ))
+                  )
+                : (
+                  <Center>
+                    <Text fontSize="xl" color="gray.500">Currently there are no bookings.</Text>
+                  </Center>
+                  )}
+            </Flex>
           </>
         )}
-      </VStack>
-    </VStack>
+      </Flex>
+    </Flex>
   )
 }
 

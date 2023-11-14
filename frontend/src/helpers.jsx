@@ -105,7 +105,8 @@ export const formatOptionLabel = (option) => (
 export const customSelectStyles = {
   control: (baseStyles) => ({
     ...baseStyles,
-    minWidth: '500px',
+    minWidth: '50vw',
+    maxWidth: '80vw',
     minHeight: '40px',
     borderRadius: '15px',
   }),
@@ -113,4 +114,10 @@ export const customSelectStyles = {
     ...provided,
     zIndex: 2000
   }),
+};
+
+export const statusColourSchemes = {
+  accepted: 'green',
+  declined: 'red',
+  default: 'gray',
 };

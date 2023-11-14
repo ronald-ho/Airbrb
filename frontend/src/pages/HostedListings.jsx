@@ -12,7 +12,6 @@ function HostedListings () {
       try {
         const listings = await getAllListingDetailsByUser();
         setListings(listings);
-        console.log(listings)
       } catch (error) {
         console.error('Error fetching listings:', error);
       }

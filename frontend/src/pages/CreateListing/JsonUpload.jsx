@@ -50,7 +50,6 @@ function JsonUpload () {
   }
 
   const validateJson = () => {
-    console.log(jsonFile);
     if (jsonFile) {
       const valid = validate(jsonFile);
       if (valid) {
@@ -64,7 +63,6 @@ function JsonUpload () {
       } else {
         setIsValidJson(false);
         setError(validate.errors);
-        console.log(validate.errors);
         setShowPopup(true);
       }
     }

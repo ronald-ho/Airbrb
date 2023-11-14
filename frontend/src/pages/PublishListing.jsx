@@ -40,8 +40,6 @@ function PublishListing () {
 
   const handleSubmit = async () => {
     try {
-      console.log(availability);
-
       await publishListing(listingId, { availability });
       navigate('/my-listings');
       toast({

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import {
   Box,
   Button,
@@ -19,6 +19,7 @@ import {
 import { HamburgerIcon } from '@chakra-ui/icons';
 import airbnbLogo from '../assets/airbnb.svg'
 import airbnbIcon from '../assets/airbnb-icon.svg'
+import { AuthContext } from './AuthProvider';
 
 const logout = () => {
   localStorage.removeItem('token');
@@ -27,6 +28,7 @@ const logout = () => {
 
 const NavBar = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { isLoggedIn, logOut } = useContext(AuthContext);
 
   const imageSrc = useBreakpointValue({
     base: airbnbIcon,
@@ -57,7 +59,7 @@ const NavBar = (props) => {
             <MenuLink to="/" py='2' fontWeight='semibold' width='100%'>Home</MenuLink>
             <MenuLink to="/my-listings" py='2' fontWeight='semibold' width='100%'>My Listings</MenuLink>
             {
-              localStorage.getItem('token')
+              isLoggedIn
                 ? <MenuLink to="/" py='2'>
                   <Button
                     size="sm"
@@ -66,7 +68,7 @@ const NavBar = (props) => {
                     color='white'
                     width='100%'
                     _hover={{ bg: 'red.600' }}
-                    onClick={logout}
+                    onClick={logOut}
                   >
                     Sign Out
                   </Button>

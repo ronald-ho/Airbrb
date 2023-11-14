@@ -36,7 +36,7 @@ const ThumbnailStep = ({ onSubmit, onBack }) => {
       <VStack spacing={4}>
         <h1>Thumbnail</h1>
         {thumbnailPreview && (
-          <Image src={thumbnailPreview} alt="Thumbnail preview" maxWidth="100%"/>
+          <Image src={thumbnailPreview} alt="Thumbnail preview" maxWidth="50vw"/>
         )}
         <FormControl id="thumbnail" isRequired>
           <FormLabel>Thumbnail</FormLabel>

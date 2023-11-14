@@ -1,6 +1,14 @@
 import { apiCall } from '../../services/api';
 import { getListing } from '../listings/actions';
-import { differenceInCalendarDays, parseISO } from 'date-fns';
+import {
+  differenceInCalendarDays,
+  eachDayOfInterval,
+  formatDuration,
+  formatISO,
+  intervalToDuration,
+  parseISO,
+  subDays
+} from 'date-fns';
 
 /**
  * Get all bookings
@@ -11,9 +19,7 @@ export const getAllBookings = async () => {
 }
 
 export const getAllBookingDetails = async (listingId) => {
-  console.log('listingId', listingId)
   const bookingsResponse = await getAllBookings();
-  const now = new Date();
 
   const filteredBookings = bookingsResponse.data.bookings.filter(
     booking => parseInt(booking.listingId) === listingId
@@ -26,29 +32,20 @@ export const getAllBookingDetails = async (listingId) => {
     profitThisYear: 0
   };
 
-  console.log('filtered Bookings', filteredBookings)
+  const listingResponse = await getListing(listingId);
+
+  const postedOn = listingResponse.data.listing.postedOn;
+  const postedOnDate = parseISO(postedOn);
+  const now = new Date();
+
+  const duration = intervalToDuration({ start: postedOnDate, end: now });
+  bookingDetails.onlineDuration = formatDuration(duration);
+  bookingDetails.postedOn = postedOn;
 
   for (const booking of filteredBookings) {
-    const listingResponse = await getListing(booking.listingId);
-    console.log('listingResponse', listingResponse)
-    const postedOn = listingResponse.data.listing.postedOn;
-    const postedOnISO = parseISO(postedOn);
-    console.log('postedOn', postedOn)
+    console.log('calling getListing with', booking.listingId)
 
-    // Calculate how long the listing has been up online
-    const diffTime = Math.abs(now - postedOnISO);
-    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
-    const diffHours = Math.ceil(diffTime / (1000 * 60 * 60));
-    const diffMonths = Math.floor(diffDays / 30);
-    const diffYears = Math.floor(diffDays / 365);
-
-    bookingDetails.onlineDuration = {
-      years: diffYears,
-      months: diffMonths % 12,
-      days: diffDays % 30,
-      hours: diffHours % 24
-    };
-    bookingDetails.postedOn = postedOn;
+    console.log('listingResponse', listingResponse);
 
     // Calculate days booked and profit for 'accepted' bookings this year
     if (booking.status === 'accepted' && new Date(booking.dateRange[0]).getFullYear() === now.getFullYear()) {
@@ -58,14 +55,54 @@ export const getAllBookingDetails = async (listingId) => {
       bookingDetails.profitThisYear += booking.totalPrice;
     }
 
-    console.log('booking', booking);
-
     bookingDetails.detailedBookings.push({
       ...booking,
     });
   }
 
-  console.log('Booking Details', bookingDetails)
+  console.log('bookingDetails', bookingDetails);
 
   return bookingDetails;
+}
+
+export const getProfitData = async () => {
+  // Get all bookings first
+  const bookingsResponse = await getAllBookings();
+
+  // Filter out only bookings that are accepted
+  const acceptedBookings = bookingsResponse.data.bookings.filter(
+    booking => booking.status === 'accepted'
+  );
+
+  const today = new Date();
+  const thirtyDaysAgo = subDays(today, 30);
+
+  const dailyProfits = {};
+
+  // Initialise dailyProfits object with 0 profit for each day
+  eachDayOfInterval({ start: thirtyDaysAgo, end: today }).forEach(day => {
+    dailyProfits[formatISO(day, { representation: 'date' })] = 0;
+  });
+
+  // Ensure the booking is within the last 30 days
+  for (const booking of acceptedBookings) {
+    const startDate = parseISO(booking.dateRange[0]);
+    const endDate = parseISO(booking.dateRange[1]);
+
+    // It does not matter if the listing booking is not entirely within the last 30 days
+    // We will only count the days that are within the last 30 days
+    const listingPrice = (await getListing(booking.listingId)).data.listing.price;
+
+    eachDayOfInterval({ start: startDate, end: endDate }).forEach(day => {
+      const dateString = formatISO(day, { representation: 'date' });
+      if (dailyProfits[dateString] !== undefined) {
+        dailyProfits[dateString] += listingPrice;
+      }
+    });
+  }
+
+  return Object.keys(dailyProfits).map(key => ({
+    day: differenceInCalendarDays(today, parseISO(key)),
+    profit: dailyProfits[key]
+  })).sort((a, b) => a.day - b.day);
 }

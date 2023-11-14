@@ -126,8 +126,6 @@ function EditListing () {
   };
 
   const handleImagesChange = (base64Strings) => {
-    console.log('Received base64Strings:', base64Strings); // Debugging line
-
     setListing(prevListing => {
       const updatedListing = {
         ...prevListing,
@@ -137,7 +135,6 @@ function EditListing () {
         }
       };
 
-      console.log('Updated listing with new images:', updatedListing);
       return updatedListing;
     });
   };
@@ -226,8 +223,7 @@ function EditListing () {
   const handleDelete = async () => {
     try {
       setShowDeletePopup(false);
-      const response = await deleteListing(listingId);
-      console.log('Deleted listing: ', response);
+      await deleteListing(listingId);
       toast({ title: 'Listing deleted', status: 'success', duration: 3000, isClosable: true, })
       navigate('/my-listings');
     } catch (err) {
