@@ -163,8 +163,9 @@ function ViewListing () {
       for (const booking of allBookingsResponse.data.bookings) {
         if (booking.owner === localStorage.getItem('email') &&
           booking.status === 'accepted' &&
-          booking.listingId === parsedData.listingId
+          Number(booking.listingId) === parsedData.listingId
         ) {
+          console.log('found suitable booking');
           bookingId = booking.id;
           break;
         }
