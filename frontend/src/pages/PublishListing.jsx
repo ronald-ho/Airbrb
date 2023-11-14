@@ -43,7 +43,7 @@ function PublishListing () {
       await publishListing(listingId, { availability });
       navigate('/my-listings');
       toast({
-        title: 'Sucessfully published',
+        title: 'Successfully published',
         status: 'success',
         duration: 3000,
         isClosable: true,

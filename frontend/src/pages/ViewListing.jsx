@@ -106,7 +106,6 @@ function ViewListing () {
         status: 'error',
         duration: 3000,
         variant: 'subtle',
-        position: 'bottom',
         isClosable: true,
       });
       return;
@@ -119,7 +118,6 @@ function ViewListing () {
         status: 'error',
         duration: 3000,
         variant: 'subtle',
-        position: 'bottom',
         isClosable: true,
       });
       return;
@@ -140,7 +138,6 @@ function ViewListing () {
           status: 'success',
           duration: 3000,
           variant: 'subtle',
-          position: 'bottom',
           isClosable: true,
         });
       }
@@ -151,7 +148,6 @@ function ViewListing () {
         status: 'error',
         duration: 3000,
         variant: 'subtle',
-        position: 'bottom',
         isClosable: true,
       });
     }
@@ -184,7 +180,6 @@ function ViewListing () {
         description: 'You have not made any accepted bookings for this listing',
         status: 'error',
         variant: 'subtle',
-        position: 'top',
         isClosable: true,
       });
     }
