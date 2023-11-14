@@ -21,12 +21,12 @@ import {
 } from '@chakra-ui/react';
 import NumberInputFieldCustom from '../components/NumberInputFieldCustom';
 import PropertyTypeSelector from '../components/PropertyTypeSelector';
-import CenteredBox from '../components/CenteredBox';
 import Popup from '../components/Popup';
 import DefaultAirbnbImage from '../assets/default-airbnb-image.webp'
 import { publishListing, unpublishListing } from '../api/listings/publish';
 import { Calendar } from 'react-multi-date-picker';
 import 'react-multi-date-picker/styles/colors/red.css'
+import ImageCarousel from '../components/ImageCarousel';
 
 function EditListing () {
   const { listingId } = useParams();
@@ -126,8 +126,6 @@ function EditListing () {
   };
 
   const handleImagesChange = (base64Strings) => {
-    console.log('Received base64Strings:', base64Strings); // Debugging line
-
     setListing(prevListing => {
       const updatedListing = {
         ...prevListing,
@@ -137,7 +135,6 @@ function EditListing () {
         }
       };
 
-      console.log('Updated listing with new images:', updatedListing);
       return updatedListing;
     });
   };
@@ -226,8 +223,7 @@ function EditListing () {
   const handleDelete = async () => {
     try {
       setShowDeletePopup(false);
-      const response = await deleteListing(listingId);
-      console.log('Deleted listing: ', response);
+      await deleteListing(listingId);
       toast({ title: 'Listing deleted', status: 'success', duration: 3000, isClosable: true, })
       navigate('/my-listings');
     } catch (err) {
@@ -236,211 +232,211 @@ function EditListing () {
     }
   }
 
-  const customStyles = {
-    maxW: { base: '100%' }
-  }
-
   if (isLoading) return null;
 
   return (
-    <CenteredBox customStyles={customStyles}>
-      <VStack>
-        <Text fontSize='3xl'>{listing.title}</Text>
-        {listing.thumbnail === ''
-          ? (
-            <Image src={DefaultAirbnbImage} alt="Default Photo" objectFit="contain"/>
-            )
-          : (
-            <Image src={listing.thumbnail} alt={listing.title} objectFit="contain"/>
-            )}
-        <Tabs maxWidth="100%">
-          {/* Tab navigation */}
-          <Flex position="relative">
-            <TabList style={{ flex: 'none' }}>
-              <Tab fontSize="sm">Basic</Tab>
-              <Tab fontSize="sm">Address</Tab>
-              <Tab fontSize="sm">Property Type</Tab>
-              <Tab fontSize="sm">Details</Tab>
-              <Tab fontSize="sm">Images</Tab>
-              <Tab fontSize="sm">Amenities</Tab>
-              {listing.published
-                ? (
-                  <Tab fontSize="sm">Availability</Tab>
-                  )
-                : null}
-            </TabList>
-          </Flex>
-          <TabPanels>
-            {/* Basic Tab */}
-            <TabPanel>
-              <FormControl>
-                <FormLabel>Title</FormLabel>
-                <Input
-                  type="text"
-                  value={listing.title}
-                  onChange={(e) => handleInputChange('title', e.target.value)}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Price per night</FormLabel>
-                <Input
-                  type="number"
-                  value={listing.price}
-                  onChange={(e) => handleInputChange('price', e.target.value)}
-                />
-              </FormControl>
-              <FormControl>
-                <FormLabel>Thumbnail</FormLabel>
-                <Input type="file" accept="image/*" onChange={handleThumbnailUpload}/>
-              </FormControl>
-            </TabPanel>
-
-            {/* Address Tab */}
-            <TabPanel>
-              <HStack>
-                <FormControl>
-                  <FormLabel>Number</FormLabel>
-                  <Input type="text" value={listing.address.number}
-                         onChange={e => handleAddressChange('number', e.target.value)}/>
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Street</FormLabel>
-                  <Input type="text" value={listing.address.street}
-                         onChange={e => handleAddressChange('street', e.target.value)}/>
-                </FormControl>
-              </HStack>
-              <HStack>
-                <FormControl>
-                  <FormLabel>City</FormLabel>
-                  <Input type="text" value={listing.address.city}
-                         onChange={e => handleAddressChange('city', e.target.value)}/>
-                </FormControl>
-                <FormControl>
-                  <FormLabel>State</FormLabel>
-                  <Input type="text" value={listing.address.state}
-                         onChange={e => handleAddressChange('state', e.target.value)}/>
-                </FormControl>
-              </HStack>
-              <HStack>
-                <FormControl>
-                  <FormLabel>Postcode</FormLabel>
-                  <Input type="text" value={listing.address.postcode}
-                         onChange={e => handleAddressChange('postcode', e.target.value)}/>
-                </FormControl>
-                <FormControl>
-                  <FormLabel>Country</FormLabel>
-                  <Input type="text" value={listing.address.country}
-                         onChange={e => handleAddressChange('country', e.target.value)}/>
-                </FormControl>
-              </HStack>
-            </TabPanel>
-
-            {/* Property Type Tab */}
-            <TabPanel>
-              <PropertyTypeSelector
-                propertyType={listing.metadata.propertyType}
-                onChange={(type) =>
-                  handleMetadataChange('propertyType', type)
-                }
-              />
-            </TabPanel>
-
-            {/* Details Tab */}
-            <TabPanel>
-              <NumberInputFieldCustom
-                title="Bedrooms"
-                value={listing.metadata.bedrooms}
-                onChange={(value) => handleMetadataChange('bedrooms', value)}
-              />
-              <NumberInputFieldCustom
-                title="Beds"
-                value={listing.metadata.beds}
-                onChange={(value) => handleMetadataChange('beds', value)}
-              />
-              <NumberInputFieldCustom
-                title="Bathrooms"
-                value={listing.metadata.bathrooms}
-                onChange={(value) => handleMetadataChange('bathrooms', value)}
-              />
-            </TabPanel>
-
-            {/* Images Tab */}
-            <TabPanel>
-              <FormLabel>Images</FormLabel>
-              <Input type="file" accept="image/*" multiple onChange={handleImagesUpload}/>
-            </TabPanel>
-
-            {/* Amenities Tab */}
-            <TabPanel>
-              <FormControl>
-                <FormLabel>Amenities (Separated by commas)</FormLabel>
-                <Input
-                  type="text"
-                  value={listing.metadata.amenities.join(', ')}
-                  onChange={(e) =>
-                    handleMetadataChange(
-                      'amenities',
-                      e.target.value.split(',').map((item) => item.trim())
-                    )
-                  }
-                />
-              </FormControl>
-            </TabPanel>
-
-            {/* Availability Tab */}
+    <VStack maxWidth="98vw">
+      <Text fontSize='3xl'>{listing.title}</Text>
+      {listing.thumbnail === ''
+        ? (
+          <Image src={DefaultAirbnbImage} alt="Default Photo" objectFit="contain" maxWidth="600px" maxHeight="400px"/>
+          )
+        : (
+          <Image src={listing.thumbnail} alt={listing.title} objectFit="contain" maxWidth="600px" maxHeight="400px"/>
+          )}
+      <Tabs maxWidth="100%">
+        {/* Tab navigation */}
+        <Flex justify="space-between" style={{ overflowX: 'auto' }}>
+          <TabList style={{ flex: 'none' }}>
+            <Tab fontSize="sm">Basic</Tab>
+            <Tab fontSize="sm">Address</Tab>
+            <Tab fontSize="sm">Property Type</Tab>
+            <Tab fontSize="sm">Details</Tab>
+            <Tab fontSize="sm">Images</Tab>
+            <Tab fontSize="sm">Amenities</Tab>
             {listing.published
               ? (
-                <TabPanel>
-                  <Center>
-                    <Calendar
-                      className="red"
-                      value={listing.availability}
-                      onChange={handleDateChanges}
-                      multiple
-                      range
-                    />
-                  </Center>
-                </TabPanel>
+                <Tab fontSize="sm">Availability</Tab>
                 )
               : null}
-          </TabPanels>
-        </Tabs>
-        <Text>Changes are autosaved</Text>
-        <HStack>
+          </TabList>
+        </Flex>
+        <TabPanels>
+          {/* Basic Tab */}
+          <TabPanel>
+            <FormControl>
+              <FormLabel>Title</FormLabel>
+              <Input
+                type="text"
+                value={listing.title}
+                onChange={(e) => handleInputChange('title', e.target.value)}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Price per night</FormLabel>
+              <Input
+                type="number"
+                value={listing.price}
+                onChange={(e) => handleInputChange('price', e.target.value)}
+              />
+            </FormControl>
+            <FormControl>
+              <FormLabel>Thumbnail</FormLabel>
+              <Input type="file" accept="image/*" onChange={handleThumbnailUpload}/>
+            </FormControl>
+          </TabPanel>
+
+          {/* Address Tab */}
+          <TabPanel>
+            <HStack>
+              <FormControl>
+                <FormLabel>Number</FormLabel>
+                <Input type="text" value={listing.address.number}
+                       onChange={e => handleAddressChange('number', e.target.value)}/>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Street</FormLabel>
+                <Input type="text" value={listing.address.street}
+                       onChange={e => handleAddressChange('street', e.target.value)}/>
+              </FormControl>
+            </HStack>
+            <HStack>
+              <FormControl>
+                <FormLabel>City</FormLabel>
+                <Input type="text" value={listing.address.city}
+                       onChange={e => handleAddressChange('city', e.target.value)}/>
+              </FormControl>
+              <FormControl>
+                <FormLabel>State</FormLabel>
+                <Input type="text" value={listing.address.state}
+                       onChange={e => handleAddressChange('state', e.target.value)}/>
+              </FormControl>
+            </HStack>
+            <HStack>
+              <FormControl>
+                <FormLabel>Postcode</FormLabel>
+                <Input type="text" value={listing.address.postcode}
+                       onChange={e => handleAddressChange('postcode', e.target.value)}/>
+              </FormControl>
+              <FormControl>
+                <FormLabel>Country</FormLabel>
+                <Input type="text" value={listing.address.country}
+                       onChange={e => handleAddressChange('country', e.target.value)}/>
+              </FormControl>
+            </HStack>
+          </TabPanel>
+
+          {/* Property Type Tab */}
+          <TabPanel>
+            <PropertyTypeSelector
+              propertyType={listing.metadata.propertyType}
+              onChange={(type) =>
+                handleMetadataChange('propertyType', type)
+              }
+            />
+          </TabPanel>
+
+          {/* Details Tab */}
+          <TabPanel>
+            <NumberInputFieldCustom
+              title="Bedrooms"
+              value={listing.metadata.bedrooms}
+              onChange={(value) => handleMetadataChange('bedrooms', value)}
+            />
+            <NumberInputFieldCustom
+              title="Beds"
+              value={listing.metadata.beds}
+              onChange={(value) => handleMetadataChange('beds', value)}
+            />
+            <NumberInputFieldCustom
+              title="Bathrooms"
+              value={listing.metadata.bathrooms}
+              onChange={(value) => handleMetadataChange('bathrooms', value)}
+            />
+          </TabPanel>
+
+          {/* Images Tab */}
+          <TabPanel>
+            {listing.metadata.images.length > 0
+              ? (
+                <ImageCarousel allImages={listing.metadata.images}/>
+                )
+              : null
+            }
+            <FormLabel>Images</FormLabel>
+            <Input type="file" accept="image/*" multiple onChange={handleImagesUpload}/>
+          </TabPanel>
+
+          {/* Amenities Tab */}
+          <TabPanel>
+            <FormControl>
+              <FormLabel>Amenities (Separated by commas)</FormLabel>
+              <Input
+                type="text"
+                value={listing.metadata.amenities.join(', ')}
+                onChange={(e) =>
+                  handleMetadataChange(
+                    'amenities',
+                    e.target.value.split(',').map((item) => item.trim())
+                  )
+                }
+              />
+            </FormControl>
+          </TabPanel>
+
+          {/* Availability Tab */}
           {listing.published
             ? (
-              <Button colorScheme="purple" onClick={() => setShowUnpublishPopup(true)}>
-                Unpublish Listing
-              </Button>
+              <TabPanel>
+                <Center>
+                  <Calendar
+                    className="red"
+                    value={listing.availability}
+                    onChange={handleDateChanges}
+                    multiple
+                    range
+                  />
+                </Center>
+              </TabPanel>
               )
             : null}
-          <Button colorScheme="red" onClick={() => setShowDeletePopup(true)}>
-            Delete Listing
-          </Button>
-        </HStack>
-        {showUnpublishPopup && (
-          <Popup
-            title="Confirm Deletion"
-            body="Are you sure you want to unpublish this listing?"
-            primaryButtonText="Unpublish"
-            onClose={() => setShowUnpublishPopup(false)}
-            onConfirm={handleUnpublish}
-          />
-        )}
-        {showDeletePopup && (
-          <Popup
-            title="Confirm Deletion"
-            body="Are you sure you want to delete this listing? This action cannot be undone."
-            primaryButtonText="Delete"
-            onClose={() => setShowDeletePopup(false)}
-            onConfirm={handleDelete}
-          />
-        )}
-        <Button colorScheme="blue" onClick={() => navigate('/my-listings')}>
-          Done
+        </TabPanels>
+      </Tabs>
+      <Text>Changes are autosaved</Text>
+      <HStack>
+        {listing.published
+          ? (
+            <Button colorScheme="purple" onClick={() => setShowUnpublishPopup(true)}>
+              Unpublish Listing
+            </Button>
+            )
+          : null}
+        <Button colorScheme="red" onClick={() => setShowDeletePopup(true)}>
+          Delete Listing
         </Button>
-      </VStack>
-    </CenteredBox>
+      </HStack>
+      {showUnpublishPopup && (
+        <Popup
+          title="Confirm Deletion"
+          body="Are you sure you want to unpublish this listing?"
+          primaryButtonText="Unpublish"
+          onClose={() => setShowUnpublishPopup(false)}
+          onConfirm={handleUnpublish}
+        />
+      )}
+      {showDeletePopup && (
+        <Popup
+          title="Confirm Deletion"
+          body="Are you sure you want to delete this listing? This action cannot be undone."
+          primaryButtonText="Delete"
+          onClose={() => setShowDeletePopup(false)}
+          onConfirm={handleDelete}
+        />
+      )}
+      <Button colorScheme="blue" onClick={() => navigate('/my-listings')}>
+        Done
+      </Button>
+    </VStack>
   );
 }
 

@@ -17,7 +17,6 @@ const login = async (email, password) => {
   if (response.success) {
     if (response.data.token) {
       localStorage.setItem('token', response.data.token);
-      // TODO: redirect to other pages
     } else {
       throw new Error('Unexpected response from server');
     }

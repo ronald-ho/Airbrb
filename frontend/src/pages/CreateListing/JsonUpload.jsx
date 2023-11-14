@@ -50,7 +50,6 @@ function JsonUpload () {
   }
 
   const validateJson = () => {
-    console.log(jsonFile);
     if (jsonFile) {
       const valid = validate(jsonFile);
       if (valid) {
@@ -64,7 +63,6 @@ function JsonUpload () {
       } else {
         setIsValidJson(false);
         setError(validate.errors);
-        console.log(validate.errors);
         setShowPopup(true);
       }
     }
@@ -110,7 +108,7 @@ function JsonUpload () {
   };
 
   return (
-    <CenteredBox customStyles={{ minW: '500px' }}>
+    <CenteredBox>
       <VStack spacing={4}>
         <h1>Upload a Jsonfile to create your Airbrb!</h1>
         <Input type="file" accept=".json" onChange={handleFileInputChange}/>

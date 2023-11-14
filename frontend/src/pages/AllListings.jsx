@@ -1,15 +1,27 @@
 /* eslint-disable */
-import React, { useEffect, useState } from 'react';
-import { getAllListings } from '../api/listings';
-import { Flex, Grid, GridItem, Box, Text, Button, Select, Modal, ModalOverlay, Stack, StackDivider } from '@chakra-ui/react';
+import React, {useEffect, useState} from 'react';
+import {getAllListings} from '../api/listings';
+import {
+  Box,
+  Button,
+  Flex,
+  Grid,
+  GridItem,
+  Modal,
+  ModalOverlay,
+  Select,
+  Stack,
+  StackDivider,
+  Text
+} from '@chakra-ui/react';
 import ListingPreview from '../components/ListingPreview';
-import { SearchBar, InputBar } from '../components/SearchBar';
-import { getListing } from '../api/listings/actions';
-import { getAllBookings } from '../api/booking';
-import { averageRating } from '../helpers';
+import {InputBar, SearchBar} from '../components/SearchBar';
+import {getListing} from '../api/listings/actions';
+import {getAllBookings} from '../api/booking';
+import {averageRating} from '../helpers';
 import QuantitySelector from '../components/QuantitySelector';
 
-function AllListings () {
+function AllListings() {
   // Get listings data
   const [listings, setListings] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -61,7 +73,7 @@ function AllListings () {
 
       return 0;
     }
-    
+
     // Determine ranges for dates
     let floorDate = searchInput.dateSearch[0];
     let ceilDate = searchInput.dateSearch[1];
@@ -109,11 +121,11 @@ function AllListings () {
       return (
         (listing.title.toLowerCase().includes(searchInput.textSearch) ||
           listing.address.city.toLowerCase().includes(searchInput.textSearch)) &&
-          filterDate &&
-          filterByFloorBedroom &&
-          filterByCeilBedroom &&
-          filterByFloorPrice &&
-          filterByCeilPrice
+        filterDate &&
+        filterByFloorBedroom &&
+        filterByCeilBedroom &&
+        filterByFloorPrice &&
+        filterByCeilPrice
       );
     });
 
@@ -140,7 +152,7 @@ function AllListings () {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        if (localStorage.token) {
+        if (localStorage.getItem('token')) {
           const bookingsResponse = await getAllBookings();
 
           if (!bookingsResponse.success) {
@@ -180,7 +192,7 @@ function AllListings () {
 
             if (propertyResponse.success) {
               const propertyData = propertyResponse.data.listing;
-              
+
               // Listing needs to be published
               if (!propertyData.published) return null;
 
@@ -218,7 +230,7 @@ function AllListings () {
         setFilteredListings(propertyDetails);
         setLoading(false);
       } catch (error) {
-        return;
+
       }
     };
 
@@ -251,84 +263,85 @@ function AllListings () {
 
   return (
     <Flex onMouseDown={event => handleFocusOut(event)} flexDirection='column' align='center' px={8}>
-        <Box
-          py='2'
-          id='search-bar'
-        >
-          {
-            isSearchVisible
-              ? <SearchBar onClickHandler={handleSearchClick} />
-              : <InputBar onClickHandler={handleSubmitClick} callReset={callReset} stopReset={stopReset} />
-          }
+      <Box
+        py='2'
+        id='search-bar'
+      >
+        {
+          isSearchVisible
+            ? <SearchBar onClickHandler={handleSearchClick}/>
+            : <InputBar onClickHandler={handleSubmitClick} callReset={callReset} stopReset={stopReset}/>
+        }
 
-          <Modal isOpen={!isSearchVisible}>
-            <ModalOverlay zIndex={300}/>
-          </Modal>
-          
-          <Stack
-            display={isFiltersVisible ? 'block' : 'none'}
-            bg={'white'}
-            py='3'
-            px='8'
-            borderWidth='1px'
-            borderRadius='20px'
-            borderColor='gray.200'
-            boxShadow='lg'
-            position='fixed'
-            left="50%"
-            width={{ base: '95%', md: '70%' }}
-            transform='translate(-50%, 60px)'
-            zIndex={400}
-            divider={<StackDivider />}
-            spacing={4}
-          >
-            <QuantitySelector title={'Bedrooms'} defaults={defaultBedrooms} value={bedroomFilter} setter={setBedroomFilter} />
-            <QuantitySelector title={'Price'} defaults={defaultPrices} value={priceFilter} setter={setPriceFilter} />
-            <Box display='flex' alignItems='center' justifyContent='space-between'>
-              <Text fontWeight='bold' whiteSpace='nowrap'>Sort Reviews</Text>
-              <Select onChange={handleSelectReviews} defaultValue='none' width='30%'>
-                <option value='none'>None</option>
-                <option value='ascending'>Ascending</option>
-                <option value='descending'>Descending</option>
-              </Select>
-            </Box>
-            <Button onClick={clearFilters} width='100%'>Clear All</Button>
-          </Stack>
-        </Box>
+        <Modal isOpen={!isSearchVisible}>
+          <ModalOverlay zIndex={300}/>
+        </Modal>
 
-        <Grid
-          templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}
-          width='100%'
-          gap='3'
+        <Stack
+          display={isFiltersVisible ? 'block' : 'none'}
+          bg={'white'}
+          py='3'
+          px='8'
+          borderWidth='1px'
+          borderRadius='20px'
+          borderColor='gray.200'
+          boxShadow='lg'
+          position='fixed'
+          left="50%"
+          width={{base: '95%', md: '70%'}}
+          transform='translate(-50%, 60px)'
+          zIndex={400}
+          divider={<StackDivider/>}
+          spacing={4}
         >
-          {
+          <QuantitySelector title={'Bedrooms'} defaults={defaultBedrooms} value={bedroomFilter}
+                            setter={setBedroomFilter}/>
+          <QuantitySelector title={'Price'} defaults={defaultPrices} value={priceFilter} setter={setPriceFilter}/>
+          <Box display='flex' alignItems='center' justifyContent='space-between'>
+            <Text fontWeight='bold' whiteSpace='nowrap'>Sort Reviews</Text>
+            <Select onChange={handleSelectReviews} defaultValue='none' width='30%'>
+              <option value='none'>None</option>
+              <option value='ascending'>Ascending</option>
+              <option value='descending'>Descending</option>
+            </Select>
+          </Box>
+          <Button onClick={clearFilters} width='100%'>Clear All</Button>
+        </Stack>
+      </Box>
+
+      <Grid
+        templateColumns={{base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)'}}
+        width='100%'
+        gap='3'
+      >
+        {
           !loading
             ? filteredListings.map((listing, index) => {
-                // Serialise listingId and search dates (if present)
-                const routeData = {
-                  listingId: listing.listingId
-                }
+              // Serialise listingId and search dates (if present)
+              const routeData = {
+                listingId: listing.listingId
+              }
 
-                if (searchDates) {
-                  routeData.floorDate = searchDates[0];
-                  routeData.ceilDate = searchDates[1];
-                }
+              if (searchDates) {
+                routeData.floorDate = searchDates[0];
+                routeData.ceilDate = searchDates[1];
+              }
 
-                const serialisedRouteData = JSON.stringify(routeData); 
-                const url = `/listing/${encodeURIComponent(serialisedRouteData)}/`;
+              const serialisedRouteData = JSON.stringify(routeData);
+              const url = `/listing/${encodeURIComponent(serialisedRouteData)}/`;
 
-                return (
-                  <GridItem
-                    width={{ base: '300px', sm: '200px', md: '225px' }}
-                    key={index}
-                  >
-                   {ListingPreview(listing, url)}
-                  </GridItem>
-                );
+              return (
+                <GridItem
+                  width={{base: '300px', sm: '200px', md: '225px'}}
+                  key={index}
+                >
+                  {ListingPreview(listing, url)}
+                </GridItem>
+              );
             })
             : null
-          }
-        </Grid>
+        }
+      </Grid>
     </Flex>
   )
 }

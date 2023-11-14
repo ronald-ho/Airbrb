@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import CenteredBox from '../components/CenteredBox';
-import { Button, Center, List, ListIcon, ListItem, Select, Text, useToast, VStack } from '@chakra-ui/react';
+import { Button, Center, List, ListIcon, ListItem, Text, useToast, VStack } from '@chakra-ui/react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { publishListing } from '../api/listings/publish';
 import { Calendar } from 'react-multi-date-picker';
@@ -8,6 +8,8 @@ import { CheckCircleIcon } from '@chakra-ui/icons';
 import moment from 'moment';
 import Popup from '../components/Popup';
 import 'react-multi-date-picker/styles/colors/red.css'
+import { customSelectStyles, formatOptionLabel } from '../helpers';
+import Select from 'react-select';
 
 function PublishListing () {
   const { state } = useLocation();
@@ -19,8 +21,8 @@ function PublishListing () {
   const navigate = useNavigate();
   const toast = useToast();
 
-  const handleSelectListing = (event) => {
-    setListingId(event.target.value);
+  const handleSelectListing = (option) => {
+    setListingId(option.value);
   };
 
   const formatDate = (milliseconds) => {
@@ -38,12 +40,10 @@ function PublishListing () {
 
   const handleSubmit = async () => {
     try {
-      console.log(availability);
-
       await publishListing(listingId, { availability });
       navigate('/my-listings');
       toast({
-        title: 'Sucessfully published',
+        title: 'Successfully published',
         status: 'success',
         duration: 3000,
         isClosable: true,
@@ -69,18 +69,23 @@ function PublishListing () {
           : (
             <>
               <Text mb="4">Choose a listing to publish!</Text>
-              <Select placeholder="Select Listing" onChange={handleSelectListing}>
-                {listings.map((listing) => {
-                  if (!listing.published) {
-                    return (
-                      <option key={listing.id} value={listing.id}>
-                        {listing.title} - ${listing.price} per night
-                      </option>
-                    );
-                  }
-                  return null;
-                })}
-              </Select>
+              <Select
+                className="basic-single"
+                options={
+                  listings
+                    .filter(listing => !listing.published)
+                    .map(listing => ({
+                      value: listing.id,
+                      label: listing.title,
+                      photo: listing.thumbnail,
+                      metadata: listing.metadata,
+                      price: listing.price
+                    }))
+                }
+                formatOptionLabel={formatOptionLabel}
+                onChange={handleSelectListing}
+                styles={customSelectStyles}
+              />
               {listingId && (
                 <>
                   <Text mt="4">Please select your availability dates:</Text>
@@ -94,6 +99,7 @@ function PublishListing () {
                       onChange={handleDateChanges}
                       multiple
                       range
+                      zIndex={9}
                     />
                   </Center>
                   <List spacing={3} mt="4">

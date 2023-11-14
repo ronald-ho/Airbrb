@@ -1,16 +1,29 @@
-import React from 'react';
-import { Link, Box, Flex, Text, Button, Stack, useDisclosure, Drawer, DrawerOverlay, DrawerContent, DrawerHeader, DrawerBody, Image, useBreakpointValue, IconButton } from '@chakra-ui/react';
+import React, { useContext } from 'react';
+import {
+  Box,
+  Button,
+  Drawer,
+  DrawerBody,
+  DrawerContent,
+  DrawerHeader,
+  DrawerOverlay,
+  Flex,
+  IconButton,
+  Image,
+  Link,
+  Stack,
+  Text,
+  useBreakpointValue,
+  useDisclosure
+} from '@chakra-ui/react';
 import { HamburgerIcon } from '@chakra-ui/icons';
 import airbnbLogo from '../assets/airbnb.svg'
 import airbnbIcon from '../assets/airbnb-icon.svg'
-
-const logout = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('email');
-}
+import { AuthContext } from './AuthProvider';
 
 const NavBar = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const { logOut } = useContext(AuthContext);
 
   const imageSrc = useBreakpointValue({
     base: airbnbIcon,
@@ -19,55 +32,59 @@ const NavBar = (props) => {
 
   return (
     <NavBarContainer {...props}>
-      <Image src={imageSrc} alt='Logo' height="28px" />
+      <Link to="/">
+        <Image src={imageSrc} alt='Logo' height="28px"/>
+      </Link>
       <IconButton
         display={{ base: 'block', md: 'none' }}
         variant='ghost'
         onClick={onOpen}
         height='32px'
-        icon={<HamburgerIcon />}
-      />
+        icon={<HamburgerIcon/>}
+        aria-label="menu"/>
       <Drawer placement='left' onClose={onClose} isOpen={isOpen} size='xs'>
-        <DrawerOverlay />
-          <DrawerContent>
-            <DrawerHeader>
-              <Image src={airbnbLogo} alt='Logo' height="28px" />
-            </DrawerHeader>
-            <DrawerBody>
-              <MenuLink to="/" py='2' fontWeight='semibold' width='100%'>Home</MenuLink>
-              <MenuLink to="/my-listings" py='2' fontWeight='semibold' width='100%'>My Listings</MenuLink>
-              {
-                localStorage.getItem('token')
-                  ? <MenuLink to="/" py='2'>
-                      <Button
-                        size="sm"
-                        rounded="md"
-                        bg='red.400'
-                        color='white'
-                        width='100%'
-                        _hover={{ bg: 'red.600' }}
-                        onClick={logout}
-                      >
-                        Sign Out
-                      </Button>
-                    </MenuLink>
-                  : <MenuLink to="/login" py='2'>
-                    <Button
-                        size="sm"
-                        rounded="md"
-                        bg='black'
-                        color='white'
-                        width='100%'
-                        _hover={{ bg: 'gray.600' }}
-                      >
-                        Sign In
-                      </Button>
-                    </MenuLink>
-              }
-            </DrawerBody>
-          </DrawerContent>
+        <DrawerOverlay/>
+        <DrawerContent>
+          <DrawerHeader>
+            <Link to="/">
+              <Image src={airbnbLogo} alt='Logo' height="28px"/>
+            </Link>
+          </DrawerHeader>
+          <DrawerBody>
+            <MenuLink to="/" py='2' fontWeight='semibold' width='100%'>Home</MenuLink>
+            <MenuLink to="/my-listings" py='2' fontWeight='semibold' width='100%'>My Listings</MenuLink>
+            {
+              localStorage.getItem('token')
+                ? <MenuLink to="/" py='2'>
+                  <Button
+                    size="sm"
+                    rounded="md"
+                    bg='red.400'
+                    color='white'
+                    width='100%'
+                    _hover={{ bg: 'red.600' }}
+                    onClick={logOut}
+                  >
+                    Sign Out
+                  </Button>
+                </MenuLink>
+                : <MenuLink to="/login" py='2'>
+                  <Button
+                    size="sm"
+                    rounded="md"
+                    bg='black'
+                    color='white'
+                    width='100%'
+                    _hover={{ bg: 'gray.600' }}
+                  >
+                    Sign In
+                  </Button>
+                </MenuLink>
+            }
+          </DrawerBody>
+        </DrawerContent>
       </Drawer>
-      <MenuLinks />
+      <MenuLinks/>
     </NavBarContainer>
   );
 };
@@ -83,6 +100,8 @@ const MenuLink = ({ children, to = '/', ...rest }) => {
 };
 
 const MenuLinks = () => {
+  const { logOut } = useContext(AuthContext);
+
   return (
     <Box display={{ base: 'none', md: 'block' }}>
       <Stack
@@ -96,28 +115,28 @@ const MenuLinks = () => {
         {
           localStorage.getItem('token')
             ? <MenuLink to="/">
-                <Button
-                  size="sm"
-                  rounded="md"
-                  bg='red.400'
-                  color='white'
-                  _hover={{ bg: 'red.600' }}
-                  onClick={logout}
-                >
-                  Sign Out
-                </Button>
-              </MenuLink>
+              <Button
+                size="sm"
+                rounded="md"
+                bg='red.400'
+                color='white'
+                _hover={{ bg: 'red.600' }}
+                onClick={logOut}
+              >
+                Sign Out
+              </Button>
+            </MenuLink>
             : <MenuLink to="/login">
-               <Button
-                  size="sm"
-                  rounded="md"
-                  bg='black'
-                  color='white'
-                  _hover={{ bg: 'gray.600' }}
-                >
-                  Sign In
-                </Button>
-              </MenuLink>
+              <Button
+                size="sm"
+                rounded="md"
+                bg='black'
+                color='white'
+                _hover={{ bg: 'gray.600' }}
+              >
+                Sign In
+              </Button>
+            </MenuLink>
         }
       </Stack>
     </Box>

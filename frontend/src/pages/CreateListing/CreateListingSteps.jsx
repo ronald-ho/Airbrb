@@ -45,12 +45,8 @@ const CreateListingSteps = () => {
   };
 
   useEffect(() => {
-    console.log('Current Listing Data:', listingData);
-  }, [listingData]);
-
-  useEffect(() => {
     if (step === 'amenities' && listingData.amenities) {
-      handleSubmit().then(r => console.log(r));
+      handleSubmit();
     }
   }, [listingData.amenities, step]);
 

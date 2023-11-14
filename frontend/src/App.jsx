@@ -15,24 +15,29 @@ import CreateListing from './pages/CreateListing/CreateListing';
 import JsonUpload from './pages/CreateListing/JsonUpload';
 import NavBar from './components/NavBar';
 import PublishListing from './pages/PublishListing';
+import { AuthProvider } from './components/AuthProvider';
+import Profits from './pages/Profits';
 
 function App () {
   return (
-    <ChakraProvider>
-      <ListingProvider>
+    <AuthProvider>
+      <ChakraProvider>
+        <ListingProvider>
           <BrowserRouter>
-            <NavBar />
+            <NavBar/>
             <Center pt='5rem' mx={0}>
-            {/* <Container> */}
+              {/* <Container> */}
               <Routes>
                 <Route path="/" element={<AllListings/>}/>
                 <Route path="/login" element={<Login/>}/>
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/my-listings" element={<HostedListings/>}/>
                 <Route path="/my-listings/edit/:listingId" element={<EditListing/>}/>
+                <Route path="/my-listings/profits" element={<Profits/>}/>
                 <Route path="/listings" element={<AllListings/>}/>
                 <Route path="/listing/:data" element={<ViewListing/>}/>
-                <Route path="/booking-history/:id" element={<BookingHistory/>}/>
+                <Route path="/booking-history" element={<BookingHistory/>}/>
+                <Route path="/booking-history/:listingId" element={<BookingHistory/>}/>
                 <Route path="/create-listing/:step" element={<CreateListingSteps/>}/>
                 <Route path="/create-listing" element={<CreateListing/>}/>
                 <Route path="/create-listing/json" element={<JsonUpload/>}/>
@@ -40,8 +45,9 @@ function App () {
               </Routes>
             </Center>
           </BrowserRouter>
-      </ListingProvider>
-    </ChakraProvider>
+        </ListingProvider>
+      </ChakraProvider>
+    </AuthProvider>
   )
 }
 

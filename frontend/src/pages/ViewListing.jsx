@@ -10,18 +10,12 @@ import {
   FormLabel,
   Heading,
   ListItem,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalOverlay,
   Select,
   Stack,
   StackDivider,
   Text,
   Textarea,
   UnorderedList,
-  useDisclosure,
   useToast
 } from '@chakra-ui/react';
 import { addressToString, averageRating } from '../helpers';
@@ -52,9 +46,6 @@ function ViewListing () {
 
     fetchListing();
   }, []);
-
-  // Modal
-  const { isOpen, onOpen, onClose } = useDisclosure()
 
   // Display Data
   const [listingData, setListingData] = useState(null);
@@ -104,17 +95,58 @@ function ViewListing () {
   }
 
   const sendBookingRequest = async () => {
+    // if selectedDates is empty
+    if (selectedDates[0] === undefined || selectedDates[1] === undefined) {
+      toast({
+        title: "Can't submit booking.",
+        description: 'Please select a date range',
+        status: 'error',
+        duration: 3000,
+        variant: 'subtle',
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!localStorage.getItem('token')) {
+      toast({
+        title: "Can't submit booking.",
+        description: 'Please log in to submit a booking',
+        status: 'error',
+        duration: 3000,
+        variant: 'subtle',
+        isClosable: true,
+      });
+      return;
+    }
+
     const days = Math.floor((selectedDates[1] - selectedDates[0]) / (1000 * 60 * 60 * 24));
 
     const body = {
       totalPrice: days * listingData.price,
       dateRange: selectedDates,
     }
+    try {
+      const bookingResponse = await createNewBooking(parsedData.listingId, body);
 
-    const bookingResponse = await createNewBooking(parsedData.listingId, body);
-
-    if (bookingResponse.bookingId) {
-      onOpen();
+      if (bookingResponse.bookingId) {
+        toast({
+          title: 'Booking submitted.',
+          status: 'success',
+          duration: 3000,
+          variant: 'subtle',
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Can't submit booking.",
+        description: error.message,
+        status: 'error',
+        duration: 3000,
+        variant: 'subtle',
+        isClosable: true,
+      });
     }
   };
 
@@ -145,7 +177,6 @@ function ViewListing () {
         description: 'You have not made any accepted bookings for this listing',
         status: 'error',
         variant: 'subtle',
-        position: 'top',
         isClosable: true,
       });
     }
@@ -234,7 +265,7 @@ function ViewListing () {
               <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange}></Textarea>
               <Button onClick={submitReview} colorScheme='red'>Submit Review</Button>
             </Stack>
-            : null
+            : <Text>There are no reviews currently</Text>
         }
         <Stack spacing={3} divider={<StackDivider/>}>
           <Box></Box>
@@ -248,21 +279,6 @@ function ViewListing () {
           ))}
         </Stack>
       </Box>
-
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay/>
-        <ModalContent>
-          <ModalBody>
-            Booking Confirmed.
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme='red' mr={3} onClick={onClose}>
-              Close
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </Container>
   );
 }

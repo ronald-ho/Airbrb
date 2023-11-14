@@ -28,7 +28,7 @@ function Register () {
       await register(email, password, name);
       navigate('/login');
       toast({
-        title: 'Registration Successful please login',
+        title: 'Registration successful, please login',
         status: 'success',
         duration: 3000,
         isClosable: true,

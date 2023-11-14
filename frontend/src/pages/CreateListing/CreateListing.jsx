@@ -18,7 +18,7 @@ function CreateListing () {
               <h1>Express Creation</h1>
               <Image
                 src={rocketIcon}
-                boxSize="150px"
+                boxSize="80%"
                 cursor="pointer"
                 onClick={() => navigate('/create-listing/title')}/>
             </VStack>
@@ -28,7 +28,7 @@ function CreateListing () {
               <h1>Json upload</h1>
               <Image
                 src={jsonIcon}
-                boxSize="150px"
+                boxSize="80%"
                 cursor="pointer"
                 onClick={() => navigate('/create-listing/json')}/>
             </VStack>
