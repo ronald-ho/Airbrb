@@ -23,9 +23,15 @@ function ListingPreview (listing, url) {
           </Badge>
           {
             listing.bookingStatus && listing.bookingStatus !== 'zzz'
-              ? (<Badge borderRadius='md' px='2' colorScheme='red'>
-                {listing.bookingStatus}
-              </Badge>)
+              ? (
+                <Badge
+                  borderRadius='md'
+                  px='2'
+                  colorScheme={listing.bookingStatus === 'accepted' ? 'green' : 'red'}
+                >
+                  {listing.bookingStatus}
+                </Badge>
+                )
               : null
           }
         </Flex>

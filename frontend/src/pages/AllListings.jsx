@@ -162,7 +162,11 @@ function AllListings() {
           const bookingsDict = {};
 
           for (const booking of bookingsResponse.data.bookings) {
-            bookingsDict[booking.listingId] = booking.status;
+            if (!bookingsDict[booking.listingId]) {
+              bookingsDict[booking.listingId] = booking.status;
+            } else if (booking.status == 'accepted') {
+              bookingsDict[booking.listingId] = booking.status;
+            }
           }
 
           setBookings(bookingsDict);
