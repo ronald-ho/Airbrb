@@ -1,4 +1,5 @@
 import React, { createContext, useState } from 'react';
+import { logout } from '../api/auth/logout';
 
 export const AuthContext = createContext();
 
@@ -9,7 +10,8 @@ export const AuthProvider = ({ children }) => {
     setIsLoggedIn(true);
   };
 
-  const logOut = () => {
+  const logOut = async () => {
+    await logout();
     setIsLoggedIn(false);
   };
 

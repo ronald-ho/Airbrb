@@ -16,6 +16,7 @@ import JsonUpload from './pages/CreateListing/JsonUpload';
 import NavBar from './components/NavBar';
 import PublishListing from './pages/PublishListing';
 import { AuthProvider } from './components/AuthProvider';
+import Profits from './pages/Profits';
 
 function App () {
   return (
@@ -32,6 +33,7 @@ function App () {
                 <Route path="/register" element={<Register/>}/>
                 <Route path="/my-listings" element={<HostedListings/>}/>
                 <Route path="/my-listings/edit/:listingId" element={<EditListing/>}/>
+                <Route path="/my-listings/profits" element={<Profits/>}/>
                 <Route path="/listings" element={<AllListings/>}/>
                 <Route path="/listing/:data" element={<ViewListing/>}/>
                 <Route path="/booking-history" element={<BookingHistory/>}/>

@@ -30,7 +30,7 @@ const DetailsStep = ({ onSubmit, onBack }) => {
   };
 
   return (
-    <CenteredBox customStyles={{ minW: '500px' }}>
+    <CenteredBox>
       <VStack spacing={4}>
         <h1>Details</h1>
         <DetailsInputField title="Bedrooms" numberInput={bedroomsInput}/>

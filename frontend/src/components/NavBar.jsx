@@ -21,11 +21,6 @@ import airbnbLogo from '../assets/airbnb.svg'
 import airbnbIcon from '../assets/airbnb-icon.svg'
 import { AuthContext } from './AuthProvider';
 
-const logout = () => {
-  localStorage.removeItem('token');
-  localStorage.removeItem('email');
-}
-
 const NavBar = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const { isLoggedIn, logOut } = useContext(AuthContext);
@@ -105,6 +100,8 @@ const MenuLink = ({ children, to = '/', ...rest }) => {
 };
 
 const MenuLinks = () => {
+  const { isLoggedIn, logOut } = useContext(AuthContext);
+
   return (
     <Box display={{ base: 'none', md: 'block' }}>
       <Stack
@@ -116,7 +113,7 @@ const MenuLinks = () => {
         <MenuLink to="/" fontSize='md' fontWeight='semibold'>Home</MenuLink>
         <MenuLink to="/my-listings" fontSize='md' fontWeight='semibold'>My Listings</MenuLink>
         {
-          localStorage.getItem('token')
+          isLoggedIn
             ? <MenuLink to="/">
               <Button
                 size="sm"
@@ -124,7 +121,7 @@ const MenuLinks = () => {
                 bg='red.400'
                 color='white'
                 _hover={{ bg: 'red.600' }}
-                onClick={logout}
+                onClick={logOut}
               >
                 Sign Out
               </Button>

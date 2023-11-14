@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getListing } from '../api/listings/actions';
 import {
@@ -10,18 +10,12 @@ import {
   FormLabel,
   Heading,
   ListItem,
-  Modal,
-  ModalBody,
-  ModalContent,
-  ModalFooter,
-  ModalOverlay,
   Select,
   Stack,
   StackDivider,
   Text,
   Textarea,
   UnorderedList,
-  useDisclosure,
   useToast
 } from '@chakra-ui/react';
 import { addressToString, averageRating } from '../helpers';
@@ -32,6 +26,7 @@ import { reviewListing } from '../api/listings/review';
 import { getAllBookings } from '../api/booking';
 import ImageCarousel from '../components/ImageCarousel';
 import StarRating from '../components/StarRating';
+import { AuthContext } from '../components/AuthProvider';
 
 function ViewListing () {
   // URL Information
@@ -53,9 +48,6 @@ function ViewListing () {
     fetchListing();
   }, []);
 
-  // Modal
-  const { isOpen, onOpen, onClose } = useDisclosure()
-
   // Display Data
   const [listingData, setListingData] = useState(null);
   const [loading, setLoading] = useState(true);
@@ -72,6 +64,8 @@ function ViewListing () {
 
   // Image Carousel
   const [allImages, setAllImages] = useState(null);
+
+  const { isLoggedIn } = useContext(AuthContext);
 
   if (loading) {
     return (
@@ -104,17 +98,62 @@ function ViewListing () {
   }
 
   const sendBookingRequest = async () => {
+    // if selectedDates is empty
+    if (selectedDates[0] === undefined || selectedDates[1] === undefined) {
+      toast({
+        title: "Can't submit booking.",
+        description: 'Please select a date range',
+        status: 'error',
+        duration: 3000,
+        variant: 'subtle',
+        position: 'bottom',
+        isClosable: true,
+      });
+      return;
+    }
+
+    if (!isLoggedIn) {
+      toast({
+        title: "Can't submit booking.",
+        description: 'Please log in to submit a booking',
+        status: 'error',
+        duration: 3000,
+        variant: 'subtle',
+        position: 'bottom',
+        isClosable: true,
+      });
+      return;
+    }
+
     const days = Math.floor((selectedDates[1] - selectedDates[0]) / (1000 * 60 * 60 * 24));
 
     const body = {
       totalPrice: days * listingData.price,
       dateRange: selectedDates,
     }
+    try {
+      const bookingResponse = await createNewBooking(parsedData.listingId, body);
 
-    const bookingResponse = await createNewBooking(parsedData.listingId, body);
-
-    if (bookingResponse.bookingId) {
-      onOpen();
+      if (bookingResponse.bookingId) {
+        toast({
+          title: 'Booking submitted.',
+          status: 'success',
+          duration: 3000,
+          variant: 'subtle',
+          position: 'bottom',
+          isClosable: true,
+        });
+      }
+    } catch (error) {
+      toast({
+        title: "Can't submit booking.",
+        description: error.message,
+        status: 'error',
+        duration: 3000,
+        variant: 'subtle',
+        position: 'bottom',
+        isClosable: true,
+      });
     }
   };
 
@@ -219,7 +258,7 @@ function ViewListing () {
       <Box display='flex' flexDirection='column'>
         <Heading fontSize='xl'>Reviews</Heading>
         {
-          localStorage.getItem('token')
+          isLoggedIn
             ? <Stack spacing={1}>
               <Heading fontWeight='semibold' fontSize='md' py='1'>Leave a review</Heading>
               <Select onChange={handleRatingChange} defaultValue='none'>
@@ -234,7 +273,7 @@ function ViewListing () {
               <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange}></Textarea>
               <Button onClick={submitReview} colorScheme='red'>Submit Review</Button>
             </Stack>
-            : null
+            : <Text>There are no reviews currently</Text>
         }
         <Stack spacing={3} divider={<StackDivider/>}>
           <Box></Box>
@@ -248,21 +287,6 @@ function ViewListing () {
           ))}
         </Stack>
       </Box>
-
-      <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay/>
-        <ModalContent>
-          <ModalBody>
-            Booking Confirmed.
-          </ModalBody>
-
-          <ModalFooter>
-            <Button colorScheme='red' mr={3} onClick={onClose}>
-              Close
-            </Button>
-          </ModalFooter>
-        </ModalContent>
-      </Modal>
     </Container>
   );
 }

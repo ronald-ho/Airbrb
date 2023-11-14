@@ -235,7 +235,7 @@ function EditListing () {
   if (isLoading) return null;
 
   return (
-    <VStack maxW={{ base: '100%' }}>
+    <VStack maxWidth="98vw">
       <Text fontSize='3xl'>{listing.title}</Text>
       {listing.thumbnail === ''
         ? (

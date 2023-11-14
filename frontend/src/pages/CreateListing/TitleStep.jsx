@@ -22,7 +22,7 @@ const TitleStep = ({ onSubmit }) => {
   };
 
   return (
-    <CenteredBox customStyles={{ minW: '500px' }}>
+    <CenteredBox>
       <VStack spacing={4}>
         <h1>Choose a Title for your Airbrb!</h1>
         <FormInput name="title" label="Title" type="text" value={title} onChange={handleInputChange}/>

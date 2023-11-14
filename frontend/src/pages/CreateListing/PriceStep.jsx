@@ -22,7 +22,7 @@ const PriceStep = ({ onSubmit, onBack }) => {
   };
 
   return (
-    <CenteredBox customStyles={{ minW: '500px' }}>
+    <CenteredBox>
       <VStack spacing={4}>
         <h1>Price</h1>
         <FormInput name="price" label="Price per night" type="number" value={price} onChange={handleInputChange}/>

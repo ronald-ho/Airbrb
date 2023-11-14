@@ -3,7 +3,7 @@ import { CartesianGrid, Legend, Line, LineChart, Tooltip, XAxis, YAxis } from 'r
 
 function ProfitGraph ({ profitData }) {
   return (
-    <LineChart width={600} height={300} data={profitData}>
+    <LineChart width="80vw" height="70vh" data={profitData}>
       <CartesianGrid strokeDasharray="3 3"/>
       <XAxis dataKey="day" label={{ value: 'Days Ago', position: 'insideBottomRight', offset: 0 }}/>
       <YAxis label={{ value: 'Profit ($)', angle: -90, position: 'insideLeft' }}/>

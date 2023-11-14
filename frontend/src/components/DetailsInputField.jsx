@@ -7,7 +7,7 @@ const DetailsInputField = ({ title, numberInput }) => {
   const inputProps = numberInput.getInputProps();
 
   return (
-    <HStack justify="space-between" w="100%">
+    <HStack justify="space-between">
       <Text>{title}:</Text>
       <HStack>
         <Button {...decreaseProps}>-</Button>

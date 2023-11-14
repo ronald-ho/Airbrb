@@ -108,7 +108,7 @@ function JsonUpload () {
   };
 
   return (
-    <CenteredBox customStyles={{ minW: '500px' }}>
+    <CenteredBox>
       <VStack spacing={4}>
         <h1>Upload a Jsonfile to create your Airbrb!</h1>
         <Input type="file" accept=".json" onChange={handleFileInputChange}/>

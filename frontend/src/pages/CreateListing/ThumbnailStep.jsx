@@ -32,7 +32,7 @@ const ThumbnailStep = ({ onSubmit, onBack }) => {
   };
 
   return (
-    <CenteredBox customStyles={{ minW: '500px' }}>
+    <CenteredBox>
       <VStack spacing={4}>
         <h1>Thumbnail</h1>
         {thumbnailPreview && (

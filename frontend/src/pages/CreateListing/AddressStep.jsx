@@ -38,7 +38,7 @@ const AddressStep = ({ onSubmit, onBack }) => {
   };
 
   return (
-    <CenteredBox customStyles={{ minW: '500px' }}>
+    <CenteredBox>
       <VStack spacing={4}>
         <h1>Address</h1>
         <FormInput name="number" label="Number" type="text" value={address.number} onChange={handleInputChange}/>
