@@ -232,6 +232,7 @@ function ViewListing () {
           width={{ base: '100%', md: '50%' }}
           p={3}
           bg={'white'}
+          display={listingData.owner === localStorage.getItem('email') ? 'none' : 'block'}
         >
           <Heading fontSize='3xl'>${price}
             <Box as='span' color='gray.600'
@@ -251,25 +252,26 @@ function ViewListing () {
       <Box display='flex' flexDirection='column'>
         <Heading fontSize='xl'>Reviews</Heading>
         {
-          localStorage.getItem('token')
+          localStorage.getItem('token') && listingData.owner !== localStorage.getItem('email')
             ? <Stack spacing={1}>
-              <Heading fontWeight='semibold' fontSize='md' py='1'>Leave a review</Heading>
-              <Select onChange={handleRatingChange} defaultValue='none'>
-                <option value='none'>Select Rating</option>
-                <option value='1'>1 Star</option>
-                <option value='2'>2 Star</option>
-                <option value='3'>3 Star</option>
-                <option value='4'>4 Star</option>
-                <option value='5'>5 Star</option>
-              </Select>
+                <Heading fontWeight='semibold' fontSize='md' py='1'>Leave a review</Heading>
+                <Select onChange={handleRatingChange} defaultValue='none'>
+                  <option value='none'>Select Rating</option>
+                  <option value='1'>1 Star</option>
+                  <option value='2'>2 Star</option>
+                  <option value='3'>3 Star</option>
+                  <option value='4'>4 Star</option>
+                  <option value='5'>5 Star</option>
+                </Select>
 
-              <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange}></Textarea>
-              <Button onClick={submitReview} colorScheme='red'>Submit Review</Button>
-            </Stack>
-            : <Text>There are no reviews currently</Text>
+                <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange}></Textarea>
+                <Button onClick={submitReview} colorScheme='red'>Submit Review</Button>
+              </Stack>
+            : null
         }
         <Stack spacing={3} divider={<StackDivider/>}>
           <Box></Box>
+          {listingData.reviews.length === 0 ? <Box>There are no reviews yet</Box> : null}
           {listingData.reviews.map((review, index) => (
             <Box key={index}>
               <Box>
