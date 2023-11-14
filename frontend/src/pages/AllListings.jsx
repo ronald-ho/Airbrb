@@ -1,5 +1,5 @@
 /* eslint-disable */
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {getAllListings} from '../api/listings';
 import {
   Box,
@@ -20,7 +20,6 @@ import {getListing} from '../api/listings/actions';
 import {getAllBookings} from '../api/booking';
 import {averageRating} from '../helpers';
 import QuantitySelector from '../components/QuantitySelector';
-import {AuthContext} from "../components/AuthProvider";
 
 function AllListings() {
   // Get listings data
@@ -51,8 +50,6 @@ function AllListings() {
 
   // Handles resetting search
   const [callReset, setCallReset] = useState(false);
-  // Auth context
-  const {isLoggedIn} = useContext(AuthContext);
 
   const handleSelectReviews = (e) => setSortReviews(e.target.value);
 
@@ -155,7 +152,7 @@ function AllListings() {
   useEffect(() => {
     const fetchBookings = async () => {
       try {
-        if (isLoggedIn) {
+        if (localStorage.getItem('token')) {
           const bookingsResponse = await getAllBookings();
 
           if (!bookingsResponse.success) {

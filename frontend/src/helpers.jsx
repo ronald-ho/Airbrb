@@ -105,7 +105,7 @@ export const formatOptionLabel = (option) => (
 export const customSelectStyles = {
   control: (baseStyles) => ({
     ...baseStyles,
-    minWidth: '50vw',
+    minWidth: '70vw',
     maxWidth: '80vw',
     minHeight: '40px',
     borderRadius: '15px',

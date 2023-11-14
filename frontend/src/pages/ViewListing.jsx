@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import { getListing } from '../api/listings/actions';
 import {
@@ -26,7 +26,6 @@ import { reviewListing } from '../api/listings/review';
 import { getAllBookings } from '../api/booking';
 import ImageCarousel from '../components/ImageCarousel';
 import StarRating from '../components/StarRating';
-import { AuthContext } from '../components/AuthProvider';
 
 function ViewListing () {
   // URL Information
@@ -64,8 +63,6 @@ function ViewListing () {
 
   // Image Carousel
   const [allImages, setAllImages] = useState(null);
-
-  const { isLoggedIn } = useContext(AuthContext);
 
   if (loading) {
     return (
@@ -111,7 +108,7 @@ function ViewListing () {
       return;
     }
 
-    if (!isLoggedIn) {
+    if (!localStorage.getItem('token')) {
       toast({
         title: "Can't submit booking.",
         description: 'Please log in to submit a booking',
@@ -253,7 +250,7 @@ function ViewListing () {
       <Box display='flex' flexDirection='column'>
         <Heading fontSize='xl'>Reviews</Heading>
         {
-          isLoggedIn
+          localStorage.getItem('token')
             ? <Stack spacing={1}>
               <Heading fontWeight='semibold' fontSize='md' py='1'>Leave a review</Heading>
               <Select onChange={handleRatingChange} defaultValue='none'>

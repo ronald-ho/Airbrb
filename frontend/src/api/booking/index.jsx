@@ -74,6 +74,8 @@ export const getProfitData = async () => {
     booking => booking.status === 'accepted'
   );
 
+  console.log('acceptedBookings', acceptedBookings)
+
   const today = new Date();
   const thirtyDaysAgo = subDays(today, 30);
 
@@ -86,12 +88,16 @@ export const getProfitData = async () => {
 
   // Ensure the booking is within the last 30 days
   for (const booking of acceptedBookings) {
+    console.log('booking', booking);
     const startDate = parseISO(booking.dateRange[0]);
     const endDate = parseISO(booking.dateRange[1]);
 
     // It does not matter if the listing booking is not entirely within the last 30 days
     // We will only count the days that are within the last 30 days
-    const listingPrice = (await getListing(booking.listingId)).data.listing.price;
+    const listingResponse = await getListing(booking.listingId)
+    console.log(listingResponse)
+    const listingPrice = listingResponse.data.listing.price;
+    console.log('listingPrice', listingPrice)
 
     eachDayOfInterval({ start: startDate, end: endDate }).forEach(day => {
       const dateString = formatISO(day, { representation: 'date' });
@@ -101,8 +107,14 @@ export const getProfitData = async () => {
     });
   }
 
-  return Object.keys(dailyProfits).map(key => ({
+  console.log('dailyProfits', dailyProfits)
+
+  const profitData = Object.keys(dailyProfits).map(key => ({
     day: differenceInCalendarDays(today, parseISO(key)),
     profit: dailyProfits[key]
   })).sort((a, b) => a.day - b.day);
+
+  console.log('profitData', profitData);
+
+  return profitData;
 }

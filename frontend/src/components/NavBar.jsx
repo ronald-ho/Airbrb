@@ -23,7 +23,7 @@ import { AuthContext } from './AuthProvider';
 
 const NavBar = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isLoggedIn, logOut } = useContext(AuthContext);
+  const { logOut } = useContext(AuthContext);
 
   const imageSrc = useBreakpointValue({
     base: airbnbIcon,
@@ -54,7 +54,7 @@ const NavBar = (props) => {
             <MenuLink to="/" py='2' fontWeight='semibold' width='100%'>Home</MenuLink>
             <MenuLink to="/my-listings" py='2' fontWeight='semibold' width='100%'>My Listings</MenuLink>
             {
-              isLoggedIn
+              localStorage.getItem('token')
                 ? <MenuLink to="/" py='2'>
                   <Button
                     size="sm"
@@ -100,7 +100,7 @@ const MenuLink = ({ children, to = '/', ...rest }) => {
 };
 
 const MenuLinks = () => {
-  const { isLoggedIn, logOut } = useContext(AuthContext);
+  const { logOut } = useContext(AuthContext);
 
   return (
     <Box display={{ base: 'none', md: 'block' }}>
@@ -113,7 +113,7 @@ const MenuLinks = () => {
         <MenuLink to="/" fontSize='md' fontWeight='semibold'>Home</MenuLink>
         <MenuLink to="/my-listings" fontSize='md' fontWeight='semibold'>My Listings</MenuLink>
         {
-          isLoggedIn
+          localStorage.getItem('token')
             ? <MenuLink to="/">
               <Button
                 size="sm"
