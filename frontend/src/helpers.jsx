@@ -9,7 +9,9 @@ const averageRating = (reviews) => {
     totalRatings += Number(review.rating);
   }
 
-  return Math.round((totalRatings / reviews.length) * 10) / 10;
+  const res = reviews.length ? totalRatings / reviews.length : 0;
+
+  return Math.round(res * 10) / 10;
 };
 
 // Converts address json to a string

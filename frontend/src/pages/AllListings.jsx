@@ -41,14 +41,14 @@ function AllListings () {
   const defaultPrices = [0, 10000]
   const [priceFilter, setPriceFilter] = useState(defaultPrices);
 
-  // Passes search dates into listing previews
-  const [searchDates, setSearchDates] = useState(null);
+  // Get date search inputs and also passes search dates into listing previews
+  const [searchDates, setSearchDates] = useState([undefined, undefined]);
+
+  // Get text search inputs
+  const [searchText, setSearchText] = useState('');
 
   // Handle sort review selector
   const [sortReviews, setSortReviews] = useState('none');
-
-  // Handles resetting search
-  const [callReset, setCallReset] = useState(false);
 
   const handleSelectReviews = (e) => setSortReviews(e.target.value);
 
@@ -58,7 +58,19 @@ function AllListings () {
     setIsSearchVisible(false);
   };
 
-  const handleSubmitClick = (searchInput) => {
+  const updateTextAndDate = (searchFilters) => {
+    // Determine ranges for dates
+    const floorDate = searchFilters.dateSearch[0];
+    const ceilDate = searchFilters.dateSearch[1];
+
+    if (floorDate !== undefined || ceilDate !== undefined) {
+      setSearchDates([floorDate, ceilDate]);
+    }
+
+    setSearchText(searchFilters.textSearch);
+  }
+
+  const handleSubmitClick = () => {
     // Helper function to check if listing availabilities meet search
     const isAvailable = (start, end, availabilities) => {
       for (const [s, e] of availabilities) {
@@ -74,8 +86,8 @@ function AllListings () {
     }
 
     // Determine ranges for dates
-    const floorDate = searchInput.dateSearch[0];
-    const ceilDate = searchInput.dateSearch[1];
+    const floorDate = searchDates[0];
+    const ceilDate = searchDates[1];
 
     // Determine ranges for bedrooms
     let floorBedroom;
@@ -118,8 +130,8 @@ function AllListings () {
       listing.avgRating = averageRating(listing.reviews);
 
       return (
-        (listing.title.toLowerCase().includes(searchInput.textSearch) ||
-          listing.address.city.toLowerCase().includes(searchInput.textSearch)) &&
+        (listing.title.toLowerCase().includes(searchText) ||
+          listing.address.city.toLowerCase().includes(searchText)) &&
         filterDate &&
         filterByFloorBedroom &&
         filterByCeilBedroom &&
@@ -135,17 +147,18 @@ function AllListings () {
       return 0;
     }
 
+    let sortedListings = newFiltered;
     if (sortReviews === 'ascending') {
-      newFiltered.sort((a, b) => simpleCompare(a.avgRating, b.avgRating))
+      sortedListings = newFiltered.sort((a, b) => simpleCompare(a.avgRating, b.avgRating));
     } else if (sortReviews === 'descending') {
-      newFiltered.sort((b, a) => simpleCompare(a.avgRating, b.avgRating))
+      sortedListings = newFiltered.sort((b, a) => simpleCompare(a.avgRating, b.avgRating));
     }
 
     if (floorDate !== undefined || ceilDate !== undefined) {
       setSearchDates([floorDate, ceilDate]);
     }
 
-    setFilteredListings(newFiltered);
+    setFilteredListings(sortedListings);
   }
 
   // First get bookings that will be used to sort all listings
@@ -253,16 +266,12 @@ function AllListings () {
   };
 
   const clearFilters = () => {
-    setCallReset(true);
+    // setCallReset(true);
     setBedroomFilter(defaultBedrooms);
     setPriceFilter(defaultPrices);
     setSortReviews('none');
-  };
-
-  // We need to reset the callReset to false to stop InputBar from infinitely re-rendering as it would otherwise
-  // keep seeing callReset == true
-  const stopReset = () => {
-    setCallReset(false);
+    setSearchDates([undefined, undefined]);
+    setSearchText('');
   };
 
   return (
@@ -274,7 +283,7 @@ function AllListings () {
         {
           isSearchVisible
             ? <SearchBar onClickHandler={handleSearchClick}/>
-            : <InputBar onClickHandler={handleSubmitClick} callReset={callReset} stopReset={stopReset}/>
+            : <InputBar onClickHandler={handleSubmitClick} updateFilters={updateTextAndDate} />
         }
 
         <Modal isOpen={!isSearchVisible}>
@@ -303,7 +312,7 @@ function AllListings () {
           <QuantitySelector title={'Price'} defaults={defaultPrices} value={priceFilter} setter={setPriceFilter}/>
           <Box display='flex' alignItems='center' justifyContent='space-between'>
             <Text fontWeight='bold' whiteSpace='nowrap'>Sort Reviews</Text>
-            <Select onChange={handleSelectReviews} defaultValue='none' width='30%'>
+            <Select value={sortReviews} onChange={handleSelectReviews} width='30%'>
               <option value='none'>None</option>
               <option value='ascending'>Ascending</option>
               <option value='descending'>Descending</option>
