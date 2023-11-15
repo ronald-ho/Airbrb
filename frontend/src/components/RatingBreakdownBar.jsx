@@ -38,11 +38,17 @@ function RatingBreakdownBar ({ listing, rating }) {
 
   return (
     <Box>
-      <Box display='flex' justifyContent='space-between' alignItems='center' as='button' onClick={handleOpen}
-           width='100%'>
-        <Box flexShrink={0}>{rating} Stars</Box>
-        <Progress value={percent} width='60%' mx='2'/>
-        <Box flexShrink={0}>{percent}%/{totalReviews} reviews</Box>
+      <Box
+        display='flex'
+        justifyContent='space-between'
+        alignItems='center'
+        as='button'
+        onClick={handleOpen}
+        width='100%'
+      >
+        <Box width='20%'>{rating} Stars</Box>
+        <Progress flexShrink='0' value={percent} width='45%' mx='1' colorScheme='blackAlpha' />
+        <Box width='35%' fontSize='sm'>{percent}%/{totalReviews} reviews</Box>
       </Box>
 
       <Modal isOpen={isOpen} onClose={onClose}>
