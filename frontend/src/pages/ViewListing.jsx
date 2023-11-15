@@ -11,12 +11,12 @@ import {
   Heading,
   ListItem,
   Popover,
-  PopoverTrigger,
-  PopoverContent,
   PopoverArrow,
-  PopoverCloseButton,
-  PopoverHeader,
   PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger,
   Select,
   Stack,
   StackDivider,
@@ -186,6 +186,7 @@ function ViewListing () {
         description: 'You have not made any accepted bookings for this listing',
         status: 'error',
         variant: 'subtle',
+        duration: 3000,
         isClosable: true,
       });
     }
@@ -210,21 +211,21 @@ function ViewListing () {
       <Heading fontSize='3xl'>{listingData.title}</Heading>
       <Stack>
         <Box display='flex' alignItems='center'>
-        <Popover trigger='hover'>
+          <Popover trigger='hover'>
             <PopoverTrigger>
               <Button bg='transparent' p='0'>
                 <StarIcon aria-label='Star'/>
               </Button>
             </PopoverTrigger>
             <PopoverContent>
-              <PopoverArrow />
-              <PopoverCloseButton />
+              <PopoverArrow/>
+              <PopoverCloseButton/>
               <PopoverHeader>Review Breakdown</PopoverHeader>
               <PopoverBody>
                 {
                   Array(5).fill('')
                     .map((_, i) => (
-                      <RatingBreakdownBar key={i} listing={listingData} rating={5 - i} />
+                      <RatingBreakdownBar key={i} listing={listingData} rating={5 - i}/>
                     ))
                 }
               </PopoverBody>
@@ -281,19 +282,19 @@ function ViewListing () {
         {
           localStorage.getItem('token') && listingData.owner !== localStorage.getItem('email')
             ? <Stack spacing={1}>
-                <Heading fontWeight='semibold' fontSize='md' py='1'>Leave a review</Heading>
-                <Select onChange={handleRatingChange} defaultValue='none'>
-                  <option value='none'>Select Rating</option>
-                  <option value='1'>1 Star</option>
-                  <option value='2'>2 Star</option>
-                  <option value='3'>3 Star</option>
-                  <option value='4'>4 Star</option>
-                  <option value='5'>5 Star</option>
-                </Select>
+              <Heading fontWeight='semibold' fontSize='md' py='1'>Leave a review</Heading>
+              <Select onChange={handleRatingChange} defaultValue='none'>
+                <option value='none'>Select Rating</option>
+                <option value='1'>1 Star</option>
+                <option value='2'>2 Star</option>
+                <option value='3'>3 Star</option>
+                <option value='4'>4 Star</option>
+                <option value='5'>5 Star</option>
+              </Select>
 
-                <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange}></Textarea>
-                <Button onClick={submitReview} colorScheme='red'>Submit Review</Button>
-              </Stack>
+              <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange}></Textarea>
+              <Button onClick={submitReview} colorScheme='red'>Submit Review</Button>
+            </Stack>
             : null
         }
         <Stack spacing={3} divider={<StackDivider/>}>

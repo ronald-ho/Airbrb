@@ -51,7 +51,7 @@ function HostedListings () {
         <Link to="/my-listings/profits">
           <Button
             position="fixed"
-            bottom="2rem"
+            bottom="1rem"
             left="2rem"
             backgroundColor="yellow.500"
             color="white"
@@ -66,7 +66,7 @@ function HostedListings () {
         <Link to="/booking-history" state={{ listing: listings }}>
           <Button
             position="fixed"
-            bottom="8rem"
+            bottom="7rem"
             right="2rem"
             backgroundColor="blue.500"
             color="white"
@@ -81,7 +81,7 @@ function HostedListings () {
         <Link to="/publish-listing" state={{ listing: listings }}>
           <Button
             position="fixed"
-            bottom="5rem"
+            bottom="4rem"
             right="2rem"
             backgroundColor="purple.500"
             color="white"
@@ -96,7 +96,7 @@ function HostedListings () {
         <Link to="/create-listing">
           <Button
             position="fixed"
-            bottom="2rem"
+            bottom="1rem"
             right="2rem"
             backgroundColor="teal.500"
             color="white"

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Image } from '@chakra-ui/react';
 
-function ThumbnailPreview ({ url }) {
+function ThumbnailPreview ({ url, alt }) {
   // USED https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url
   // for checking if valid url
 
@@ -30,14 +30,14 @@ function ThumbnailPreview ({ url }) {
   if (videoId) {
     return (
       <iframe
-        title="YouTube video player"
+        title={alt || 'YouTube video player'} // Use 'alt' for the title if provided
         src={`https://www.youtube.com/embed/${videoId}`}
         allowFullScreen
       />
     );
   } else if (url) {
     return (
-      <Image src={url} alt="Thumbnail preview" objectFit='contain' rounded='lg'/>
+      <Image src={url} alt={alt || 'Thumbnail preview'} objectFit='contain'/>
     );
   }
 
