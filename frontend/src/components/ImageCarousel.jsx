@@ -11,11 +11,13 @@ function ImageCarousel ({ allImages }) {
     if (allImages.length > 1) setStyle(!style);
   }
 
-  const handlePrev = () => {
+  const handlePrev = (event) => {
+    event.preventDefault();
     setImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
   };
 
-  const handleNext = () => {
+  const handleNext = (event) => {
+    event.preventDefault();
     setImageIndex((next) => (next === allImages.length - 1 ? 0 : next + 1));
   };
 
@@ -24,6 +26,7 @@ function ImageCarousel ({ allImages }) {
       position='relative'
       onMouseEnter={toggleStyle}
       onMouseLeave={toggleStyle}
+      zIndex={0}
     >
       <IconButton
         position='absolute'
@@ -35,7 +38,7 @@ function ImageCarousel ({ allImages }) {
         display={ style ? 'block' : 'none' }
         icon={<ArrowLeftIcon />}
         onClick={handlePrev}
-        zIndex={100}
+        zIndex={250}
         aria-label='Previous Image'
       />
       <AspectRatio ratio={4 / 3}>
@@ -51,6 +54,7 @@ function ImageCarousel ({ allImages }) {
         display={ style ? 'block' : 'none' }
         icon={<ArrowRightIcon />}
         onClick={handleNext}
+        zIndex={250}
         aria-label='Next Image'
       />
     </Box>

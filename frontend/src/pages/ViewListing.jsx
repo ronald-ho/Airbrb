@@ -10,6 +10,13 @@ import {
   FormLabel,
   Heading,
   ListItem,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  PopoverArrow,
+  PopoverCloseButton,
+  PopoverHeader,
+  PopoverBody,
   Select,
   Stack,
   StackDivider,
@@ -26,6 +33,7 @@ import { reviewListing } from '../api/listings/review';
 import { getAllBookings } from '../api/booking';
 import ImageCarousel from '../components/ImageCarousel';
 import StarRating from '../components/StarRating';
+import RatingBreakdownBar from '../components/RatingBreakdownBar';
 
 function ViewListing () {
   // URL Information
@@ -202,7 +210,26 @@ function ViewListing () {
       <Heading fontSize='3xl'>{listingData.title}</Heading>
       <Stack>
         <Box display='flex' alignItems='center'>
-          <StarIcon aria-label='Star'/>
+        <Popover trigger='hover'>
+            <PopoverTrigger>
+              <Button bg='transparent' p='0'>
+                <StarIcon aria-label='Star'/>
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverArrow />
+              <PopoverCloseButton />
+              <PopoverHeader>Review Breakdown</PopoverHeader>
+              <PopoverBody>
+                {
+                  Array(5).fill('')
+                    .map((_, i) => (
+                      <RatingBreakdownBar key={i} listing={listingData} rating={5 - i} />
+                    ))
+                }
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
           <Text px={1}>
             {avgRating || 'No reviews'}
           </Text>
