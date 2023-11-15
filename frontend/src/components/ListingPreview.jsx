@@ -1,8 +1,9 @@
 import React from 'react';
-import { AspectRatio, Badge, Box, Flex, Image, Link } from '@chakra-ui/react'
+import { AspectRatio, Badge, Box, Flex, Link } from '@chakra-ui/react'
 import { Link as ReactLink } from 'react-router-dom';
 import { averageRating } from '../helpers';
 import StarRating from './StarRating';
+import ThumbnailPreview from './ThumbnailPreview';
 
 function ListingPreview (listing, url) {
   // Get review information
@@ -11,10 +12,13 @@ function ListingPreview (listing, url) {
   // Get metadata for listing
   const metadata = listing.metadata;
 
+  console.log('listing', listing)
+  console.log('metadata', metadata)
+
   return (
     <Link as={ReactLink} to={url}>
       <AspectRatio ratio={4 / 3}>
-        <Image src={listing.thumbnail} objectFit='contain' rounded='lg' />
+        <ThumbnailPreview url={listing.thumbnail}/>
       </AspectRatio>
       <Box p='1'>
         <Flex>
@@ -62,7 +66,7 @@ function ListingPreview (listing, url) {
         </Box>
 
         <Flex mt='2' alignItems='center'>
-          <StarRating rating={avgRating} />
+          <StarRating rating={avgRating}/>
           <Box as='span' ml='2' color='gray.600' fontSize='sm'>
             {listing.reviews.length} reviews
           </Box>

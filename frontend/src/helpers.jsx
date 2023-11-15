@@ -1,8 +1,13 @@
 // Helper function to calculate average review for listing
-import { Badge, Box, Flex, HStack, Image, Text } from '@chakra-ui/react';
+import { AspectRatio, Badge, Box, Flex, HStack, Text } from '@chakra-ui/react';
 import React from 'react';
+import ThumbnailPreview from './components/ThumbnailPreview';
 
 const averageRating = (reviews) => {
+  if (!Array.isArray(reviews) || reviews.length === 0) {
+    return 0;
+  }
+
   let totalRatings = 0;
 
   for (const review of reviews) {
@@ -80,7 +85,11 @@ export const listingSchema = {
 
 export const formatOptionLabel = (option) => (
   <Flex align="center">
-    <Image src={option.photo} alt={option.label} boxSize="60px" mr="10px" rounded="xl"/>
+    <Box boxSize="60px" mr="10px">
+      <AspectRatio ratio={1}>
+        <ThumbnailPreview url={option.photo}/>
+      </AspectRatio>
+    </Box>
     <HStack justify="space-between" w="100%">
       <Box>
         <Text fontWeight="semibold" isTruncated>
