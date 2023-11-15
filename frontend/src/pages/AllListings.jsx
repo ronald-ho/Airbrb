@@ -22,11 +22,11 @@ import QuantitySelector from '../components/QuantitySelector';
 
 function AllListings () {
   // Get listings data
-  const [listings, setListings] = useState(null);
+  const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
 
   // We keep a filtered listings separate so we don't need to find complete list every time
-  const [filteredListings, setFilteredListings] = useState(null);
+  const [filteredListings, setFilteredListings] = useState([]);
 
   // Get bookings data
   const [bookings, setBookings] = useState({});

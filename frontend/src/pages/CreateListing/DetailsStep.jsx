@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { ListingContext } from './ListingContext';
-import { Button, Flex, useNumberInput, VStack } from '@chakra-ui/react';
+import { Button, Flex, useNumberInput } from '@chakra-ui/react';
 import DetailsInputField from '../../components/DetailsInputField';
 import CenteredBox from '../../components/CenteredBox';
 
@@ -8,7 +8,7 @@ function useCustomNumberInput (defaultValue) {
   return useNumberInput({
     step: 1,
     defaultValue: defaultValue || 0,
-    min: 0,
+    min: 1,
   });
 }
 
@@ -31,12 +31,12 @@ const DetailsStep = ({ onSubmit, onBack }) => {
 
   return (
     <CenteredBox>
-      <VStack spacing={4}>
-        <h1>Details</h1>
+      <h1>Details</h1>
+      <Flex flexDirection="column" spacing={4}>
         <DetailsInputField title="Bedrooms" numberInput={bedroomsInput}/>
         <DetailsInputField title="Beds" numberInput={bedsInput}/>
         <DetailsInputField title="Bathrooms" numberInput={bathroomsInput}/>
-      </VStack>
+      </Flex>
       <Flex justify="space-between" mt={4}>
         <Button colorScheme="gray" onClick={onBack}>Back</Button>
         <Button colorScheme="blue" onClick={handleNext}>Next</Button>

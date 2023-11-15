@@ -8,7 +8,6 @@ import {
   FormControl,
   FormLabel,
   HStack,
-  Image,
   Input,
   Tab,
   TabList,
@@ -22,11 +21,11 @@ import {
 import NumberInputFieldCustom from '../components/NumberInputFieldCustom';
 import PropertyTypeSelector from '../components/PropertyTypeSelector';
 import Popup from '../components/Popup';
-import DefaultAirbnbImage from '../assets/default-airbnb-image.webp'
 import { publishListing, unpublishListing } from '../api/listings/publish';
 import { Calendar } from 'react-multi-date-picker';
 import 'react-multi-date-picker/styles/colors/red.css'
 import ImageCarousel from '../components/ImageCarousel';
+import ThumbnailPreview from '../components/ThumbnailPreview';
 
 function EditListing () {
   const { listingId } = useParams();
@@ -237,13 +236,7 @@ function EditListing () {
   return (
     <VStack maxWidth="98vw">
       <Text fontSize='3xl'>{listing.title}</Text>
-      {listing.thumbnail === ''
-        ? (
-          <Image src={DefaultAirbnbImage} alt="Default Photo" objectFit="contain" maxWidth="600px" maxHeight="400px"/>
-          )
-        : (
-          <Image src={listing.thumbnail} alt={listing.title} objectFit="contain" maxWidth="600px" maxHeight="400px"/>
-          )}
+      <ThumbnailPreview url={listing.thumbnail}/>
       <Tabs maxWidth="100%">
         {/* Tab navigation */}
         <Flex justify="space-between" style={{ overflowX: 'auto' }}>

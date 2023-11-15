@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Box, Image, IconButton, AspectRatio } from '@chakra-ui/react';
+import { AspectRatio, Box, IconButton } from '@chakra-ui/react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
+import ThumbnailPreview from './ThumbnailPreview';
 
 function ImageCarousel ({ allImages }) {
   const [style, setStyle] = useState(false);
@@ -35,15 +36,17 @@ function ImageCarousel ({ allImages }) {
         transform="translateY(-50%)"
         isRound='true'
         size='sm'
-        display={ style ? 'block' : 'none' }
-        icon={<ArrowLeftIcon />}
+        display={style ? 'block' : 'none'}
+        icon={<ArrowLeftIcon/>}
         onClick={handlePrev}
         zIndex={250}
         aria-label='Previous Image'
       />
-      <AspectRatio ratio={4 / 3}>
-        <Image src={allImages[imageIndex]} width='100%' rounded='lg' alt={`Image ${imageIndex}`} />
-      </AspectRatio>
+      <Box rounded='lg' overflow='hidden'>
+        <AspectRatio ratio={4 / 3}>
+          <ThumbnailPreview url={allImages[imageIndex]}/>
+        </AspectRatio>
+      </Box>
       <IconButton
         position='absolute'
         top='50%'
@@ -51,8 +54,8 @@ function ImageCarousel ({ allImages }) {
         transform="translateY(-50%)"
         isRound='true'
         size='sm'
-        display={ style ? 'block' : 'none' }
-        icon={<ArrowRightIcon />}
+        display={style ? 'block' : 'none'}
+        icon={<ArrowRightIcon/>}
         onClick={handleNext}
         zIndex={250}
         aria-label='Next Image'

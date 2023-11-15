@@ -1,5 +1,15 @@
 import React from 'react';
-import { Box, Modal, ModalOverlay, ModalContent, ModalHeader, ModalCloseButton, ModalBody, Progress, useDisclosure } from '@chakra-ui/react'
+import {
+  Box,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+  Progress,
+  useDisclosure
+} from '@chakra-ui/react'
 import StarRating from './StarRating';
 
 function RatingBreakdownBar ({ listing, rating }) {
@@ -28,26 +38,27 @@ function RatingBreakdownBar ({ listing, rating }) {
 
   return (
     <Box>
-      <Box display='flex' alignItems='center' as='button' onClick={handleOpen}>
-        <Box>{rating} Stars</Box>
-        <Progress value={percent} width='100%' />
-        <Box>{percent}%/{totalReviews} reviews</Box>
+      <Box display='flex' justifyContent='space-between' alignItems='center' as='button' onClick={handleOpen}
+           width='100%'>
+        <Box flexShrink={0}>{rating} Stars</Box>
+        <Progress value={percent} width='60%' mx='2'/>
+        <Box flexShrink={0}>{percent}%/{totalReviews} reviews</Box>
       </Box>
 
       <Modal isOpen={isOpen} onClose={onClose}>
-        <ModalOverlay />
+        <ModalOverlay/>
         <ModalContent>
           <ModalHeader>{rating} Star Reviews</ModalHeader>
-          <ModalCloseButton />
+          <ModalCloseButton/>
           <ModalBody>
             {listing.reviews.map((review, index) => (
               Number(review.rating) === rating
                 ? <Box key={index}>
-                    <Box>
-                      <StarRating rating={review.rating}/>
-                    </Box>
-                    {review.message}
+                  <Box>
+                    <StarRating rating={review.rating}/>
                   </Box>
+                  {review.message}
+                </Box>
                 : null
             ))}
           </ModalBody>

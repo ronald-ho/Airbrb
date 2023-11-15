@@ -1,0 +1,21 @@
+{
+    "title": "Example Json Upload",
+    "address": {
+        "number": "34",
+        "street": "Long Street",
+        "city": "Adelaide",
+        "state": "SA",
+        "postcode": "3212",
+        "country": "Australia"
+    },
+    "price": 350,
+    "thumbnail": "https://www.youtube.com/watch?v=dQw4w9WgXcQ&t",
+    "metadata": {
+        "propertyType": "Apartment",
+        "bathrooms": 2,
+        "bedrooms": 3,
+        "beds": 3,
+        "amenities": ["Wi-Fi", "Air Conditioning", "Pool"],
+	"images": ["data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAgAAAAIAQMAAAD+wSzIAAAABlBMVEX///+/v7+jQ3Y5AAAADklEQVQI12P4AIX8EAgALgAD/aNpbtEAAAAASUVORK5CYII"]
+    }
+}
