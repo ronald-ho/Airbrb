@@ -37,7 +37,7 @@ function ThumbnailPreview ({ url }) {
     );
   } else if (url) {
     return (
-      <Image src={url} alt="Thumbnail preview" maxWidth="50vw" objectFit='contain' rounded='lg'/>
+      <Image src={url} alt="Thumbnail preview" objectFit='contain' rounded='lg'/>
     );
   }
 

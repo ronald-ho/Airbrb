@@ -17,9 +17,11 @@ function ListingPreview (listing, url) {
 
   return (
     <Link as={ReactLink} to={url}>
-      <AspectRatio ratio={4 / 3}>
-        <ThumbnailPreview url={listing.thumbnail}/>
-      </AspectRatio>
+      <Box rounded='lg' overflow='hidden'>
+        <AspectRatio ratio={4 / 3}>
+          <ThumbnailPreview url={listing.thumbnail}/>
+        </AspectRatio>
+      </Box>
       <Box p='1'>
         <Flex>
           <Badge borderRadius='md' px='2' mr='1'>

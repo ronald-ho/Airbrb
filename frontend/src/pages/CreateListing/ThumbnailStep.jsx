@@ -9,6 +9,7 @@ const ThumbnailStep = ({ onSubmit, onBack }) => {
   const { listingData } = useContext(ListingContext);
   const [thumbnail, setThumbnail] = useState(listingData.thumbnail || '');
   const [youtubeURL, setYoutubeURL] = useState(listingData.thumbnail || '');
+  const [thumbnailPreview, setThumbnailPreview] = useState(listingData.thumbnail || '');
 
   useEffect(() => {
     setThumbnail(listingData.thumbnail || '');
@@ -21,6 +22,7 @@ const ThumbnailStep = ({ onSubmit, onBack }) => {
       reader.onloadend = () => {
         const base64String = reader.result;
         setThumbnail(base64String);
+        setThumbnailPreview(base64String);
         setYoutubeURL('');
       };
       reader.readAsDataURL(file);
@@ -29,6 +31,7 @@ const ThumbnailStep = ({ onSubmit, onBack }) => {
 
   const handleYoutubeURLChange = (event) => {
     setYoutubeURL(event.target.value);
+    setThumbnailPreview(event.target.value);
     setThumbnail('');
   };
 
@@ -42,7 +45,7 @@ const ThumbnailStep = ({ onSubmit, onBack }) => {
     <CenteredBox>
       <VStack spacing={4}>
         <h1>Thumbnail</h1>
-        <ThumbnailPreview url={listingData.thumbnail}/>
+        <ThumbnailPreview url={thumbnailPreview}/>
         <FormControl isRequired>
           <FormLabel>Thumbnail</FormLabel>
           <Input type="file" accept="image/*" onChange={handleThumbnailChange}/>

@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { getAllListingDetailsByUser } from '../api/listings';
 import listingPreview from '../components/ListingPreview';
-import { Button, Flex, Grid, GridItem, VStack } from '@chakra-ui/react';
+import { Button, Flex, Grid, GridItem, Text, VStack } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
 function HostedListings () {
   const [listings, setListings] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+
     const fetchData = async () => {
       try {
         const listings = await getAllListingDetailsByUser();
@@ -20,9 +24,17 @@ function HostedListings () {
     fetchData();
   }, []);
 
+  if (!isLoggedIn) {
+    return (
+      <Flex justify="center" align="center" minH="90vh">
+        <Text fontSize="lg">Please login or create an account to view your listings.</Text>
+      </Flex>
+    );
+  }
+
   return (
 
-    <Flex justify="center" minH="100vh">
+    <Flex justify="center" minH="90vh">
       <VStack>
         <Grid
           templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}
