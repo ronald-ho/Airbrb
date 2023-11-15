@@ -1,6 +1,5 @@
-/* eslint-disable */
-import React, {useEffect, useState} from 'react';
-import {getAllListings} from '../api/listings';
+import React, { useEffect, useState } from 'react';
+import { getAllListings } from '../api/listings';
 import {
   Box,
   Button,
@@ -15,13 +14,13 @@ import {
   Text
 } from '@chakra-ui/react';
 import ListingPreview from '../components/ListingPreview';
-import {InputBar, SearchBar} from '../components/SearchBar';
-import {getListing} from '../api/listings/actions';
-import {getAllBookings} from '../api/booking';
-import {averageRating} from '../helpers';
+import { InputBar, SearchBar } from '../components/SearchBar';
+import { getListing } from '../api/listings/actions';
+import { getAllBookings } from '../api/booking';
+import { averageRating } from '../helpers';
 import QuantitySelector from '../components/QuantitySelector';
 
-function AllListings() {
+function AllListings () {
   // Get listings data
   const [listings, setListings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -63,10 +62,10 @@ function AllListings() {
     // Helper function to check if listing availabilities meet search
     const isAvailable = (start, end, availabilities) => {
       for (const [s, e] of availabilities) {
-        const s_parsed = new Date(s);
-        const e_parsed = new Date(e);
+        const sParsed = new Date(s);
+        const eParsed = new Date(e);
 
-        if (start >= s_parsed && end <= e_parsed) {
+        if (start >= sParsed && end <= eParsed) {
           return 1;
         }
       }
@@ -75,8 +74,8 @@ function AllListings() {
     }
 
     // Determine ranges for dates
-    let floorDate = searchInput.dateSearch[0];
-    let ceilDate = searchInput.dateSearch[1];
+    const floorDate = searchInput.dateSearch[0];
+    const ceilDate = searchInput.dateSearch[1];
 
     // Determine ranges for bedrooms
     let floorBedroom;
@@ -149,6 +148,7 @@ function AllListings() {
     setFilteredListings(newFiltered);
   }
 
+  // First get bookings that will be used to sort all listings
   useEffect(() => {
     const fetchBookings = async () => {
       try {
@@ -164,7 +164,7 @@ function AllListings() {
           for (const booking of bookingsResponse.data.bookings) {
             if (!bookingsDict[booking.listingId]) {
               bookingsDict[booking.listingId] = booking.status;
-            } else if (booking.status == 'accepted') {
+            } else if (booking.status === 'accepted') {
               bookingsDict[booking.listingId] = booking.status;
             }
           }
@@ -292,7 +292,7 @@ function AllListings() {
           boxShadow='lg'
           position='fixed'
           left="50%"
-          width={{base: '95%', md: '70%'}}
+          width={{ base: '95%', md: '70%' }}
           transform='translate(-50%, 60px)'
           zIndex={400}
           divider={<StackDivider/>}
@@ -314,7 +314,7 @@ function AllListings() {
       </Box>
 
       <Grid
-        templateColumns={{base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)'}}
+        templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}
         width='100%'
         gap='3'
       >
@@ -336,7 +336,7 @@ function AllListings() {
 
               return (
                 <GridItem
-                  width={{base: '300px', sm: '200px', md: '225px'}}
+                  width={{ base: '300px', sm: '200px', md: '225px' }}
                   key={index}
                 >
                   {ListingPreview(listing, url)}

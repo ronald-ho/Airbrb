@@ -1,9 +1,10 @@
 import React from 'react';
-import { AspectRatio, Badge, Box, Flex, Link } from '@chakra-ui/react'
+import { Badge, Box, Button, Flex, Link, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger } from '@chakra-ui/react'
 import { Link as ReactLink } from 'react-router-dom';
 import { averageRating } from '../helpers';
 import StarRating from './StarRating';
-import ThumbnailPreview from './ThumbnailPreview';
+import ImageCarousel from './ImageCarousel';
+import RatingBreakdownBar from './RatingBreakdownBar';
 
 function ListingPreview (listing, url) {
   // Get review information
@@ -12,16 +13,9 @@ function ListingPreview (listing, url) {
   // Get metadata for listing
   const metadata = listing.metadata;
 
-  console.log('listing', listing)
-  console.log('metadata', metadata)
-
   return (
     <Link as={ReactLink} to={url}>
-      <Box rounded='lg' overflow='hidden'>
-        <AspectRatio ratio={4 / 3}>
-          <ThumbnailPreview url={listing.thumbnail}/>
-        </AspectRatio>
-      </Box>
+      <ImageCarousel allImages={[listing.thumbnail, ...metadata.images]} />
       <Box p='1'>
         <Flex>
           <Badge borderRadius='md' px='2' mr='1'>
@@ -68,7 +62,26 @@ function ListingPreview (listing, url) {
         </Box>
 
         <Flex mt='2' alignItems='center'>
-          <StarRating rating={avgRating}/>
+          <Popover trigger='hover'>
+            <PopoverTrigger>
+              <Button bg='transparent' p='0'>
+                <StarRating rating={avgRating} />
+              </Button>
+            </PopoverTrigger>
+            <PopoverContent>
+              <PopoverArrow />
+              <PopoverCloseButton />
+              <PopoverHeader>Review Breakdown</PopoverHeader>
+              <PopoverBody>
+                {
+                  Array(5).fill('')
+                    .map((_, i) => (
+                      <RatingBreakdownBar key={i} listing={listing} rating={5 - i} />
+                    ))
+                }
+              </PopoverBody>
+            </PopoverContent>
+          </Popover>
           <Box as='span' ml='2' color='gray.600' fontSize='sm'>
             {listing.reviews.length} reviews
           </Box>
