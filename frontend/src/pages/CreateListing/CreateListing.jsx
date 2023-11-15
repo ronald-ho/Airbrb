@@ -12,25 +12,27 @@ function CreateListing () {
     <CenteredBox>
       <VStack spacing={8}>
         <Text>Choose how to create your listing!</Text>
-        <Flex justify="space-between" width="100%">
-          <Box p={8} marginRight={2} borderWidth={1} borderRadius={25} boxShadow="lg">
+        <Flex justify="space-evenly" width="100%">
+          <Box p={6} marginRight={2} borderWidth={1} borderRadius={25} boxShadow="lg">
             <VStack spacing={4}>
               <h1>Express Creation</h1>
               <Image
                 src={rocketIcon}
                 boxSize="80%"
                 cursor="pointer"
-                onClick={() => navigate('/create-listing/title')}/>
+                onClick={() => navigate('/create-listing/title')}
+                alt="Express creation"/>
             </VStack>
           </Box>
-          <Box p={8} marginLeft={2} borderWidth={1} borderRadius={25} boxShadow="lg">
+          <Box p={6} marginLeft={2} borderWidth={1} borderRadius={25} boxShadow="lg">
             <VStack spacing={4}>
               <h1>Json upload</h1>
               <Image
                 src={jsonIcon}
                 boxSize="80%"
                 cursor="pointer"
-                onClick={() => navigate('/create-listing/json')}/>
+                onClick={() => navigate('/create-listing/json')}
+                alt="Json Upload"/>
             </VStack>
           </Box>
         </Flex>

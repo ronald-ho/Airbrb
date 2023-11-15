@@ -37,7 +37,7 @@ const NavBar = (props) => {
 
   return (
     <NavBarContainer {...props}>
-      <Link to="/">
+      <Link href="/">
         <Image src={imageSrc} alt='Logo' height="28px"/>
       </Link>
       <IconButton
@@ -51,9 +51,9 @@ const NavBar = (props) => {
         <DrawerOverlay/>
         <DrawerContent>
           <DrawerHeader>
-            <MenuLink to="/">
+            <Link href="/">
               <Image src={airbnbLogo} alt='Logo' height="28px"/>
-            </MenuLink>
+            </Link>
           </DrawerHeader>
           <DrawerBody>
             <MenuLink to="/" py='2' fontWeight='semibold' width='100%'>Home</MenuLink>

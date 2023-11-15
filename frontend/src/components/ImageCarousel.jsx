@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
-import { Box, Image, IconButton, AspectRatio } from '@chakra-ui/react';
+import { AspectRatio, Box, IconButton } from '@chakra-ui/react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
+import ThumbnailPreview from './ThumbnailPreview';
 
 function ImageCarousel ({ allImages }) {
   const [style, setStyle] = useState(false);
@@ -11,11 +12,13 @@ function ImageCarousel ({ allImages }) {
     if (allImages.length > 1) setStyle(!style);
   }
 
-  const handlePrev = () => {
+  const handlePrev = (event) => {
+    event.preventDefault();
     setImageIndex((prev) => (prev === 0 ? allImages.length - 1 : prev - 1));
   };
 
-  const handleNext = () => {
+  const handleNext = (event) => {
+    event.preventDefault();
     setImageIndex((next) => (next === allImages.length - 1 ? 0 : next + 1));
   };
 
@@ -24,6 +27,7 @@ function ImageCarousel ({ allImages }) {
       position='relative'
       onMouseEnter={toggleStyle}
       onMouseLeave={toggleStyle}
+      zIndex={0}
     >
       <IconButton
         position='absolute'
@@ -32,15 +36,17 @@ function ImageCarousel ({ allImages }) {
         transform="translateY(-50%)"
         isRound='true'
         size='sm'
-        display={ style ? 'block' : 'none' }
-        icon={<ArrowLeftIcon />}
+        display={style ? 'block' : 'none'}
+        icon={<ArrowLeftIcon/>}
         onClick={handlePrev}
-        zIndex={100}
+        zIndex={250}
         aria-label='Previous Image'
       />
-      <AspectRatio ratio={4 / 3}>
-        <Image src={allImages[imageIndex]} width='100%' rounded='lg' alt={`Image ${imageIndex}`} />
-      </AspectRatio>
+      <Box rounded='lg' overflow='hidden'>
+        <AspectRatio ratio={4 / 3}>
+          <ThumbnailPreview url={allImages[imageIndex]}/>
+        </AspectRatio>
+      </Box>
       <IconButton
         position='absolute'
         top='50%'
@@ -48,9 +54,10 @@ function ImageCarousel ({ allImages }) {
         transform="translateY(-50%)"
         isRound='true'
         size='sm'
-        display={ style ? 'block' : 'none' }
-        icon={<ArrowRightIcon />}
+        display={style ? 'block' : 'none'}
+        icon={<ArrowRightIcon/>}
         onClick={handleNext}
+        zIndex={250}
         aria-label='Next Image'
       />
     </Box>

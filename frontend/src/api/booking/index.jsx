@@ -80,17 +80,23 @@ export const getProfitData = async () => {
     dailyProfits[formatISO(day, { representation: 'date' })] = 0;
   });
 
+  console.log('acceptedBookings', acceptedBookings)
+
   for (const booking of acceptedBookings) {
+    console.log('booking', booking)
+
     const startDate = parseISO(booking.dateRange[0]);
     const endDate = parseISO(booking.dateRange[1]);
 
     const listingResponse = await getListing(booking.listingId);
+    console.log('listingResponse', listingResponse)
     const listingPrice = listingResponse.data.listing.price;
+    console.log('listingPrice', listingPrice)
 
     const adjustedStartDate = max([startDate, thirtyDaysAgo]);
     const adjustedEndDate = min([endDate, today]);
 
-    if (adjustedStartDate <= adjustedEndDate) {
+    if (adjustedStartDate <= adjustedEndDate && listingPrice) {
       eachDayOfInterval({
         start: adjustedStartDate,
         end: adjustedEndDate

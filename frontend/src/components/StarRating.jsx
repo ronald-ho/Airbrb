@@ -8,6 +8,7 @@ function StarRating ({ rating }) {
         <StarIcon
           key={i}
           color={i < rating ? 'black.400' : 'gray.300'}
+          aria-label={`Rating of ${rating} stars`}
         />
       ))
   )

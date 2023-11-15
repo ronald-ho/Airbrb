@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Text, Divider, Circle, Input, FormControl, FormLabel, Button } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons';
 import { RangeDatepicker } from 'chakra-dayzed-datepicker';
@@ -25,6 +25,7 @@ function SearchBar ({ onClickHandler }) {
       top="2"
       transform='translate(-50%, 0%)'
       zIndex={400}
+      aria-label='Open Search'
     >
       <Text px='2' fontWeight='semibold'>Anywhere</Text>
       <Divider orientation='vertical' />
@@ -36,32 +37,23 @@ function SearchBar ({ onClickHandler }) {
   );
 }
 
-function InputBar ({ onClickHandler, callReset, stopReset }) {
+// function InputBar ({ onClickHandler, callReset, stopReset, updateFilters }) {
+function InputBar ({ onClickHandler, updateFilters }) {
   const [selectedDates, setSelectedDates] = useState([undefined, undefined]);
+  const [textInput, setTextInput] = useState('');
 
-  const textSearch = document.getElementById('location-search');
-
-  // Reset the text input and daterangepicker field
-  if (callReset) {
-    textSearch.value = '';
-
-    // We don't set state to prevent infinite re-rendering
-    if (selectedDates[0] !== undefined && selectedDates[1] !== undefined) {
-      setSelectedDates([undefined, undefined]);
-    }
-
-    stopReset();
-  }
-
-  // Pass search parameters upwards
-  const submitSearch = () => {
+  const onInputChange = () => {
     const searchFilters = {
-      textSearch: textSearch ? textSearch.value : '',
+      textSearch: textInput,
       dateSearch: selectedDates,
     }
 
-    onClickHandler(searchFilters);
+    updateFilters(searchFilters);
   }
+
+  useEffect(() => {
+    onInputChange();
+  }, [textInput, selectedDates]);
 
   return (
     <Box
@@ -83,11 +75,17 @@ function InputBar ({ onClickHandler, callReset, stopReset }) {
       <Box px='3' _hover={{ bg: 'gray.100', borderWidth: '1px', borderLeftRadius: '40px' }} flexGrow='2'>
         <FormControl>
           <FormLabel px='3' mt='1' mb='0'>Where</FormLabel>
-          <Input id='location-search' type='text' placeholder='By title or city'
+          <Input
+            type='text'
+            placeholder='By title or city'
             size='sm'
             my='1'
             borderWidth='0px'
-            focusBorderColor='transparent' defaultValue='' />
+            focusBorderColor='transparent'
+            aria-label='Text Search'
+            value={textInput}
+            onChange={(event) => setTextInput(event.target.value)}
+          />
         </FormControl>
       </Box>
       <Divider orientation='vertical' />
@@ -129,12 +127,19 @@ function InputBar ({ onClickHandler, callReset, stopReset }) {
                 focusBorderColor: 'black',
                 placeholder: 'Check In / Out',
                 my: '1',
+                'aria-label': 'Select check-in/out dates'
               },
             }}
           />
         </FormControl>
       </Box>
-      <Button leftIcon={<SearchIcon />} onClick={submitSearch} borderRadius='20px' mr='2'>
+      <Button
+        leftIcon={<SearchIcon />}
+        onClick={onClickHandler}
+        borderRadius='20px'
+        mr='2'
+        aria-aria-label='Submit Search'
+      >
         Search
       </Button>
     </Box>

@@ -95,7 +95,10 @@ function BookingHistory () {
   if (loading) return null;
 
   return (
-    <Flex flexDirection="column" maxHeight="100vh">
+    <Flex flexDirection="column" maxHeight="90vh">
+      <Center>
+        <Text fontSize="3xl" fontWeight="bold" mb={4}>Booking History</Text>
+      </Center>
       <Select
         className="basic-single"
         options={
