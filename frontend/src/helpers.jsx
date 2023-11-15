@@ -30,8 +30,18 @@ export const customAjv = new Ajv({ allErrors: true });
 customAjv.addFormat('base64image', {
   type: 'string',
   validate: (data) => {
+    if (typeof data !== 'string') return false;
     const regex = /^data:image\/(png|jpeg|jpg);base64,/;
     return regex.test(data);
+  }
+});
+
+customAjv.addFormat('youtubeUrl', {
+  type: 'string',
+  validate: (data) => {
+    if (typeof data !== 'string') return false;
+    const youtubeRegex = /^(https?:\/\/)?(www\.)?(youtube\.com\/watch\?v=|youtu\.be\/)[\w-]+(&[\w-]+)*$/;
+    return youtubeRegex.test(data);
   }
 });
 
@@ -55,8 +65,16 @@ export const listingSchema = {
       type: 'number'
     },
     thumbnail: {
-      type: 'string',
-      format: 'base64image'
+      oneOf: [
+        {
+          type: 'string',
+          format: 'base64image'
+        },
+        {
+          type: 'string',
+          format: 'youtubeUrl'
+        }
+      ]
     },
     metadata: {
       type: 'object',
