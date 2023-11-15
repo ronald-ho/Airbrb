@@ -21,9 +21,14 @@ import airbnbLogo from '../assets/airbnb.svg'
 import airbnbIcon from '../assets/airbnb-icon.svg'
 import { AuthContext } from './AuthProvider';
 
+const logout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('email');
+}
+
 const NavBar = (props) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
-  const { logOut } = useContext(AuthContext);
+  const { isLoggedIn, logOut } = useContext(AuthContext);
 
   const imageSrc = useBreakpointValue({
     base: airbnbIcon,
@@ -46,15 +51,15 @@ const NavBar = (props) => {
         <DrawerOverlay/>
         <DrawerContent>
           <DrawerHeader>
-            <Link to="/">
+            <MenuLink to="/">
               <Image src={airbnbLogo} alt='Logo' height="28px"/>
-            </Link>
+            </MenuLink>
           </DrawerHeader>
           <DrawerBody>
             <MenuLink to="/" py='2' fontWeight='semibold' width='100%'>Home</MenuLink>
             <MenuLink to="/my-listings" py='2' fontWeight='semibold' width='100%'>My Listings</MenuLink>
             {
-              localStorage.getItem('token')
+              isLoggedIn
                 ? <MenuLink to="/" py='2'>
                   <Button
                     size="sm"
@@ -100,8 +105,6 @@ const MenuLink = ({ children, to = '/', ...rest }) => {
 };
 
 const MenuLinks = () => {
-  const { logOut } = useContext(AuthContext);
-
   return (
     <Box display={{ base: 'none', md: 'block' }}>
       <Stack
@@ -121,7 +124,7 @@ const MenuLinks = () => {
                 bg='red.400'
                 color='white'
                 _hover={{ bg: 'red.600' }}
-                onClick={logOut}
+                onClick={logout}
               >
                 Sign Out
               </Button>
