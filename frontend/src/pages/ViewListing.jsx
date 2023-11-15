@@ -273,7 +273,7 @@ function ViewListing () {
               onDateChange={setSelectedDates}
             />
           </FormControl>
-          <Button onClick={sendBookingRequest} width='100%' colorScheme='red'>Request to book</Button>
+          <Button onClick={sendBookingRequest} width='100%' colorScheme='red' aria-label='Send booking'>Request to book</Button>
         </Stack>
       </Stack>
 
@@ -292,8 +292,8 @@ function ViewListing () {
                 <option value='5'>5 Star</option>
               </Select>
 
-              <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange}></Textarea>
-              <Button onClick={submitReview} colorScheme='red'>Submit Review</Button>
+              <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange} aria-label='Review input'></Textarea>
+              <Button onClick={submitReview} colorScheme='red' aria-label='Submit review'>Submit Review</Button>
             </Stack>
             : null
         }

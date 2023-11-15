@@ -266,7 +266,6 @@ function AllListings () {
   };
 
   const clearFilters = () => {
-    // setCallReset(true);
     setBedroomFilter(defaultBedrooms);
     setPriceFilter(defaultPrices);
     setSortReviews('none');
@@ -312,13 +311,19 @@ function AllListings () {
           <QuantitySelector title={'Price'} defaults={defaultPrices} value={priceFilter} setter={setPriceFilter}/>
           <Box display='flex' alignItems='center' justifyContent='space-between'>
             <Text fontWeight='bold' whiteSpace='nowrap'>Sort Reviews</Text>
-            <Select value={sortReviews} onChange={handleSelectReviews} width='30%'>
+            <Select value={sortReviews} onChange={handleSelectReviews} width='30%' aria-label='Sort reviews by'>
               <option value='none'>None</option>
               <option value='ascending'>Ascending</option>
               <option value='descending'>Descending</option>
             </Select>
           </Box>
-          <Button onClick={clearFilters} width='100%'>Clear All</Button>
+          <Button
+            onClick={clearFilters}
+            width='100%'
+            aria-label='Clear filters'
+          >
+            Clear All
+          </Button>
         </Stack>
       </Box>
 
