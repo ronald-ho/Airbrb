@@ -1,13 +1,17 @@
 import React, { useEffect, useState } from 'react';
 import { getAllListingDetailsByUser } from '../api/listings';
 import listingPreview from '../components/ListingPreview';
-import { Button, Flex, Grid, GridItem, VStack } from '@chakra-ui/react';
+import { Button, Flex, Grid, GridItem, Text, VStack } from '@chakra-ui/react';
 import { Link } from 'react-router-dom';
 
 function HostedListings () {
   const [listings, setListings] = useState([]);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    const token = localStorage.getItem('token');
+    setIsLoggedIn(!!token);
+
     const fetchData = async () => {
       try {
         const listings = await getAllListingDetailsByUser();
@@ -20,9 +24,17 @@ function HostedListings () {
     fetchData();
   }, []);
 
+  if (!isLoggedIn) {
+    return (
+      <Flex justify="center" align="center" minH="90vh">
+        <Text fontSize="lg">Please login or create an account to view your listings.</Text>
+      </Flex>
+    );
+  }
+
   return (
 
-    <Flex justify="center" minH="100vh">
+    <Flex justify="center" minH="90vh">
       <VStack>
         <Grid
           templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}
@@ -39,7 +51,7 @@ function HostedListings () {
         <Link to="/my-listings/profits">
           <Button
             position="fixed"
-            bottom="2rem"
+            bottom="1rem"
             left="2rem"
             backgroundColor="yellow.500"
             color="white"
@@ -54,7 +66,7 @@ function HostedListings () {
         <Link to="/booking-history" state={{ listing: listings }}>
           <Button
             position="fixed"
-            bottom="8rem"
+            bottom="7rem"
             right="2rem"
             backgroundColor="blue.500"
             color="white"
@@ -69,7 +81,7 @@ function HostedListings () {
         <Link to="/publish-listing" state={{ listing: listings }}>
           <Button
             position="fixed"
-            bottom="5rem"
+            bottom="4rem"
             right="2rem"
             backgroundColor="purple.500"
             color="white"
@@ -84,7 +96,7 @@ function HostedListings () {
         <Link to="/create-listing">
           <Button
             position="fixed"
-            bottom="2rem"
+            bottom="1rem"
             right="2rem"
             backgroundColor="teal.500"
             color="white"

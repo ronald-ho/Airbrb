@@ -13,7 +13,8 @@ const PropertyTypeSelector = ({ propertyType, onChange }) => {
           cursor="pointer"
           onClick={() => onChange('House')}
           border={propertyType === 'House' ? '1px solid black' : 'none'}
-          borderRadius="lg"/>
+          borderRadius="lg"
+          alt="House"/>
         <h1>House</h1>
       </VStack>
       <VStack spacing={4}>
@@ -23,7 +24,8 @@ const PropertyTypeSelector = ({ propertyType, onChange }) => {
           cursor="pointer"
           onClick={() => onChange('Apartment')}
           border={propertyType === 'Apartment' ? '1px solid black' : 'none'}
-          borderRadius="lg"/>
+          borderRadius="lg"
+          alt="Apartment"/>
         <h1>Apartment</h1>
       </VStack>
     </Flex>
