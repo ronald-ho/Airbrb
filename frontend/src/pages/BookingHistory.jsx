@@ -29,7 +29,6 @@ function BookingHistory () {
   }, []);
 
   useEffect(() => {
-    console.log('Listings:', listings);
     if (listingId) {
       setLoading(true);
       const fetchBookings = async () => {
@@ -37,7 +36,6 @@ function BookingHistory () {
           const response = await getAllBookingDetails(listingId);
           setListingBookings(response);
           setLoading(false);
-          console.log('LISTING BOOKINGS', listingBookings)
         } catch (error) {
           console.error('Error fetching bookings', error);
         }
@@ -67,7 +65,6 @@ function BookingHistory () {
     try {
       const response = await getAllBookingDetails(id);
       setListingBookings(response);
-      console.log('listingBookings', listingBookings)
     } catch (error) {
       console.error('Error fetching bookings ', error);
     }
