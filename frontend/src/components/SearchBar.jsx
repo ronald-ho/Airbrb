@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Box, Text, Divider, Circle, Input, FormControl, FormLabel, Button } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons';
 import { RangeDatepicker } from 'chakra-dayzed-datepicker';
@@ -36,32 +36,23 @@ function SearchBar ({ onClickHandler }) {
   );
 }
 
-function InputBar ({ onClickHandler, callReset, stopReset }) {
+// function InputBar ({ onClickHandler, callReset, stopReset, updateFilters }) {
+function InputBar ({ onClickHandler, updateFilters }) {
   const [selectedDates, setSelectedDates] = useState([undefined, undefined]);
+  const [textInput, setTextInput] = useState('');
 
-  const textSearch = document.getElementById('location-search');
-
-  // Reset the text input and daterangepicker field
-  if (callReset) {
-    textSearch.value = '';
-
-    // We don't set state to prevent infinite re-rendering
-    if (selectedDates[0] !== undefined && selectedDates[1] !== undefined) {
-      setSelectedDates([undefined, undefined]);
-    }
-
-    stopReset();
-  }
-
-  // Pass search parameters upwards
-  const submitSearch = () => {
+  const onInputChange = () => {
     const searchFilters = {
-      textSearch: textSearch ? textSearch.value : '',
+      textSearch: textInput,
       dateSearch: selectedDates,
     }
 
-    onClickHandler(searchFilters);
+    updateFilters(searchFilters);
   }
+
+  useEffect(() => {
+    onInputChange();
+  }, [textInput, selectedDates]);
 
   return (
     <Box
@@ -87,7 +78,11 @@ function InputBar ({ onClickHandler, callReset, stopReset }) {
             size='sm'
             my='1'
             borderWidth='0px'
-            focusBorderColor='transparent' defaultValue='' />
+            focusBorderColor='transparent'
+            // defaultValue=''
+            value={textInput}
+            onChange={(event) => setTextInput(event.target.value)}
+          />
         </FormControl>
       </Box>
       <Divider orientation='vertical' />
@@ -134,7 +129,7 @@ function InputBar ({ onClickHandler, callReset, stopReset }) {
           />
         </FormControl>
       </Box>
-      <Button leftIcon={<SearchIcon />} onClick={submitSearch} borderRadius='20px' mr='2'>
+      <Button leftIcon={<SearchIcon />} onClick={onClickHandler} borderRadius='20px' mr='2'>
         Search
       </Button>
     </Box>
