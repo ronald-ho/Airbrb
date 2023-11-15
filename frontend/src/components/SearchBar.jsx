@@ -25,6 +25,7 @@ function SearchBar ({ onClickHandler }) {
       top="2"
       transform='translate(-50%, 0%)'
       zIndex={400}
+      aria-label='Open Search'
     >
       <Text px='2' fontWeight='semibold'>Anywhere</Text>
       <Divider orientation='vertical' />
@@ -74,12 +75,14 @@ function InputBar ({ onClickHandler, updateFilters }) {
       <Box px='3' _hover={{ bg: 'gray.100', borderWidth: '1px', borderLeftRadius: '40px' }} flexGrow='2'>
         <FormControl>
           <FormLabel px='3' mt='1' mb='0'>Where</FormLabel>
-          <Input id='location-search' type='text' placeholder='By title or city'
+          <Input
+            type='text'
+            placeholder='By title or city'
             size='sm'
             my='1'
             borderWidth='0px'
             focusBorderColor='transparent'
-            // defaultValue=''
+            aria-label='Text Search'
             value={textInput}
             onChange={(event) => setTextInput(event.target.value)}
           />
@@ -124,12 +127,19 @@ function InputBar ({ onClickHandler, updateFilters }) {
                 focusBorderColor: 'black',
                 placeholder: 'Check In / Out',
                 my: '1',
+                'aria-label': 'Select check-in/out dates'
               },
             }}
           />
         </FormControl>
       </Box>
-      <Button leftIcon={<SearchIcon />} onClick={onClickHandler} borderRadius='20px' mr='2'>
+      <Button
+        leftIcon={<SearchIcon />}
+        onClick={onClickHandler}
+        borderRadius='20px'
+        mr='2'
+        aria-aria-label='Submit Search'
+      >
         Search
       </Button>
     </Box>
