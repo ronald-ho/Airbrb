@@ -37,7 +37,6 @@ function SearchBar ({ onClickHandler }) {
   );
 }
 
-// function InputBar ({ onClickHandler, callReset, stopReset, updateFilters }) {
 function InputBar ({ onClickHandler, updateFilters }) {
   const [selectedDates, setSelectedDates] = useState([undefined, undefined]);
   const [textInput, setTextInput] = useState('');
