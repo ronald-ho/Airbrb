@@ -1,59 +1,30 @@
-import React, { useContext } from 'react';
-import { ListingContext } from './ListingContext';
-import { Button, Flex, useNumberInput } from '@chakra-ui/react';
-import DetailsInputField from '../../components/DetailsInputField';
+import { Button, Flex } from '@chakra-ui/react';
+import React, { useContext, useState } from 'react';
 import CenteredBox from '../../components/CenteredBox';
+import NumberInputFieldCustom from '../../components/NumberInputFieldCustom';
+import { ListingContext } from './ListingContext';
 
-/**
- * Custom hook to create a number input with specific configuration.
- * @param {number} defaultValue - The default value for the number input.
- * @returns {object} - Number input configuration.
- */
-function useCustomNumberInput (defaultValue) {
-  return useNumberInput({
-    step: 1,
-    defaultValue: defaultValue || 0,
-    min: 1,
-  });
-}
-
-/**
- * DetailsStep component represents the step in the listing creation process
- * where the user enters details such as bedrooms, beds, and bathrooms for the listing.
- * @param {function} onSubmit - Callback function to submit the details data.
- * @param {function} onBack - Callback function to navigate back to the previous step.
- */
 const DetailsStep = ({ onSubmit, onBack }) => {
-  // Access listing data from the context
   const { listingData } = useContext(ListingContext);
 
-  // Create number input configurations for bedrooms, beds, and bathrooms
-  const bedroomsInput = useCustomNumberInput(listingData.bedrooms);
-  const bedsInput = useCustomNumberInput(listingData.beds);
-  const bathroomsInput = useCustomNumberInput(listingData.bathrooms);
+  // State for bedrooms, beds, and bathrooms
+  const [bedrooms, setBedrooms] = useState(listingData.bedrooms || 0);
+  const [beds, setBeds] = useState(listingData.beds || 0);
+  const [bathrooms, setBathrooms] = useState(listingData.bathrooms || 0);
 
-  // Function to handle submission
   const handleNext = (event) => {
     event.preventDefault();
-    onSubmit({
-      bedrooms: bedroomsInput.getInputProps().value,
-      beds: bedsInput.getInputProps().value,
-      bathrooms: bathroomsInput.getInputProps().value,
-    });
+    onSubmit({ bedrooms, beds, bathrooms });
   };
 
   return (
     <CenteredBox>
       <h1>Details</h1>
-
-      {/* Render DetailsInputField components for entering details */}
       <Flex flexDirection="column" spacing={4}>
-        <DetailsInputField title="Bedrooms" numberInput={bedroomsInput}/>
-        <DetailsInputField title="Beds" numberInput={bedsInput}/>
-        <DetailsInputField title="Bathrooms" numberInput={bathroomsInput}/>
+        <NumberInputFieldCustom title="Bedrooms" value={bedrooms} onChange={setBedrooms}/>
+        <NumberInputFieldCustom title="Beds" value={beds} onChange={setBeds}/>
+        <NumberInputFieldCustom title="Bathrooms" value={bathrooms} onChange={setBathrooms}/>
       </Flex>
-
-      {/* Render "Back" and "Next" buttons for navigation */}
       <Flex justify="space-between" mt={4}>
         <Button colorScheme="gray" onClick={onBack}>Back</Button>
         <Button colorScheme="blue" onClick={handleNext}>Next</Button>

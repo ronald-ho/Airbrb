@@ -1,11 +1,11 @@
-import React from 'react';
 import { Button, Flex, HStack, Input, Text, useNumberInput } from '@chakra-ui/react';
+import React from 'react';
 
 function NumberInputFieldCustom ({ title, value, onChange }) {
   const { getInputProps, getIncrementButtonProps, getDecrementButtonProps } = useNumberInput({
     step: 1,
-    defaultValue: value,
-    min: 0,
+    defaultValue: value || 0,
+    min: 1,
     onChange: (valueAsString, valueAsNumber) => onChange(valueAsNumber),
   });
 
@@ -19,7 +19,7 @@ function NumberInputFieldCustom ({ title, value, onChange }) {
         <Text>{title}:</Text>
         <HStack minW="0">
           <Button {...decreaseProps}>-</Button>
-          <Input {...inputProps} />
+          <Input {...inputProps} role="textbox"/>
           <Button {...increaseProps}>+</Button>
         </HStack>
       </Flex>

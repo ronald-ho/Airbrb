@@ -1,9 +1,8 @@
 /* eslint-disable */
-import React from 'react';
-import { screen, render, fireEvent } from '@testing-library/react';
+import {render, screen} from '@testing-library/react';
 import userEvent from "@testing-library/user-event";
-import QuantitySelector from './QuantitySelector';
-import { left } from '@popperjs/core';
+import React from 'react';
+import QuantitySelector from '../components/QuantitySelector';
 
 describe('Quantity Selector', () => {
   let currentValue = [0, 1000];
@@ -18,11 +17,11 @@ describe('Quantity Selector', () => {
   }
 
   test('Can render with correct initial values', () => {
-    const { queryAllByRole, getByText  } = render(<QuantitySelector {...props} />);
+    const {queryAllByRole, getByText} = render(<QuantitySelector {...props} />);
     const sliders = queryAllByRole(/slider/i);
-    const title = getByText (/Price/i);
+    const title = getByText(/Price/i);
     const minimum = getByText(/^0/i);
-    
+
     // Initial display should have '+' for maximum
     const maximum = getByText(/1000+/i);
 
@@ -36,7 +35,7 @@ describe('Quantity Selector', () => {
     // const { queryAllByRole, getByText } = render(<QuantitySelector {...props} />);
     render(<QuantitySelector {...props} />);
     const sliders = screen.getAllByRole(/slider/i);
-    const  test  = screen.getByText(/0/i);
+    const test = screen.getByText(/0/i);
 
     const leftThumb = sliders[0];
     await user.pointer([
@@ -59,7 +58,7 @@ describe('Quantity Selector', () => {
     // // Simulate changes to first slider
     // // fireEvent.change(sliders[0], { target: { value: 500 } });
     // sliders[0].setAttribute('aria-valuenow', 500);
-    
+
     // // Check display value
     // expect(Number(sliders[0].getAttribute('aria-valuenow'))).toEqual(500);
 
@@ -71,7 +70,7 @@ describe('Quantity Selector', () => {
     // fireEvent.change(sliders[0]);
     expect(setter).toHaveBeenCalledWith([500, 1000]);
     // expect(Number(sliders[1].getAttribute('aria-valuenow'))).toEqual(1000);
-  });  
+  });
 
   // test('Can switch to the next image', () => {
   //   const { getByLabelText, getByAltText } = render(<ImageCarousel allImages={allImages} />);
@@ -87,7 +86,7 @@ describe('Quantity Selector', () => {
   //   const { getByLabelText, getByAltText } = render(<ImageCarousel allImages={allImages} />);
   //   const previousButton = getByLabelText(/Previous Image/i);
   //   const nextButton = getByLabelText(/Next Image/i);
-    
+
   //   fireEvent.click(nextButton);
   //   fireEvent.click(previousButton);
 

@@ -75,7 +75,7 @@ function Login () {
         <Link to="/register">Register</Link>
 
         {/* Login button */}
-        <Button colorScheme="blue" onClick={handleSubmit}>
+        <Button type="submit" colorScheme="blue" onClick={handleSubmit}>
           Login
         </Button>
       </VStack>

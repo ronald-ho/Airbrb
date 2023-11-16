@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { AspectRatio, Box, IconButton } from '@chakra-ui/react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
+import { AspectRatio, Box, IconButton } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import ThumbnailPreview from './ThumbnailPreview';
 
 function ImageCarousel ({ allImages }) {
@@ -44,7 +44,7 @@ function ImageCarousel ({ allImages }) {
       />
       <Box rounded='lg' overflow='hidden'>
         <AspectRatio ratio={4 / 3}>
-          <ThumbnailPreview url={allImages[imageIndex]}/>
+          <ThumbnailPreview url={allImages[imageIndex]} alt={`Image ${imageIndex}`}/>
         </AspectRatio>
       </Box>
       <IconButton

@@ -14,7 +14,6 @@
     "axios": "^1.6.0",
     "chakra-dayzed-datepicker": "^0.2.10",
     "chart.js": "^4.4.0",
-    "cypress": "^13.3.3",
     "date-fns": "^2.30.0",
     "date-fns-tz": "^2.0.0",
     "dayzed": "^3.2.3",
@@ -60,6 +59,7 @@
   },
   "devDependencies": {
     "@testing-library/react": "^12.1.5",
+    "cypress": "^13.5.1",
     "eslint": "^8.26.0",
     "eslint-config-react-app": "^7.0.1",
     "eslint-config-standard": "^17.0.0",

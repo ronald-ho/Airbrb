@@ -1,4 +1,5 @@
 import {
+  Box,
   Button,
   Center,
   Flex,
@@ -125,17 +126,13 @@ function EditListing () {
   };
 
   const handleImagesChange = (base64Strings) => {
-    setListing(prevListing => {
-      const updatedListing = {
-        ...prevListing,
-        metadata: {
-          ...prevListing.metadata,
-          images: [...prevListing.metadata.images, ...base64Strings]
-        }
-      };
-
-      return updatedListing;
-    });
+    setListing(prevListing => ({
+      ...prevListing,
+      metadata: {
+        ...prevListing.metadata,
+        images: [...prevListing.metadata.images, ...base64Strings]
+      }
+    }));
   };
 
   const handleDateChanges = async (newDates) => {
@@ -236,7 +233,9 @@ function EditListing () {
   return (
     <VStack maxWidth="98vw">
       <Text fontSize='3xl'>{listing.title}</Text>
-      <ThumbnailPreview url={listing.thumbnail}/>
+      <Box rounded='lg'>
+        <ThumbnailPreview url={listing.thumbnail}/>
+      </Box>
       <Tabs maxWidth="100%">
         {/* Tab navigation */}
         <Flex justify="space-between" style={{ overflowX: 'auto' }}>
