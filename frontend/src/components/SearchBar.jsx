@@ -37,7 +37,6 @@ function SearchBar ({ onClickHandler }) {
   );
 }
 
-// function InputBar ({ onClickHandler, callReset, stopReset, updateFilters }) {
 function InputBar ({ onClickHandler, updateFilters }) {
   const [selectedDates, setSelectedDates] = useState([undefined, undefined]);
   const [textInput, setTextInput] = useState('');
@@ -138,7 +137,7 @@ function InputBar ({ onClickHandler, updateFilters }) {
         onClick={onClickHandler}
         borderRadius='20px'
         mr='2'
-        aria-aria-label='Submit Search'
+        aria-label='Submit Search'
       >
         Search
       </Button>

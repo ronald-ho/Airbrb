@@ -44,7 +44,7 @@ function ImageCarousel ({ allImages }) {
       />
       <Box rounded='lg' overflow='hidden'>
         <AspectRatio ratio={4 / 3}>
-          <ThumbnailPreview url={allImages[imageIndex]}/>
+          <ThumbnailPreview url={allImages[imageIndex]} alt={`Image ${imageIndex}`}/>
         </AspectRatio>
       </Box>
       <IconButton
