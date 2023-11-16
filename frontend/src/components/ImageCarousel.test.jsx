@@ -57,3 +57,35 @@ describe('ImageCarousel with multiple images', () => {
     expect(image).toBeInTheDocument();
   });
 });
+
+describe('ImageCarousel with single image (thumbnail)', () => {
+  const allImages = ['thumbnail.jpg'];
+
+  test('Can render', () => {
+    render(<ImageCarousel allImages={allImages} />);
+  });
+
+  // Buttons are hidden if it's a single image, but on the event that a user manages to trigger it
+  // it should just loop back to Image 0 anyway
+  test('Can switch to the next image', () => {
+    const { getByLabelText, getByAltText } = render(<ImageCarousel allImages={allImages} />);
+    const nextButton = getByLabelText(/Next Image/i);
+
+    fireEvent.click(nextButton);
+
+    const image = getByAltText('Image 0');
+    expect(image).toBeInTheDocument();
+  });
+
+  test('Can switch to the previous image', () => {
+    const { getByLabelText, getByAltText } = render(<ImageCarousel allImages={allImages} />);
+    const previousButton = getByLabelText(/Previous Image/i);
+    const nextButton = getByLabelText(/Next Image/i);
+
+    fireEvent.click(nextButton);
+    fireEvent.click(previousButton);
+
+    const image = getByAltText('Image 0');
+    expect(image).toBeInTheDocument();
+  });
+});

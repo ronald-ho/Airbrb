@@ -60,7 +60,7 @@ function RatingBreakdownBar ({ listing, rating }) {
             {listing.reviews.map((review, index) => (
               Number(review.rating) === rating
                 ? <Box key={index}>
-                  <Box>
+                  <Box aria-label={`Rating of ${review.rating} stars`}>
                     <StarRating rating={review.rating}/>
                   </Box>
                   {review.message}
