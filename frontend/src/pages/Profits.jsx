@@ -1,15 +1,21 @@
-import React, { useEffect, useState } from 'react';
-import { getProfitData } from '../api/booking';
-import { Line } from 'react-chartjs-2';
-import 'chart.js/auto';
 import { Flex, Heading } from '@chakra-ui/react';
+import 'chart.js/auto';
+import React, { useEffect, useState } from 'react';
+import { Line } from 'react-chartjs-2';
+import { getProfitData } from '../api/booking';
 
+/**
+ * Component: Profits
+ * Description: This component displays a line chart showing profit data for the last 30 days.
+ */
 function Profits () {
+  // State to store chart data
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: []
   });
 
+  // Chart options
   const options = {
     scales: {
       x: {
@@ -41,6 +47,7 @@ function Profits () {
     cubicInterpolationMode: 'monotone'
   };
 
+  // Fetch profit data from the API and update the chart data state
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -69,6 +76,7 @@ function Profits () {
     fetchData();
   }, []);
 
+  // Render the Profits component
   return (
     <Flex flexDirection="column" align="center" width="90vw">
       <Heading>

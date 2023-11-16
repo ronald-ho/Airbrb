@@ -1,6 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { deleteListing, getListing, updateListing } from '../api/listings/actions';
-import { useNavigate, useParams } from 'react-router-dom';
 import {
   Button,
   Center,
@@ -18,13 +15,16 @@ import {
   useToast,
   VStack
 } from '@chakra-ui/react';
-import NumberInputFieldCustom from '../components/NumberInputFieldCustom';
-import PropertyTypeSelector from '../components/PropertyTypeSelector';
-import Popup from '../components/Popup';
-import { publishListing, unpublishListing } from '../api/listings/publish';
+import React, { useEffect, useState } from 'react';
 import { Calendar } from 'react-multi-date-picker';
 import 'react-multi-date-picker/styles/colors/red.css'
+import { useNavigate, useParams } from 'react-router-dom';
+import { deleteListing, getListing, updateListing } from '../api/listings/actions';
+import { publishListing, unpublishListing } from '../api/listings/publish';
 import ImageCarousel from '../components/ImageCarousel';
+import NumberInputFieldCustom from '../components/NumberInputFieldCustom';
+import Popup from '../components/Popup';
+import PropertyTypeSelector from '../components/PropertyTypeSelector';
 import ThumbnailPreview from '../components/ThumbnailPreview';
 
 function EditListing () {

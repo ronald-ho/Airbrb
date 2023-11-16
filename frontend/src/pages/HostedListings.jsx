@@ -1,17 +1,23 @@
+import { Button, Flex, Grid, GridItem, Text, VStack } from '@chakra-ui/react';
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { getAllListingDetailsByUser } from '../api/listings';
 import listingPreview from '../components/ListingPreview';
-import { Button, Flex, Grid, GridItem, Text, VStack } from '@chakra-ui/react';
-import { Link } from 'react-router-dom';
 
+/**
+ * HostedListings component displays a user's hosted listings.
+ */
 function HostedListings () {
+  // State variables to store listings and login status
   const [listings, setListings] = useState([]);
   const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   useEffect(() => {
+    // Check if the user is logged in
     const token = localStorage.getItem('token');
     setIsLoggedIn(!!token);
 
+    // Fetch user's listings
     const fetchData = async () => {
       try {
         const listings = await getAllListingDetailsByUser();
@@ -25,6 +31,7 @@ function HostedListings () {
   }, []);
 
   if (!isLoggedIn) {
+    // Display a message if the user is not logged in
     return (
       <Flex justify="center" align="center" minH="90vh">
         <Text fontSize="lg">Please login or create an account to view your listings.</Text>
@@ -33,7 +40,6 @@ function HostedListings () {
   }
 
   return (
-
     <Flex justify="center" minH="90vh">
       <VStack>
         <Grid
@@ -45,9 +51,13 @@ function HostedListings () {
             <GridItem
               width={{ base: '300px', sm: '200px', md: '225px' }}
               key={index}
-            >{listingPreview(listing, `/my-listings/edit/${listing.id}`)}</GridItem>
+            >
+              {/* Display listing previews */}
+              {listingPreview(listing, `/my-listings/edit/${listing.id}`)}
+            </GridItem>
           ))}
         </Grid>
+        {/* Links for additional functionality */}
         <Link to="/my-listings/profits">
           <Button
             position="fixed"
@@ -110,7 +120,7 @@ function HostedListings () {
         </Link>
       </VStack>
     </Flex>
-  )
+  );
 }
 
 export default HostedListings;
