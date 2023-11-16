@@ -50,7 +50,7 @@ const ThumbnailStep = ({ onSubmit, onBack }) => {
           <FormLabel>Thumbnail</FormLabel>
           <Input type="file" accept="image/*" onChange={handleThumbnailChange}/>
         </FormControl>
-        <FormControl isRequired>
+        <FormControl>
           <FormLabel>YouTube URL</FormLabel>
           <Input type="url" value={youtubeURL} onChange={handleYoutubeURLChange} placeholder="Enter YouTube URL"/>
         </FormControl>

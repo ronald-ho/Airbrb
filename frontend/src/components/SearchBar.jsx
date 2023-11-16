@@ -138,7 +138,7 @@ function InputBar ({ onClickHandler, updateFilters }) {
         onClick={onClickHandler}
         borderRadius='20px'
         mr='2'
-        aria-aria-label='Submit Search'
+        aria-label='Submit Search'
       >
         Search
       </Button>
