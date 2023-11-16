@@ -64,7 +64,7 @@ function ListingPreview (listing, url) {
         <Flex mt='2' alignItems='center'>
           <Popover trigger='hover'>
             <PopoverTrigger>
-              <Button bg='transparent' p='0'>
+              <Button bg='transparent' p='0' aria-label={`Rating of ${avgRating} stars`}>
                 <StarRating rating={avgRating} />
               </Button>
             </PopoverTrigger>
