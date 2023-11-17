@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { getAllListings } from '../api/listings';
 import {
   Box,
   Button,
@@ -13,12 +11,14 @@ import {
   StackDivider,
   Text
 } from '@chakra-ui/react';
-import ListingPreview from '../components/ListingPreview';
-import { InputBar, SearchBar } from '../components/SearchBar';
-import { getListing } from '../api/listings/actions';
+import React, { useEffect, useState } from 'react';
 import { getAllBookings } from '../api/booking';
-import { averageRating } from '../helpers';
+import { getAllListings } from '../api/listings';
+import { getListing } from '../api/listings/actions';
+import ListingPreview from '../components/ListingPreview';
 import QuantitySelector from '../components/QuantitySelector';
+import { InputBar, SearchBar } from '../components/SearchBar';
+import { averageRating } from '../helpers';
 
 function AllListings () {
   // Get listings data
@@ -38,7 +38,7 @@ function AllListings () {
   // Get filter inputs
   const defaultBedrooms = [0, 8];
   const [bedroomFilter, setBedroomFilter] = useState(defaultBedrooms);
-  const defaultPrices = [0, 10000]
+  const defaultPrices = [0, 5000]
   const [priceFilter, setPriceFilter] = useState(defaultPrices);
 
   // Get date search inputs and also passes search dates into listing previews
@@ -204,11 +204,6 @@ function AllListings () {
         // Fetch details for each property in the listings
         let propertyDetails = await Promise.all(
           listingsResponse.data.listings.map(async (property) => {
-            // If listing belongs to the logged in user, we don't need to show it
-            if (property.owner === localStorage.getItem('email')) {
-              return null;
-            }
-
             // Make a separate API call to get details for each property
             const propertyResponse = await getListing(property.id);
 
@@ -287,7 +282,7 @@ function AllListings () {
         {
           isSearchVisible
             ? <SearchBar onClickHandler={handleSearchClick}/>
-            : <InputBar onClickHandler={handleSubmitClick} updateFilters={updateTextAndDate} />
+            : <InputBar onClickHandler={handleSubmitClick} updateFilters={updateTextAndDate}/>
         }
 
         <Modal isOpen={!isSearchVisible}>
@@ -304,8 +299,11 @@ function AllListings () {
           borderColor='gray.200'
           boxShadow='lg'
           position='fixed'
-          left="50%"
-          width={{ base: '95%', md: '70%' }}
+          left='50%'
+          width={{
+            base: '95%',
+            md: '70%'
+          }}
           transform='translate(-50%, 60px)'
           zIndex={400}
           divider={<StackDivider/>}
@@ -313,7 +311,8 @@ function AllListings () {
         >
           <QuantitySelector title={'Bedrooms'} defaults={defaultBedrooms} value={bedroomFilter}
                             setter={setBedroomFilter}/>
-          <QuantitySelector title={'Price'} units={'$'} defaults={defaultPrices} value={priceFilter} setter={setPriceFilter}/>
+          <QuantitySelector title={'Price'} units={'$'} defaults={defaultPrices} value={priceFilter}
+                            setter={setPriceFilter}/>
           <Box display='flex' alignItems='center' justifyContent='space-between'>
             <Text fontWeight='bold' whiteSpace='nowrap'>Sort Reviews</Text>
             <Select value={sortReviews} onChange={handleSelectReviews} width='30%' aria-label='Sort reviews by'>
@@ -333,7 +332,12 @@ function AllListings () {
       </Box>
 
       <Grid
-        templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}
+        templateColumns={{
+          base: 'repeat(1, 1fr)',
+          sm: 'repeat(2, 1fr)',
+          md: 'repeat(3, 1fr)',
+          lg: 'repeat(4, 1fr)'
+        }}
         width='100%'
         gap='3'
       >
@@ -355,7 +359,11 @@ function AllListings () {
 
               return (
                 <GridItem
-                  width={{ base: '300px', sm: '200px', md: '225px' }}
+                  width={{
+                    base: '300px',
+                    sm: '200px',
+                    md: '225px'
+                  }}
                   key={index}
                 >
                   {ListingPreview(listing, url)}

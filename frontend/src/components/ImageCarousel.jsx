@@ -1,6 +1,6 @@
-import React, { useState } from 'react';
-import { AspectRatio, Box, IconButton } from '@chakra-ui/react';
 import { ArrowLeftIcon, ArrowRightIcon } from '@chakra-ui/icons';
+import { AspectRatio, Box, IconButton } from '@chakra-ui/react';
+import React, { useState } from 'react';
 import ThumbnailPreview from './ThumbnailPreview';
 
 function ImageCarousel ({ allImages }) {
@@ -33,7 +33,7 @@ function ImageCarousel ({ allImages }) {
         position='absolute'
         top='50%'
         left='1'
-        transform="translateY(-50%)"
+        transform='translateY(-50%)'
         isRound='true'
         size='sm'
         display={style ? 'block' : 'none'}
@@ -51,7 +51,7 @@ function ImageCarousel ({ allImages }) {
         position='absolute'
         top='50%'
         right='1'
-        transform="translateY(-50%)"
+        transform='translateY(-50%)'
         isRound='true'
         size='sm'
         display={style ? 'block' : 'none'}

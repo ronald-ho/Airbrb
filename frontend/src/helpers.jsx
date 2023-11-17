@@ -104,18 +104,18 @@ export const listingSchema = {
 }
 
 export const formatOptionLabel = (option) => (
-  <Flex align="center">
-    <Box boxSize="60px" mr="10px">
+  <Flex align='center'>
+    <Box boxSize='60px' mr='10px'>
       <AspectRatio ratio={1}>
         <ThumbnailPreview url={option.photo}/>
       </AspectRatio>
     </Box>
-    <HStack justify="space-between" w="100%">
+    <HStack justify='space-between' w='100%'>
       <Box>
-        <Text fontWeight="semibold" isTruncated>
+        <Text fontWeight='semibold' isTruncated>
           {option.label}
         </Text>
-        <Badge borderRadius="md" px="2" mr="1">
+        <Badge borderRadius='md' px='2' mr='1'>
           {option.metadata.propertyType}
         </Badge>
       </Box>
@@ -123,7 +123,7 @@ export const formatOptionLabel = (option) => (
         <Box>
           ${option.price}/night
         </Box>
-        <Box color="gray.600" fontSize="xs">
+        <Box color='gray.600' fontSize='xs'>
           {option.metadata.bedrooms} BEDS &bull; {option.metadata.bathrooms} BATHS
         </Box>
       </Box>

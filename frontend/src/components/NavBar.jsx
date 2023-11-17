@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { HamburgerIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -16,9 +16,9 @@ import {
   useBreakpointValue,
   useDisclosure
 } from '@chakra-ui/react';
-import { HamburgerIcon } from '@chakra-ui/icons';
-import airbnbLogo from '../assets/airbnb.svg'
+import React, { useContext } from 'react';
 import airbnbIcon from '../assets/airbnb-icon.svg'
+import airbnbLogo from '../assets/airbnb.svg'
 import { AuthContext } from './AuthProvider';
 
 const logout = () => {
@@ -27,8 +27,15 @@ const logout = () => {
 }
 
 const NavBar = (props) => {
-  const { isOpen, onOpen, onClose } = useDisclosure();
-  const { isLoggedIn, logOut } = useContext(AuthContext);
+  const {
+    isOpen,
+    onOpen,
+    onClose
+  } = useDisclosure();
+  const {
+    isLoggedIn,
+    logOut
+  } = useContext(AuthContext);
 
   const imageSrc = useBreakpointValue({
     base: airbnbIcon,
@@ -37,33 +44,36 @@ const NavBar = (props) => {
 
   return (
     <NavBarContainer {...props}>
-      <Link href="/">
-        <Image src={imageSrc} alt='Logo' height="28px"/>
+      <Link href='/'>
+        <Image src={imageSrc} alt='Logo' height='28px'/>
       </Link>
       <IconButton
-        display={{ base: 'block', md: 'none' }}
+        display={{
+          base: 'block',
+          md: 'none'
+        }}
         variant='ghost'
         onClick={onOpen}
         height='32px'
         icon={<HamburgerIcon/>}
-        aria-label="menu"/>
+        aria-label='menu'/>
       <Drawer placement='left' onClose={onClose} isOpen={isOpen} size='xs'>
         <DrawerOverlay/>
         <DrawerContent>
           <DrawerHeader>
-            <Link href="/">
-              <Image src={airbnbLogo} alt='Logo' height="28px"/>
+            <Link href='/'>
+              <Image src={airbnbLogo} alt='Logo' height='28px'/>
             </Link>
           </DrawerHeader>
           <DrawerBody>
-            <MenuLink to="/" py='2' fontWeight='semibold' width='100%'>Home</MenuLink>
-            <MenuLink to="/my-listings" py='2' fontWeight='semibold' width='100%'>My Listings</MenuLink>
+            <MenuLink to='/' py='2' fontWeight='semibold' width='100%'>Home</MenuLink>
+            <MenuLink to='/my-listings' py='2' fontWeight='semibold' width='100%'>My Listings</MenuLink>
             {
               isLoggedIn
-                ? <MenuLink to="/" py='2'>
+                ? <MenuLink to='/' py='2'>
                   <Button
-                    size="sm"
-                    rounded="md"
+                    size='sm'
+                    rounded='md'
                     bg='red.400'
                     color='white'
                     width='100%'
@@ -73,10 +83,10 @@ const NavBar = (props) => {
                     Sign Out
                   </Button>
                 </MenuLink>
-                : <MenuLink to="/login" py='2'>
+                : <MenuLink to='/login' py='2'>
                   <Button
-                    size="sm"
-                    rounded="md"
+                    size='sm'
+                    rounded='md'
                     bg='black'
                     color='white'
                     width='100%'
@@ -94,10 +104,14 @@ const NavBar = (props) => {
   );
 };
 
-const MenuLink = ({ children, to = '/', ...rest }) => {
+const MenuLink = ({
+  children,
+  to = '/',
+  ...rest
+}) => {
   return (
     <Link href={to}>
-      <Text display="flex" {...rest}>
+      <Text display='flex' {...rest}>
         {children}
       </Text>
     </Link>
@@ -106,21 +120,24 @@ const MenuLink = ({ children, to = '/', ...rest }) => {
 
 const MenuLinks = () => {
   return (
-    <Box display={{ base: 'none', md: 'block' }}>
+    <Box display={{
+      base: 'none',
+      md: 'block'
+    }}>
       <Stack
         spacing={5}
-        align="center"
+        align='center'
         justify='flex-end'
         direction='row'
       >
-        <MenuLink to="/" fontSize='md' fontWeight='semibold'>Home</MenuLink>
-        <MenuLink to="/my-listings" fontSize='md' fontWeight='semibold'>My Listings</MenuLink>
+        <MenuLink to='/' fontSize='md' fontWeight='semibold'>Home</MenuLink>
+        <MenuLink to='/my-listings' fontSize='md' fontWeight='semibold'>My Listings</MenuLink>
         {
           localStorage.getItem('token')
-            ? <MenuLink to="/">
+            ? <MenuLink to='/'>
               <Button
-                size="sm"
-                rounded="md"
+                size='sm'
+                rounded='md'
                 bg='red.400'
                 color='white'
                 _hover={{ bg: 'red.600' }}
@@ -129,10 +146,10 @@ const MenuLinks = () => {
                 Sign Out
               </Button>
             </MenuLink>
-            : <MenuLink to="/login">
+            : <MenuLink to='/login'>
               <Button
-                size="sm"
-                rounded="md"
+                size='sm'
+                rounded='md'
                 bg='black'
                 color='white'
                 _hover={{ bg: 'gray.600' }}
@@ -149,11 +166,11 @@ const MenuLinks = () => {
 const NavBarContainer = ({ children }) => {
   return (
     <Flex
-      as="nav"
-      align="center"
-      justify="space-between"
-      wrap="wrap"
-      w="100%"
+      as='nav'
+      align='center'
+      justify='space-between'
+      wrap='wrap'
+      w='100%'
       p={4}
       position='fixed'
       zIndex={400}
