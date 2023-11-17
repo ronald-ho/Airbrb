@@ -1,27 +1,104 @@
 const BASE_URL = 'http://localhost:3000';
 
+const user1Credentials = {
+  name: 'New User1',
+  email: 'newUser1@gmail.com',
+  password: 'password'
+}
+
+const user2Credentials = {
+  name: 'New User2',
+  email: 'newUser2@gmail.com',
+  password: 'password'
+}
+
 describe('Happy Path 1', () => {
   it('Registers successfully', () => {
     cy.visit(`${BASE_URL}/`)
-    cy.get('button:contains("Sign In")').click();
-    cy.get('a:contains("Register")').click();
-
-    cy.get('#name').type('New User');
-    cy.get('#email').type('newUser@gmail.com');
-    cy.get('#password').type('password');
-    cy.get('#confirm-password').type('password');
-
-    cy.get('button[type=submit]').click();
+    register(user1Credentials);
   });
 
   it('Logins successfully', () => {
-    cy.get('#email').type('newUser@gmail.com');
-    cy.get('#password').type('password');
-
-    cy.get('button[type=submit]').click();
+    login(user1Credentials);
   })
 
   it('Creates a new listing successfully', () => {
+    createNewListing('Cypress New Listing');
+  });
+
+  it('Updates the thumbnail and title of the listing successfully', () => {
+    editListing('New listing Title');
+  });
+
+  it('Publishes a listing successfully', () => {
+    // Publish a listing steps here
+    publishFirstListing();
+  });
+
+  it('Unpublishes a listing successfully', () => {
+    // Unpublish a listing steps here
+    cy.get('.css-1pf2w37').click();
+
+    cy.get('button:contains("Unpublish Listing")').click();
+
+    cy.get('button.chakra-button.css-jxg557').contains('Unpublish').click();
+
+    // publish a listing again
+    publishFirstListing();
+  });
+
+  it('Makes a booking successfully', () => {
+    // Make a booking steps here
+    // Logout
+    cy.get('button:contains("Sign Out")').click();
+
+    // register
+    register(user2Credentials);
+
+    // login
+    login(user2Credentials);
+
+    // make a booking
+    cy.get('.css-1pf2w37').click();
+    cy.scrollTo(0, 500)
+    cy.get('.css-1c6j008').click();
+
+    cy.get('button[aria-label="Thu Nov 16 2023"]').click();
+    cy.get('button[aria-label="Thu Nov 23 2023"]').click();
+    cy.get('button:contains("Request to book")').click();
+  });
+
+  it('Logs out of the application successfully', () => {
+    // Logout steps here
+    logout();
+  });
+
+  it('Logs back into the application successfully', () => {
+    // Logout and login steps here
+    login(user1Credentials);
+  });
+
+  const register = ({ name, email, password }) => {
+    cy.get('button:contains("Sign In")').click();
+    cy.get('a:contains("Register")').click();
+
+    cy.get('#name').type(name);
+    cy.get('#email').type(email);
+    cy.get('#password').type(password);
+    cy.get('#confirm-password').type(password);
+
+    cy.get('button[type=submit]').click();
+  }
+
+  const login = ({ email, password }) => {
+    cy.get('button:contains("Sign In")').click();
+    cy.get('#email').type(email);
+    cy.get('#password').type(password);
+
+    cy.get('button[type=submit]').click();
+  }
+
+  const createNewListing = (title) => {
     cy.get('a.chakra-link[href="/my-listings"]').click();
     cy.url().should('include', '/my-listings');
     cy.get('button:contains("Create New Listing")').click();
@@ -30,7 +107,7 @@ describe('Happy Path 1', () => {
     cy.url().should('include', '/create-listing/title');
 
     // Title Step
-    cy.get('input[name="title"]').type('Cypress Testing Title');
+    cy.get('input[name="title"]').type(title);
     cy.contains('Next').click();
 
     // Address Step
@@ -61,9 +138,23 @@ describe('Happy Path 1', () => {
     // Amenities Step
     cy.get('input[type="text"]').type('Wi-Fi, Air-conditioner, Pool');
     cy.contains('Submit').click();
-  });
+  }
 
-  it('Updates the thumbnail and title of the listing successfully', () => {
+  const publishFirstListing = () => {
+    cy.get('button:contains("Publish a Listing")').click();
+
+    cy.get('.css-1cton11-control').click();
+
+    cy.get('.css-d7l1ni-option').click();
+
+    cy.get('div[tabindex="0"][aria-label="Choose Friday November 17 of 2023"]').click();
+
+    cy.get('div[tabindex="-1"][aria-label="Choose Thursday November 30 of 2023"]').click();
+
+    cy.get('button:contains("Publish")').click();
+  }
+
+  const editListing = (title) => {
     // Click on the first listing
     cy.get('.css-1pf2w37').click();
 
@@ -71,7 +162,7 @@ describe('Happy Path 1', () => {
     cy.get('label:contains("Title")')
       .next('input')
       .clear()
-      .type('New Title');
+      .type(title);
 
     cy.get('label:contains("Thumbnail")').next('input[type="file"]').selectFile('cypress/fixtures/apple.jpeg');
 
@@ -79,88 +170,9 @@ describe('Happy Path 1', () => {
       .click();
 
     cy.wait(500);
-  });
+  }
 
-  it('Publishes a listing successfully', () => {
-    // Publish a listing steps here
-    cy.get('button:contains("Publish a Listing")').click();
-
-    cy.get('.css-1cton11-control').click();
-
-    cy.get('.css-d7l1ni-option').click();
-
-    cy.get('div[tabindex="0"][aria-label="Choose Friday November 17 of 2023"]').click();
-
-    cy.get('div[tabindex="-1"][aria-label="Choose Thursday November 30 of 2023"]').click();
-
-    cy.get('button:contains("Publish")').click();
-  });
-
-  it('Unpublishes a listing successfully', () => {
-    // Unpublish a listing steps here
-    cy.get('.css-1pf2w37').click();
-
-    cy.get('button:contains("Unpublish Listing")').click();
-
-    cy.get('button.chakra-button.css-jxg557').contains('Unpublish').click();
-
-    // publish a listing again
-    cy.get('button:contains("Publish a Listing")').click();
-
-    cy.get('.css-1cton11-control').click();
-
-    cy.get('.css-d7l1ni-option').click();
-
-    cy.get('div[tabindex="0"][aria-label="Choose Friday November 17 of 2023"]').click();
-
-    cy.get('div[tabindex="-1"][aria-label="Choose Thursday November 30 of 2023"]').click();
-
-    cy.get('button:contains("Publish")').click();
-  });
-
-  it('Makes a booking successfully', () => {
-    // Make a booking steps here
-    // Logout
+  const logout = () => {
     cy.get('button:contains("Sign Out")').click();
-
-    // register
-    cy.get('button:contains("Sign In")').click();
-    cy.get('a:contains("Register")').click();
-
-    cy.get('#name').type('New User');
-    cy.get('#email').type('newUser1@gmail.com');
-    cy.get('#password').type('password');
-    cy.get('#confirm-password').type('password');
-
-    cy.get('button[type=submit]').click();
-
-    // login
-    cy.get('#email').type('newUser1@gmail.com');
-    cy.get('#password').type('password');
-
-    cy.get('button[type=submit]').click();
-
-    // make a booking
-    cy.get('.css-1pf2w37').click();
-    cy.get('#popover-trigger-39').click();
-
-    cy.get('button[aria-label="Thu Nov 16 2023"]').click();
-    cy.get('button[aria-label="Thu Nov 23 2023"]').click();
-    cy.get('button:contains("Request to book")').click();
-  });
-
-  it('Logs out of the application successfully', () => {
-    // Logout steps here
-    cy.get('button:contains("Sign Out")').click();
-  });
-
-  it('Logs back into the application successfully', () => {
-    // Logout and login steps here
-    cy.get('button:contains("Sign In")').click();
-
-    cy.get('#email').type('newUser@gmail.com');
-    cy.get('#password').type('password');
-
-    cy.get('button[type=submit]').click();
-  });
+  }
 });

@@ -173,7 +173,6 @@ function ViewListing () {
           booking.status === 'accepted' &&
           Number(booking.listingId) === parsedData.listingId
         ) {
-          console.log('found suitable booking');
           bookingId = booking.id;
           break;
         }
