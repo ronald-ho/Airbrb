@@ -95,7 +95,7 @@ function BookingHistory () {
   if (loading) return null;
 
   return (
-    <Flex flexDirection="column" maxHeight="90vh">
+    <Flex flexDirection="column" maxHeight="90vh" align="center">
       <Center>
         <Text fontSize="3xl" fontWeight="bold" mb={4}>Booking History</Text>
       </Center>

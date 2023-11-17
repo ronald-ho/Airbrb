@@ -197,11 +197,39 @@ function ViewListing () {
       }
     };
 
-    const reviewResponse = await reviewListing(parsedData.listingId, bookingId, body);
-    if (reviewResponse.success) {
+    if (!reviewRating || !reviewText) {
+      toast({
+        title: "Can't submit review.",
+        description: 'Please select a rating and write a review',
+        status: 'error',
+        duration: 3000,
+        variant: 'subtle',
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      await reviewListing(parsedData.listingId, bookingId, body);
+      toast({
+        title: 'Review submitted.',
+        status: 'success',
+        duration: 3000,
+        variant: 'subtle',
+        isClosable: true,
+      });
       // Update list of reviews immediately
       listingData.reviews.push(body.review);
       setUpdateReviews(!updateReviews);
+    } catch (error) {
+      toast({
+        title: "Can't submit review.",
+        description: error.message,
+        status: 'error',
+        duration: 3000,
+        variant: 'subtle',
+        isClosable: true,
+      });
     }
   }
 

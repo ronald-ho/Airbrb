@@ -1,13 +1,14 @@
 import {
   BASE_URL,
-  user1Credentials,
-  register,
+  bookListing,
+  createNewListing,
+  editListingTitleAndThumbnail,
   login,
   logout,
-  user2Credentials,
-  publishFirstListing,
-  createNewListing,
-  editListingTitleAndThumbnail
+  publishListing,
+  register,
+  user1Credentials,
+  user2Credentials
 } from '../../support/helpers';
 
 describe('Happy Path 1', () => {
@@ -21,16 +22,16 @@ describe('Happy Path 1', () => {
   })
 
   it('Creates a new listing successfully', () => {
-    createNewListing('Cypress New Listing');
+    createNewListing('Cypress New Listing', '100');
   });
 
   it('Updates the thumbnail and title of the listing successfully', () => {
-    editListingTitleAndThumbnail('New listing Title', '100');
+    editListingTitleAndThumbnail('New listing Title');
   });
 
   it('Publishes a listing successfully', () => {
     // Publish a listing steps here
-    publishFirstListing();
+    publishListing('Friday November 17 of 2023', 'Thursday November 30 of 2023');
   });
 
   it('Unpublishes a listing successfully', () => {
@@ -42,7 +43,7 @@ describe('Happy Path 1', () => {
     cy.get('button.chakra-button.css-jxg557').contains('Unpublish').click();
 
     // publish a listing again
-    publishFirstListing();
+    publishListing('Friday November 17 of 2023', 'Thursday November 30 of 2023');
   });
 
   it('Makes a booking successfully', () => {
@@ -56,14 +57,8 @@ describe('Happy Path 1', () => {
     // login
     login(user2Credentials);
 
-    // make a booking
     cy.get('.css-1pf2w37').click();
-    cy.scrollTo(0, 500)
-    cy.get('.css-1c6j008').click();
-
-    cy.get('button[aria-label="Thu Nov 16 2023"]').click();
-    cy.get('button[aria-label="Thu Nov 23 2023"]').click();
-    cy.get('button:contains("Request to book")').click();
+    bookListing('Thu Nov 16 2023', 'Thu Nov 23 2023');
   });
 
   it('Logs out of the application successfully', () => {

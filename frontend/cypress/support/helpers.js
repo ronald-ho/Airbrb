@@ -25,7 +25,17 @@ export const register = ({ name, email, password }) => {
 }
 
 export const login = ({ email, password }) => {
-  cy.get('button:contains("Sign In")').click();
+  cy.get('body').then(($body) => {
+    if ($body.find('button:contains("Sign In")').length) {
+      // If "Sign In" button exists, click it
+      cy.get('button:contains("Sign In")').click();
+    } else {
+      // If "Sign In" button does not exist, click "Sign Out" first
+      cy.get('button:contains("Sign Out")').click();
+      // Then wait for the "Sign In" button to appear and click it
+      cy.get('button:contains("Sign In")').should('be.visible').click();
+    }
+  });
   cy.get('#email').type(email);
   cy.get('#password').type(password);
 
@@ -74,32 +84,29 @@ export const createNewListing = (title, price) => {
   cy.contains('Submit').click();
 }
 
-export const publishFirstListing = () => {
+export const publishListing = (startDate, endDate) => {
+  cy.wait(500);
+
   cy.get('button:contains("Publish a Listing")').click();
 
   cy.get('.css-1cton11-control').click();
 
   cy.get('.css-d7l1ni-option').eq(0).click();
 
-  cy.get('div[tabindex="0"][aria-label="Choose Friday November 17 of 2023"]').click();
+  cy.get(`[aria-label="Choose ${startDate}"]`).click();
 
-  cy.get('div[tabindex="-1"][aria-label="Choose Thursday November 30 of 2023"]').click();
+  cy.get(`[aria-label="Choose ${endDate}"]`).click();
 
   cy.get('button:contains("Publish")').click();
 }
 
-export const publishSecondListing = () => {
-  cy.get('button:contains("Publish a Listing")').click();
+export const bookListing = (startDate, endDate) => {
+  cy.scrollTo(0, 500)
+  cy.get('.css-1c6j008').click();
 
-  cy.get('.css-1cton11-control').click();
-
-  cy.get('.css-d7l1ni-option').eq(1).click();
-
-  cy.get('div[tabindex="-1"][aria-label="Choose Wednesday November 01 of 2023"]').click();
-
-  cy.get('div[tabindex="0"][aria-label="Choose Friday November 17 of 2023"]').click();
-
-  cy.get('button:contains("Publish")').click();
+  cy.get(`button[aria-label="${startDate}"]`).click();
+  cy.get(`button[aria-label="${endDate}"]`).click();
+  cy.get('button:contains("Request to book")').click();
 }
 
 export const editListingTitleAndThumbnail = (title) => {
@@ -116,8 +123,6 @@ export const editListingTitleAndThumbnail = (title) => {
 
   cy.get('a.chakra-link[href="/my-listings"]')
     .click();
-
-  cy.wait(500);
 }
 
 export const logout = () => {
