@@ -13,7 +13,14 @@ export const user2Credentials = {
 }
 
 export const register = ({ name, email, password }) => {
-  cy.get('button:contains("Sign In")').click();
+  cy.get('body').then(($body) => {
+    if ($body.find('button:contains("Sign In")').length) {
+      cy.get('button:contains("Sign In")').click();
+    } else {
+      cy.get('button:contains("Sign Out")').click();
+      cy.get('button:contains("Sign In")').should('be.visible').click();
+    }
+  });
   cy.get('a:contains("Register")').click();
 
   cy.get('#name').type(name);
@@ -27,12 +34,9 @@ export const register = ({ name, email, password }) => {
 export const login = ({ email, password }) => {
   cy.get('body').then(($body) => {
     if ($body.find('button:contains("Sign In")').length) {
-      // If "Sign In" button exists, click it
       cy.get('button:contains("Sign In")').click();
     } else {
-      // If "Sign In" button does not exist, click "Sign Out" first
       cy.get('button:contains("Sign Out")').click();
-      // Then wait for the "Sign In" button to appear and click it
       cy.get('button:contains("Sign In")').should('be.visible').click();
     }
   });

@@ -204,11 +204,6 @@ function AllListings () {
         // Fetch details for each property in the listings
         let propertyDetails = await Promise.all(
           listingsResponse.data.listings.map(async (property) => {
-            // If listing belongs to the logged in user, we don't need to show it
-            if (property.owner === localStorage.getItem('email')) {
-              return null;
-            }
-
             // Make a separate API call to get details for each property
             const propertyResponse = await getListing(property.id);
 
