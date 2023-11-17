@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import Popup from './Popup';
+import Popup from '../components/Popup';
 
 describe('Popup', () => {
   const mockOnClose = jest.fn();

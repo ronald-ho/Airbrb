@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, fireEvent } from '@testing-library/react';
-import RatingBreakdownBar from './RatingBreakdownBar';
+import RatingBreakdownBar from '../components/RatingBreakdownBar';
 
 describe('RatingBreakdownBar', () => {
   const listing = {

@@ -1,6 +1,6 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
-import PropertyTypeSelector from './PropertyTypeSelector';
+import PropertyTypeSelector from '../components/PropertyTypeSelector';
 
 describe('Property type selector when creating listing', () => {
   test('Renders PropertyTypeSelector with default state', () => {

@@ -1,7 +1,7 @@
 import React from 'react';
 import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
-import { InputBar } from './SearchBar';
+import { InputBar } from '../components/SearchBar';
 
 // Note, we can't test the calendar inputs as the calendar buttons used to trigger changes
 // don't actually render in this

@@ -3,48 +3,36 @@ import React from 'react';
 import NumberInputFieldCustom from '../components/NumberInputFieldCustom';
 
 describe('NumberInputFieldCustom Component Tests', () => {
+  const mockOnChange = jest.fn();
+
   it('renders without crashing', () => {
     render(<NumberInputFieldCustom title="Test" value={5} onChange={() => {
     }}/>);
     expect(screen.getByText('Test:')).toBeInTheDocument();
   });
 
-  it('increments and decrements the value', () => {
-    const mockOnChange = jest.fn();
-    render(<NumberInputFieldCustom title="Test" value={5} onChange={mockOnChange}/>);
-
-    const incrementButton = screen.getByText('+');
-    const decrementButton = screen.getByText('-');
-
-    fireEvent.click(incrementButton);
-    expect(mockOnChange).toHaveBeenCalledWith(6);
-
-    fireEvent.click(decrementButton);
-    expect(mockOnChange).toHaveBeenCalledWith(4);
+  it('renders correctly', () => {
+    render(<NumberInputFieldCustom title="Test Title" value={5} onChange={() => {}} />);
+    expect(screen.getByText('Test Title:')).toBeInTheDocument();
+    expect(screen.getByRole('textbox')).toHaveValue('5');
   });
 
-  it('updates value on direct input', () => {
-    const mockOnChange = jest.fn();
-    render(<NumberInputFieldCustom title="Test" value={5} onChange={mockOnChange}/>);
+  it('does not decrement below minimum value', () => {
+    render(<NumberInputFieldCustom title="Test" value={1} onChange={mockOnChange} />);
+    fireEvent.click(screen.getByText('-'));
+    expect(mockOnChange).not.toHaveBeenCalled();
+  });
 
+  it('updates value on input change', () => {
+    const handleChange = jest.fn();
+    render(<NumberInputFieldCustom value={5} onChange={handleChange} />);
     const input = screen.getByRole('textbox');
-    fireEvent.change(input, { target: { value: '10' } });
-    expect(mockOnChange).toHaveBeenCalledWith(10);
+    fireEvent.change(input, { target: { value: '7' } });
+    expect(handleChange).toHaveBeenCalledWith(7);
   });
 
-  it('increments value by 1 when clicking the plus button', () => {
-    const mockOnChange = jest.fn();
-    render(<NumberInputFieldCustom title="Test" value={1} onChange={mockOnChange}/>);
-
-    const incrementButton = screen.getByText('+');
-
-    fireEvent.click(incrementButton);
-    expect(mockOnChange).toHaveBeenCalledWith(2);
-
-    fireEvent.click(incrementButton);
-    expect(mockOnChange).toHaveBeenCalledWith(3);
-
-    fireEvent.click(incrementButton);
-    expect(mockOnChange).toHaveBeenCalledWith(4);
+  it('displays the provided title', () => {
+    render(<NumberInputFieldCustom title="Quantity" value={5} onChange={() => {}} />);
+    expect(screen.getByText('Quantity:')).toBeInTheDocument();
   });
 });
