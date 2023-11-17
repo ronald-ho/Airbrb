@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getListing } from '../api/listings/actions';
+import { StarIcon } from '@chakra-ui/icons';
 import {
   Badge,
   Box,
@@ -25,15 +23,17 @@ import {
   UnorderedList,
   useToast
 } from '@chakra-ui/react';
-import { addressToString, averageRating } from '../helpers';
-import { StarIcon } from '@chakra-ui/icons';
 import { RangeDatepicker } from 'chakra-dayzed-datepicker';
-import { createNewBooking } from '../api/booking/actions';
-import { reviewListing } from '../api/listings/review';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { getAllBookings } from '../api/booking';
+import { createNewBooking } from '../api/booking/actions';
+import { getListing } from '../api/listings/actions';
+import { reviewListing } from '../api/listings/review';
 import ImageCarousel from '../components/ImageCarousel';
-import StarRating from '../components/StarRating';
 import RatingBreakdownBar from '../components/RatingBreakdownBar';
+import StarRating from '../components/StarRating';
+import { addressToString, averageRating } from '../helpers';
 
 function ViewListing () {
   // URL Information
@@ -106,7 +106,7 @@ function ViewListing () {
     // if selectedDates is empty
     if (selectedDates[0] === undefined || selectedDates[1] === undefined) {
       toast({
-        title: "Can't submit booking.",
+        title: 'Can\'t submit booking.',
         description: 'Please select a date range',
         status: 'error',
         duration: 3000,
@@ -118,7 +118,7 @@ function ViewListing () {
 
     if (!localStorage.getItem('token')) {
       toast({
-        title: "Can't submit booking.",
+        title: 'Can\'t submit booking.',
         description: 'Please log in to submit a booking',
         status: 'error',
         duration: 3000,
@@ -148,7 +148,7 @@ function ViewListing () {
       }
     } catch (error) {
       toast({
-        title: "Can't submit booking.",
+        title: 'Can\'t submit booking.',
         description: error.message,
         status: 'error',
         duration: 3000,
@@ -173,7 +173,6 @@ function ViewListing () {
           booking.status === 'accepted' &&
           Number(booking.listingId) === parsedData.listingId
         ) {
-          console.log('found suitable booking');
           bookingId = booking.id;
           break;
         }
@@ -182,7 +181,7 @@ function ViewListing () {
 
     if (!bookingId) {
       toast({
-        title: "Can't submit review.",
+        title: 'Can\'t submit review.',
         description: 'You have not made any accepted bookings for this listing',
         status: 'error',
         variant: 'subtle',
@@ -198,11 +197,39 @@ function ViewListing () {
       }
     };
 
-    const reviewResponse = await reviewListing(parsedData.listingId, bookingId, body);
-    if (reviewResponse.success) {
+    if (!reviewRating || !reviewText) {
+      toast({
+        title: 'Can\'t submit review.',
+        description: 'Please select a rating and write a review',
+        status: 'error',
+        duration: 3000,
+        variant: 'subtle',
+        isClosable: true,
+      });
+      return;
+    }
+
+    try {
+      await reviewListing(parsedData.listingId, bookingId, body);
+      toast({
+        title: 'Review submitted.',
+        status: 'success',
+        duration: 3000,
+        variant: 'subtle',
+        isClosable: true,
+      });
       // Update list of reviews immediately
       listingData.reviews.push(body.review);
       setUpdateReviews(!updateReviews);
+    } catch (error) {
+      toast({
+        title: 'Can\'t submit review.',
+        description: error.message,
+        status: 'error',
+        duration: 3000,
+        variant: 'subtle',
+        isClosable: true,
+      });
     }
   }
 
@@ -239,7 +266,10 @@ function ViewListing () {
       </Stack>
       <ImageCarousel allImages={allImages}/>
       <Stack
-        direction={{ base: 'column', md: 'row' }}
+        direction={{
+          base: 'column',
+          md: 'row'
+        }}
         justifyContent='space-between'
         my='3'
       >
@@ -257,7 +287,10 @@ function ViewListing () {
         <Stack
           borderWidth={1}
           borderRadius={20}
-          width={{ base: '100%', md: '50%' }}
+          width={{
+            base: '100%',
+            md: '50%'
+          }}
           p={3}
           bg={'white'}
           display={listingData.owner === localStorage.getItem('email') ? 'none' : 'block'}
@@ -273,7 +306,8 @@ function ViewListing () {
               onDateChange={setSelectedDates}
             />
           </FormControl>
-          <Button onClick={sendBookingRequest} width='100%' colorScheme='red' aria-label='Send booking'>Request to book</Button>
+          <Button onClick={sendBookingRequest} width='100%' colorScheme='red' aria-label='Send booking'>Request to
+            book</Button>
         </Stack>
       </Stack>
 
@@ -292,7 +326,8 @@ function ViewListing () {
                 <option value='5'>5 Star</option>
               </Select>
 
-              <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange} aria-label='Review input'></Textarea>
+              <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange}
+                        aria-label='Review input'></Textarea>
               <Button onClick={submitReview} colorScheme='red' aria-label='Submit review'>Submit Review</Button>
             </Stack>
             : null

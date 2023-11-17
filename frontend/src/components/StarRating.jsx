@@ -1,5 +1,5 @@
-import React from 'react';
 import { StarIcon } from '@chakra-ui/icons';
+import React from 'react';
 
 function StarRating ({ rating }) {
   return (

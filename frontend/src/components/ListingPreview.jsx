@@ -1,10 +1,23 @@
+import {
+  Badge,
+  Box,
+  Button,
+  Flex,
+  Link,
+  Popover,
+  PopoverArrow,
+  PopoverBody,
+  PopoverCloseButton,
+  PopoverContent,
+  PopoverHeader,
+  PopoverTrigger
+} from '@chakra-ui/react'
 import React from 'react';
-import { Badge, Box, Button, Flex, Link, Popover, PopoverArrow, PopoverBody, PopoverCloseButton, PopoverContent, PopoverHeader, PopoverTrigger } from '@chakra-ui/react'
 import { Link as ReactLink } from 'react-router-dom';
 import { averageRating } from '../helpers';
-import StarRating from './StarRating';
 import ImageCarousel from './ImageCarousel';
 import RatingBreakdownBar from './RatingBreakdownBar';
+import StarRating from './StarRating';
 
 function ListingPreview (listing, url) {
   // Get review information
@@ -15,7 +28,7 @@ function ListingPreview (listing, url) {
 
   return (
     <Link as={ReactLink} to={url}>
-      <ImageCarousel allImages={[listing.thumbnail, ...metadata.images]} />
+      <ImageCarousel allImages={[listing.thumbnail, ...metadata.images]}/>
       <Box p='1'>
         <Flex>
           <Badge borderRadius='md' px='2' mr='1'>
@@ -65,18 +78,18 @@ function ListingPreview (listing, url) {
           <Popover trigger='hover'>
             <PopoverTrigger>
               <Button bg='transparent' p='0' aria-label={`Rating of ${avgRating} stars`}>
-                <StarRating rating={avgRating} />
+                <StarRating rating={avgRating}/>
               </Button>
             </PopoverTrigger>
             <PopoverContent>
-              <PopoverArrow />
-              <PopoverCloseButton />
+              <PopoverArrow/>
+              <PopoverCloseButton/>
               <PopoverHeader>Review Breakdown</PopoverHeader>
               <PopoverBody>
                 {
                   Array(5).fill('')
                     .map((_, i) => (
-                      <RatingBreakdownBar key={i} listing={listing} rating={5 - i} />
+                      <RatingBreakdownBar key={i} listing={listing} rating={5 - i}/>
                     ))
                 }
               </PopoverBody>

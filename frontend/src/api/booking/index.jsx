@@ -1,5 +1,3 @@
-import { apiCall } from '../../services/api';
-import { getListing } from '../listings/actions';
 import {
   differenceInCalendarDays,
   eachDayOfInterval,
@@ -11,6 +9,8 @@ import {
   parseISO,
   subDays
 } from 'date-fns';
+import { apiCall } from '../../services/api';
+import { getListing } from '../listings/actions';
 
 /**
  * Get all bookings
@@ -40,7 +40,10 @@ export const getAllBookingDetails = async (listingId) => {
   const postedOnDate = parseISO(postedOn);
   const now = new Date();
 
-  const duration = intervalToDuration({ start: postedOnDate, end: now });
+  const duration = intervalToDuration({
+    start: postedOnDate,
+    end: now
+  });
   bookingDetails.onlineDuration = formatDuration(duration);
   bookingDetails.postedOn = postedOn;
 
@@ -76,22 +79,19 @@ export const getProfitData = async () => {
   const dailyProfits = {};
 
   // Initialise dailyProfits object with 0 profit for each day
-  eachDayOfInterval({ start: thirtyDaysAgo, end: today }).forEach(day => {
+  eachDayOfInterval({
+    start: thirtyDaysAgo,
+    end: today
+  }).forEach(day => {
     dailyProfits[formatISO(day, { representation: 'date' })] = 0;
   });
 
-  console.log('acceptedBookings', acceptedBookings)
-
   for (const booking of acceptedBookings) {
-    console.log('booking', booking)
-
     const startDate = parseISO(booking.dateRange[0]);
     const endDate = parseISO(booking.dateRange[1]);
 
     const listingResponse = await getListing(booking.listingId);
-    console.log('listingResponse', listingResponse)
     const listingPrice = listingResponse.data.listing.price;
-    console.log('listingPrice', listingPrice)
 
     const adjustedStartDate = max([startDate, thirtyDaysAgo]);
     const adjustedEndDate = min([endDate, today]);

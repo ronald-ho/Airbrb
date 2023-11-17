@@ -1,45 +1,40 @@
-import React, { useContext } from 'react';
-import { ListingContext } from './ListingContext';
-import { Button, Flex, useNumberInput } from '@chakra-ui/react';
-import DetailsInputField from '../../components/DetailsInputField';
+import { Button, Flex } from '@chakra-ui/react';
+import React, { useContext, useState } from 'react';
 import CenteredBox from '../../components/CenteredBox';
+import NumberInputFieldCustom from '../../components/NumberInputFieldCustom';
+import { ListingContext } from './ListingContext';
 
-function useCustomNumberInput (defaultValue) {
-  return useNumberInput({
-    step: 1,
-    defaultValue: defaultValue || 0,
-    min: 1,
-  });
-}
-
-const DetailsStep = ({ onSubmit, onBack }) => {
+const DetailsStep = ({
+  onSubmit,
+  onBack
+}) => {
   const { listingData } = useContext(ListingContext);
 
-  const bedroomsInput = useCustomNumberInput(listingData.bedrooms);
-  const bedsInput = useCustomNumberInput(listingData.beds);
-  const bathroomsInput = useCustomNumberInput(listingData.bathrooms);
+  // State for bedrooms, beds, and bathrooms
+  const [bedrooms, setBedrooms] = useState(listingData.bedrooms || 0);
+  const [beds, setBeds] = useState(listingData.beds || 0);
+  const [bathrooms, setBathrooms] = useState(listingData.bathrooms || 0);
 
-  // Function to handle submission
   const handleNext = (event) => {
     event.preventDefault();
     onSubmit({
-      bedrooms: bedroomsInput.getInputProps().value,
-      beds: bedsInput.getInputProps().value,
-      bathrooms: bathroomsInput.getInputProps().value,
+      bedrooms,
+      beds,
+      bathrooms
     });
   };
 
   return (
     <CenteredBox>
       <h1>Details</h1>
-      <Flex flexDirection="column" spacing={4}>
-        <DetailsInputField title="Bedrooms" numberInput={bedroomsInput}/>
-        <DetailsInputField title="Beds" numberInput={bedsInput}/>
-        <DetailsInputField title="Bathrooms" numberInput={bathroomsInput}/>
+      <Flex flexDirection='column' spacing={4}>
+        <NumberInputFieldCustom title='Bedrooms' value={bedrooms} onChange={setBedrooms}/>
+        <NumberInputFieldCustom title='Beds' value={beds} onChange={setBeds}/>
+        <NumberInputFieldCustom title='Bathrooms' value={bathrooms} onChange={setBathrooms}/>
       </Flex>
-      <Flex justify="space-between" mt={4}>
-        <Button colorScheme="gray" onClick={onBack}>Back</Button>
-        <Button colorScheme="blue" onClick={handleNext}>Next</Button>
+      <Flex justify='space-between' mt={4}>
+        <Button colorScheme='gray' onClick={onBack}>Back</Button>
+        <Button colorScheme='blue' onClick={handleNext}>Next</Button>
       </Flex>
     </CenteredBox>
   );
