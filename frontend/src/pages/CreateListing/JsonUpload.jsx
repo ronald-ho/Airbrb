@@ -127,23 +127,23 @@ function JsonUpload () {
         <h1>Upload a JSON file to create your Airbrb!</h1>
 
         {/* Input field for file upload */}
-        <Input type="file" accept=".json" onChange={handleFileInputChange}/>
+        <Input type='file' accept='.json' onChange={handleFileInputChange}/>
 
         {/* Button to validate JSON */}
-        <Button colorScheme="green" onClick={validateJson}>Validate JSON</Button>
+        <Button colorScheme='green' onClick={validateJson}>Validate JSON</Button>
       </VStack>
 
       {/* Button to submit the JSON data */}
-      <Flex justify="flex-end" mt={4}>
-        <Button colorScheme="blue" onClick={handleSubmit} isDisabled={!isValidJson}>Submit</Button>
+      <Flex justify='flex-end' mt={4}>
+        <Button colorScheme='blue' onClick={handleSubmit} isDisabled={!isValidJson}>Submit</Button>
       </Flex>
 
       {/* Error popup */}
       {showPopup && (
         <Popup
-          title="Error"
+          title='Error'
           body={formatErrorMessage(error)}
-          primaryButtonText="OK"
+          primaryButtonText='OK'
           onClose={() => setShowPopup(false)}
           onConfirm={() => setShowPopup(false)}
         />

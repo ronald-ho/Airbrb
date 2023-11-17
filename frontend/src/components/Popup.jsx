@@ -10,7 +10,13 @@ import {
 import React, { useRef } from 'react';
 
 function Popup (props) {
-  const { title, body, primaryButtonText, onClose, onConfirm } = props;
+  const {
+    title,
+    body,
+    primaryButtonText,
+    onClose,
+    onConfirm
+  } = props;
 
   const cancelRef = useRef();
 
@@ -23,17 +29,17 @@ function Popup (props) {
     >
       <AlertDialogOverlay>
         <AlertDialogContent>
-          <AlertDialogHeader id="alert-dialog-title">
+          <AlertDialogHeader id='alert-dialog-title'>
             {title}
           </AlertDialogHeader>
-          <AlertDialogBody id="alert-dialog-description">
+          <AlertDialogBody id='alert-dialog-description'>
             {body}
           </AlertDialogBody>
           <AlertDialogFooter>
             <Button ref={cancelRef} onClick={onClose}>
               Close
             </Button>
-            <Button colorScheme="blue" onClick={onConfirm} ml={3}>
+            <Button colorScheme='blue' onClick={onConfirm} ml={3}>
               {primaryButtonText}
             </Button>
           </AlertDialogFooter>

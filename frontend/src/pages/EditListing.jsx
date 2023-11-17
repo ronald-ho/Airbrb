@@ -152,7 +152,12 @@ function EditListing () {
       await publishListing(listingId, { availability: newDates })
     } catch (error) {
       setError(error.message);
-      toast({ title: error.toString(), status: 'error', duration: 3000, isClosable: true, })
+      toast({
+        title: error.toString(),
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      })
     }
   }
 
@@ -201,7 +206,12 @@ function EditListing () {
       await updateListing(listingId, updatedListing);
     } catch (err) {
       setError(error.message);
-      toast({ title: error.toString(), status: 'error', duration: 3000, isClosable: true, })
+      toast({
+        title: error.toString(),
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      })
     }
   };
 
@@ -209,10 +219,20 @@ function EditListing () {
     try {
       await unpublishListing(listingId);
       navigate('/my-listings');
-      toast({ title: 'Sucessfully unpublished ', status: 'success', duration: 3000, isClosable: true, });
+      toast({
+        title: 'Sucessfully unpublished ',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      });
     } catch (error) {
       setError(error.message);
-      toast({ title: error.toString(), status: 'error', duration: 3000, isClosable: true, })
+      toast({
+        title: error.toString(),
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      })
     }
   }
 
@@ -220,35 +240,48 @@ function EditListing () {
     try {
       setShowDeletePopup(false);
       await deleteListing(listingId);
-      toast({ title: 'Listing deleted', status: 'success', duration: 3000, isClosable: true, })
+      toast({
+        title: 'Listing deleted',
+        status: 'success',
+        duration: 3000,
+        isClosable: true,
+      })
       navigate('/my-listings');
     } catch (err) {
       setError(err.message);
-      toast({ title: error.toString(), status: 'error', duration: 3000, isClosable: true, })
+      toast({
+        title: error.toString(),
+        status: 'error',
+        duration: 3000,
+        isClosable: true,
+      })
     }
   }
 
   if (isLoading) return null;
 
   return (
-    <VStack maxWidth="98vw">
+    <VStack maxWidth='98vw'>
       <Text fontSize='3xl'>{listing.title}</Text>
-      <Box rounded='lg'>
+      <Box rounded='lg' width={{
+        base: '95%',
+        md: '50%'
+      }}>
         <ThumbnailPreview url={listing.thumbnail}/>
       </Box>
-      <Tabs maxWidth="100%">
+      <Tabs maxWidth='100%'>
         {/* Tab navigation */}
-        <Flex justify="space-between" style={{ overflowX: 'auto' }}>
+        <Flex justify='space-between' style={{ overflowX: 'auto' }}>
           <TabList style={{ flex: 'none' }}>
-            <Tab fontSize="sm">Basic</Tab>
-            <Tab fontSize="sm">Address</Tab>
-            <Tab fontSize="sm">Property Type</Tab>
-            <Tab fontSize="sm">Details</Tab>
-            <Tab fontSize="sm">Images</Tab>
-            <Tab fontSize="sm">Amenities</Tab>
+            <Tab fontSize='sm'>Basic</Tab>
+            <Tab fontSize='sm'>Address</Tab>
+            <Tab fontSize='sm'>Property Type</Tab>
+            <Tab fontSize='sm'>Details</Tab>
+            <Tab fontSize='sm'>Images</Tab>
+            <Tab fontSize='sm'>Amenities</Tab>
             {listing.published
               ? (
-                <Tab fontSize="sm">Availability</Tab>
+                <Tab fontSize='sm'>Availability</Tab>
                 )
               : null}
           </TabList>
@@ -259,7 +292,7 @@ function EditListing () {
             <FormControl>
               <FormLabel>Title</FormLabel>
               <Input
-                type="text"
+                type='text'
                 value={listing.title}
                 onChange={(e) => handleInputChange('title', e.target.value)}
               />
@@ -267,14 +300,14 @@ function EditListing () {
             <FormControl>
               <FormLabel>Price per night</FormLabel>
               <Input
-                type="number"
+                type='number'
                 value={listing.price}
                 onChange={(e) => handleInputChange('price', e.target.value)}
               />
             </FormControl>
             <FormControl>
               <FormLabel>Thumbnail</FormLabel>
-              <Input type="file" accept="image/*" onChange={handleThumbnailUpload}/>
+              <Input type='file' accept='image/*' onChange={handleThumbnailUpload}/>
             </FormControl>
           </TabPanel>
 
@@ -283,36 +316,36 @@ function EditListing () {
             <HStack>
               <FormControl>
                 <FormLabel>Number</FormLabel>
-                <Input type="text" value={listing.address.number}
+                <Input type='text' value={listing.address.number}
                        onChange={e => handleAddressChange('number', e.target.value)}/>
               </FormControl>
               <FormControl>
                 <FormLabel>Street</FormLabel>
-                <Input type="text" value={listing.address.street}
+                <Input type='text' value={listing.address.street}
                        onChange={e => handleAddressChange('street', e.target.value)}/>
               </FormControl>
             </HStack>
             <HStack>
               <FormControl>
                 <FormLabel>City</FormLabel>
-                <Input type="text" value={listing.address.city}
+                <Input type='text' value={listing.address.city}
                        onChange={e => handleAddressChange('city', e.target.value)}/>
               </FormControl>
               <FormControl>
                 <FormLabel>State</FormLabel>
-                <Input type="text" value={listing.address.state}
+                <Input type='text' value={listing.address.state}
                        onChange={e => handleAddressChange('state', e.target.value)}/>
               </FormControl>
             </HStack>
             <HStack>
               <FormControl>
                 <FormLabel>Postcode</FormLabel>
-                <Input type="text" value={listing.address.postcode}
+                <Input type='text' value={listing.address.postcode}
                        onChange={e => handleAddressChange('postcode', e.target.value)}/>
               </FormControl>
               <FormControl>
                 <FormLabel>Country</FormLabel>
-                <Input type="text" value={listing.address.country}
+                <Input type='text' value={listing.address.country}
                        onChange={e => handleAddressChange('country', e.target.value)}/>
               </FormControl>
             </HStack>
@@ -331,17 +364,17 @@ function EditListing () {
           {/* Details Tab */}
           <TabPanel>
             <NumberInputFieldCustom
-              title="Bedrooms"
+              title='Bedrooms'
               value={listing.metadata.bedrooms}
               onChange={(value) => handleMetadataChange('bedrooms', value)}
             />
             <NumberInputFieldCustom
-              title="Beds"
+              title='Beds'
               value={listing.metadata.beds}
               onChange={(value) => handleMetadataChange('beds', value)}
             />
             <NumberInputFieldCustom
-              title="Bathrooms"
+              title='Bathrooms'
               value={listing.metadata.bathrooms}
               onChange={(value) => handleMetadataChange('bathrooms', value)}
             />
@@ -356,7 +389,7 @@ function EditListing () {
               : null
             }
             <FormLabel>Images</FormLabel>
-            <Input type="file" accept="image/*" multiple onChange={handleImagesUpload}/>
+            <Input type='file' accept='image/*' multiple onChange={handleImagesUpload}/>
           </TabPanel>
 
           {/* Amenities Tab */}
@@ -364,7 +397,7 @@ function EditListing () {
             <FormControl>
               <FormLabel>Amenities (Separated by commas)</FormLabel>
               <Input
-                type="text"
+                type='text'
                 value={listing.metadata.amenities.join(', ')}
                 onChange={(e) =>
                   handleMetadataChange(
@@ -382,7 +415,7 @@ function EditListing () {
               <TabPanel>
                 <Center>
                   <Calendar
-                    className="red"
+                    className='red'
                     value={listing.availability}
                     onChange={handleDateChanges}
                     multiple
@@ -398,34 +431,34 @@ function EditListing () {
       <HStack>
         {listing.published
           ? (
-            <Button colorScheme="purple" onClick={() => setShowUnpublishPopup(true)}>
+            <Button colorScheme='purple' onClick={() => setShowUnpublishPopup(true)}>
               Unpublish Listing
             </Button>
             )
           : null}
-        <Button colorScheme="red" onClick={() => setShowDeletePopup(true)}>
+        <Button colorScheme='red' onClick={() => setShowDeletePopup(true)}>
           Delete Listing
         </Button>
       </HStack>
       {showUnpublishPopup && (
         <Popup
-          title="Confirm Deletion"
-          body="Are you sure you want to unpublish this listing?"
-          primaryButtonText="Unpublish"
+          title='Confirm Deletion'
+          body='Are you sure you want to unpublish this listing?'
+          primaryButtonText='Unpublish'
           onClose={() => setShowUnpublishPopup(false)}
           onConfirm={handleUnpublish}
         />
       )}
       {showDeletePopup && (
         <Popup
-          title="Confirm Deletion"
-          body="Are you sure you want to delete this listing? This action cannot be undone."
-          primaryButtonText="Delete"
+          title='Confirm Deletion'
+          body='Are you sure you want to delete this listing? This action cannot be undone.'
+          primaryButtonText='Delete'
           onClose={() => setShowDeletePopup(false)}
           onConfirm={handleDelete}
         />
       )}
-      <Button colorScheme="blue" onClick={() => navigate('/my-listings')}>
+      <Button colorScheme='blue' onClick={() => navigate('/my-listings')}>
         Done
       </Button>
     </VStack>

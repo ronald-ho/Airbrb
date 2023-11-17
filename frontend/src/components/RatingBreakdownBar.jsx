@@ -12,8 +12,15 @@ import {
 import React from 'react';
 import StarRating from './StarRating';
 
-function RatingBreakdownBar ({ listing, rating }) {
-  const { isOpen, onOpen, onClose } = useDisclosure();
+function RatingBreakdownBar ({
+  listing,
+  rating
+}) {
+  const {
+    isOpen,
+    onOpen,
+    onClose
+  } = useDisclosure();
 
   const handleOpen = (event) => {
     event.preventDefault();

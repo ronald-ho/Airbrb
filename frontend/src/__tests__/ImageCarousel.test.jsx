@@ -10,7 +10,10 @@ describe('ImageCarousel with multiple images', () => {
   });
 
   test('Can switch to the next image', () => {
-    const { getByLabelText, getByAltText } = render(<ImageCarousel allImages={allImages}/>);
+    const {
+      getByLabelText,
+      getByAltText
+    } = render(<ImageCarousel allImages={allImages}/>);
     const nextButton = getByLabelText(/Next Image/i);
 
     fireEvent.click(nextButton);
@@ -20,7 +23,10 @@ describe('ImageCarousel with multiple images', () => {
   });
 
   test('Can switch to the previous image', () => {
-    const { getByLabelText, getByAltText } = render(<ImageCarousel allImages={allImages}/>);
+    const {
+      getByLabelText,
+      getByAltText
+    } = render(<ImageCarousel allImages={allImages}/>);
     const previousButton = getByLabelText(/Previous Image/i);
     const nextButton = getByLabelText(/Next Image/i);
 
@@ -32,7 +38,10 @@ describe('ImageCarousel with multiple images', () => {
   });
 
   test('Can loop from end to start seamlessly', () => {
-    const { getByLabelText, getByAltText } = render(<ImageCarousel allImages={allImages}/>);
+    const {
+      getByLabelText,
+      getByAltText
+    } = render(<ImageCarousel allImages={allImages}/>);
     const nextButton = getByLabelText(/Next Image/i);
 
     // Click next button until the last image
@@ -47,7 +56,10 @@ describe('ImageCarousel with multiple images', () => {
   });
 
   test('Can loop from start to end seamlessly', () => {
-    const { getByLabelText, getByAltText } = render(<ImageCarousel allImages={allImages}/>);
+    const {
+      getByLabelText,
+      getByAltText
+    } = render(<ImageCarousel allImages={allImages}/>);
     const previousButton = getByLabelText(/Previous Image/i);
 
     // Clicking previous should show the last image
@@ -68,7 +80,10 @@ describe('ImageCarousel with single image (thumbnail)', () => {
   // Buttons are hidden if it's a single image, but on the event that a user manages to trigger it
   // it should just loop back to Image 0 anyway
   test('Can switch to the next image', () => {
-    const { getByLabelText, getByAltText } = render(<ImageCarousel allImages={allImages}/>);
+    const {
+      getByLabelText,
+      getByAltText
+    } = render(<ImageCarousel allImages={allImages}/>);
     const nextButton = getByLabelText(/Next Image/i);
 
     fireEvent.click(nextButton);
@@ -78,7 +93,10 @@ describe('ImageCarousel with single image (thumbnail)', () => {
   });
 
   test('Can switch to the previous image', () => {
-    const { getByLabelText, getByAltText } = render(<ImageCarousel allImages={allImages}/>);
+    const {
+      getByLabelText,
+      getByAltText
+    } = render(<ImageCarousel allImages={allImages}/>);
     const previousButton = getByLabelText(/Previous Image/i);
     const nextButton = getByLabelText(/Next Image/i);
 

@@ -5,15 +5,29 @@ import RatingBreakdownBar from '../components/RatingBreakdownBar';
 describe('RatingBreakdownBar', () => {
   const listing = {
     reviews: [
-      { rating: 5, message: 'Great!' },
-      { rating: 5, message: 'Excellent!' },
-      { rating: 4, message: 'Mostly good!' },
+      {
+        rating: 5,
+        message: 'Great!'
+      },
+      {
+        rating: 5,
+        message: 'Excellent!'
+      },
+      {
+        rating: 4,
+        message: 'Mostly good!'
+      },
     ],
   };
 
   test('Basic Test Case - Breakdown with reviews', () => {
     const rating = 5;
-    const { getByText, getByRole, queryByText, queryAllByLabelText } = render(
+    const {
+      getByText,
+      getByRole,
+      queryByText,
+      queryAllByLabelText
+    } = render(
       <RatingBreakdownBar listing={listing} rating={rating}/>
     );
 
@@ -47,7 +61,11 @@ describe('RatingBreakdownBar', () => {
 
   test('Edge Case - Breakdown for rating with no reviews', () => {
     const rating = 1;
-    const { getByText, getByRole, queryByText } = render(
+    const {
+      getByText,
+      getByRole,
+      queryByText
+    } = render(
       <RatingBreakdownBar listing={listing} rating={rating}/>
     );
 

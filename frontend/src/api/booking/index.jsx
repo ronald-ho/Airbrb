@@ -40,7 +40,10 @@ export const getAllBookingDetails = async (listingId) => {
   const postedOnDate = parseISO(postedOn);
   const now = new Date();
 
-  const duration = intervalToDuration({ start: postedOnDate, end: now });
+  const duration = intervalToDuration({
+    start: postedOnDate,
+    end: now
+  });
   bookingDetails.onlineDuration = formatDuration(duration);
   bookingDetails.postedOn = postedOn;
 
@@ -76,7 +79,10 @@ export const getProfitData = async () => {
   const dailyProfits = {};
 
   // Initialise dailyProfits object with 0 profit for each day
-  eachDayOfInterval({ start: thirtyDaysAgo, end: today }).forEach(day => {
+  eachDayOfInterval({
+    start: thirtyDaysAgo,
+    end: today
+  }).forEach(day => {
     dailyProfits[formatISO(day, { representation: 'date' })] = 0;
   });
 

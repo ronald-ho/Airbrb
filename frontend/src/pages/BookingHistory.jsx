@@ -95,12 +95,12 @@ function BookingHistory () {
   if (loading) return null;
 
   return (
-    <Flex flexDirection="column" maxHeight="90vh" align="center">
+    <Flex flexDirection='column' maxHeight='90vh' align='center'>
       <Center>
-        <Text fontSize="3xl" fontWeight="bold" mb={4}>Booking History</Text>
+        <Text fontSize='3xl' fontWeight='bold' mb={4}>Booking History</Text>
       </Center>
       <Select
-        className="basic-single"
+        className='basic-single'
         options={
           listings.filter(listing => listing.published).map(listing => ({
             value: listing.id,
@@ -115,24 +115,24 @@ function BookingHistory () {
         defaultValue={selectedOption}
       />
 
-      <Flex flexDirection="column">
+      <Flex flexDirection='column'>
         {selectedOption && (
           <>
             <Center>
               <VStack>
-                <Text fontSize="xl">Listing Details:</Text>
+                <Text fontSize='xl'>Listing Details:</Text>
                 <Text>Online Duration: {listingBookings.onlineDuration}</Text>
                 <Text>Days Booked This Year: {listingBookings.daysBookedThisYear}</Text>
                 <Text>Profit This Year: ${listingBookings.profitThisYear}</Text>
               </VStack>
             </Center>
 
-            <Flex flexDirection="column" overflowY="auto" maxHeight="73vh">
+            <Flex flexDirection='column' overflowY='auto' maxHeight='73vh'>
               {listingBookings.detailedBookings.length > 0
                 ? (
                     listingBookings.detailedBookings.map(booking => (
-                    <Flex flexDirection="row" align="center" justify="space-between" key={booking.id} p={2}
-                          borderWidth="1px" minWidth="80vw">
+                    <Flex flexDirection='row' align='center' justify='space-between' key={booking.id} p={2}
+                          borderWidth='1px' minWidth='80vw'>
                       <Box>
                         <Badge colorScheme={statusColourSchemes[booking.status] || statusColourSchemes.default}>
                           {booking.status}
@@ -143,12 +143,12 @@ function BookingHistory () {
                       <Box>
                       </Box>
                       {booking.status === 'pending' && (
-                        <ButtonGroup spacing="2">
-                          <Button colorScheme="green" size="sm"
+                        <ButtonGroup spacing='2'>
+                          <Button colorScheme='green' size='sm'
                                   onClick={() => handleBookingAction(acceptBooking, booking.id)}>Accept</Button>
-                          <Button colorScheme="red" size="sm"
+                          <Button colorScheme='red' size='sm'
                                   onClick={() => handleBookingAction(declineBooking, booking.id)}>Deny</Button>
-                          <Button colorScheme="gray" size="sm"
+                          <Button colorScheme='gray' size='sm'
                                   onClick={() => handleBookingAction(deleteBooking, booking.id)}>Delete</Button>
                         </ButtonGroup>
                       )}
@@ -157,7 +157,7 @@ function BookingHistory () {
                   )
                 : (
                   <Center>
-                    <Text fontSize="xl" color="gray.500">Currently there are no bookings.</Text>
+                    <Text fontSize='xl' color='gray.500'>Currently there are no bookings.</Text>
                   </Center>
                   )}
             </Flex>

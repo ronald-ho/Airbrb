@@ -106,7 +106,7 @@ function ViewListing () {
     // if selectedDates is empty
     if (selectedDates[0] === undefined || selectedDates[1] === undefined) {
       toast({
-        title: "Can't submit booking.",
+        title: 'Can\'t submit booking.',
         description: 'Please select a date range',
         status: 'error',
         duration: 3000,
@@ -118,7 +118,7 @@ function ViewListing () {
 
     if (!localStorage.getItem('token')) {
       toast({
-        title: "Can't submit booking.",
+        title: 'Can\'t submit booking.',
         description: 'Please log in to submit a booking',
         status: 'error',
         duration: 3000,
@@ -148,7 +148,7 @@ function ViewListing () {
       }
     } catch (error) {
       toast({
-        title: "Can't submit booking.",
+        title: 'Can\'t submit booking.',
         description: error.message,
         status: 'error',
         duration: 3000,
@@ -181,7 +181,7 @@ function ViewListing () {
 
     if (!bookingId) {
       toast({
-        title: "Can't submit review.",
+        title: 'Can\'t submit review.',
         description: 'You have not made any accepted bookings for this listing',
         status: 'error',
         variant: 'subtle',
@@ -199,7 +199,7 @@ function ViewListing () {
 
     if (!reviewRating || !reviewText) {
       toast({
-        title: "Can't submit review.",
+        title: 'Can\'t submit review.',
         description: 'Please select a rating and write a review',
         status: 'error',
         duration: 3000,
@@ -223,7 +223,7 @@ function ViewListing () {
       setUpdateReviews(!updateReviews);
     } catch (error) {
       toast({
-        title: "Can't submit review.",
+        title: 'Can\'t submit review.',
         description: error.message,
         status: 'error',
         duration: 3000,
@@ -266,7 +266,10 @@ function ViewListing () {
       </Stack>
       <ImageCarousel allImages={allImages}/>
       <Stack
-        direction={{ base: 'column', md: 'row' }}
+        direction={{
+          base: 'column',
+          md: 'row'
+        }}
         justifyContent='space-between'
         my='3'
       >
@@ -284,7 +287,10 @@ function ViewListing () {
         <Stack
           borderWidth={1}
           borderRadius={20}
-          width={{ base: '100%', md: '50%' }}
+          width={{
+            base: '100%',
+            md: '50%'
+          }}
           p={3}
           bg={'white'}
           display={listingData.owner === localStorage.getItem('email') ? 'none' : 'block'}

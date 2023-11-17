@@ -10,7 +10,11 @@ import { ListingContext } from './ListingContext';
  * @param {function} onBack - Callback function to navigate back to the previous step.
  * @param {function} handleSubmit - Callback function to handle the final submission.
  */
-const AmenitiesStep = ({ onSubmit, onBack, handleSubmit }) => {
+const AmenitiesStep = ({
+  onSubmit,
+  onBack,
+  handleSubmit
+}) => {
   // Access listing data from the context
   const { listingData } = useContext(ListingContext);
 
@@ -39,21 +43,21 @@ const AmenitiesStep = ({ onSubmit, onBack, handleSubmit }) => {
         <h1>Amenities</h1>
 
         {/* Form control for entering amenities */}
-        <FormControl id="amenities" isRequired>
+        <FormControl id='amenities' isRequired>
           <FormLabel>Amenities</FormLabel>
           <Input
-            type="text"
+            type='text'
             value={amenitiesInput}
             onChange={(event) => setAmenitiesInput(event.target.value)}
-            placeholder="Enter amenities separated by commas"
+            placeholder='Enter amenities separated by commas'
           />
         </FormControl>
       </VStack>
 
       {/* Render "Back" and "Submit" buttons for navigation */}
-      <Flex justify="space-between" mt={4}>
-        <Button colorScheme="gray" onClick={onBack}>Back</Button>
-        <Button colorScheme="blue" onClick={handleAmenitiesSubmit} disabled={!amenitiesInput.trim()}>Submit</Button>
+      <Flex justify='space-between' mt={4}>
+        <Button colorScheme='gray' onClick={onBack}>Back</Button>
+        <Button colorScheme='blue' onClick={handleAmenitiesSubmit} disabled={!amenitiesInput.trim()}>Submit</Button>
       </Flex>
     </CenteredBox>
   );

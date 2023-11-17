@@ -57,7 +57,7 @@ describe('Happy Path 2', () => {
     logout();
     login(user1Credentials);
     cy.get('a.chakra-link[href="/my-listings"]').click();
-    cy.get('button:contains("My Bookings")').click();
+    cy.get('button:contains("Booking History")').click();
 
     cy.get('.css-1cton11-control').click();
 

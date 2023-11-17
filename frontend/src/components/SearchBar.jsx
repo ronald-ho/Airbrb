@@ -21,8 +21,8 @@ function SearchBar ({ onClickHandler }) {
       height='50px'
       onClick={handleClick}
       position='fixed'
-      left="50%"
-      top="2"
+      left='50%'
+      top='2'
       transform='translate(-50%, 0%)'
       zIndex={400}
       aria-label='Open Search'
@@ -37,7 +37,10 @@ function SearchBar ({ onClickHandler }) {
   );
 }
 
-function InputBar ({ onClickHandler, updateFilters }) {
+function InputBar ({
+  onClickHandler,
+  updateFilters
+}) {
   const [selectedDates, setSelectedDates] = useState([undefined, undefined]);
   const [textInput, setTextInput] = useState('');
 
@@ -64,14 +67,21 @@ function InputBar ({ onClickHandler, updateFilters }) {
       display='flex'
       height='70px'
       position='fixed'
-      left="50%"
-      top="3"
+      left='50%'
+      top='3'
       transform='translate(-50%, 60px)'
-      width={{ base: '95%', md: '70%' }}
+      width={{
+        base: '95%',
+        md: '70%'
+      }}
       bg={'white'}
       zIndex={500}
     >
-      <Box px='3' _hover={{ bg: 'gray.100', borderWidth: '1px', borderLeftRadius: '40px' }} flexGrow='2'>
+      <Box px='3' _hover={{
+        bg: 'gray.100',
+        borderWidth: '1px',
+        borderLeftRadius: '40px'
+      }} flexGrow='2'>
         <FormControl>
           <FormLabel px='3' mt='1' mb='0'>Where</FormLabel>
           <Input
@@ -88,7 +98,10 @@ function InputBar ({ onClickHandler, updateFilters }) {
         </FormControl>
       </Box>
       <Divider orientation='vertical'/>
-      <Box px='3' _hover={{ bg: 'gray.100', borderWidth: '1px' }}>
+      <Box px='3' _hover={{
+        bg: 'gray.100',
+        borderWidth: '1px'
+      }}>
         <FormControl>
           <FormLabel px='3' mt='1' mb='0'>When</FormLabel>
           <RangeDatepicker

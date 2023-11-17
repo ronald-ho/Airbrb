@@ -78,7 +78,7 @@ function Profits () {
 
   // Render the Profits component
   return (
-    <Flex flexDirection="column" align="center" width="90vw">
+    <Flex flexDirection='column' align='center' width='90vw'>
       <Heading>
         Profit Graph for the last 30 days
       </Heading>

@@ -33,7 +33,7 @@ function ImageCarousel ({ allImages }) {
         position='absolute'
         top='50%'
         left='1'
-        transform="translateY(-50%)"
+        transform='translateY(-50%)'
         isRound='true'
         size='sm'
         display={style ? 'block' : 'none'}
@@ -51,7 +51,7 @@ function ImageCarousel ({ allImages }) {
         position='absolute'
         top='50%'
         right='1'
-        transform="translateY(-50%)"
+        transform='translateY(-50%)'
         isRound='true'
         size='sm'
         display={style ? 'block' : 'none'}

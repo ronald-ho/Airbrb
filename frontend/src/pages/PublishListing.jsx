@@ -33,7 +33,10 @@ function PublishListing () {
   // Format a date in a human-readable format
   const formatDate = (milliseconds) => {
     const date = new Date(milliseconds);
-    return date.toLocaleDateString('en-US', { day: 'numeric', month: 'long' });
+    return date.toLocaleDateString('en-US', {
+      day: 'numeric',
+      month: 'long'
+    });
   };
 
   // Handle changes to selected dates
@@ -79,8 +82,8 @@ function PublishListing () {
   const renderAllListingsPublished = () => {
     return (
       <>
-        <Text mb="4">All your listings are published.</Text>
-        <Text mb="4">To change your listing availabilities please click on your listing to edit</Text>
+        <Text mb='4'>All your listings are published.</Text>
+        <Text mb='4'>To change your listing availabilities please click on your listing to edit</Text>
       </>
     )
   }
@@ -89,9 +92,9 @@ function PublishListing () {
   const renderListingsToPublish = () => {
     return (
       <>
-        <Text mb="4">Choose a listing to publish!</Text>
+        <Text mb='4'>Choose a listing to publish!</Text>
         <Select
-          className="basic-single"
+          className='basic-single'
           options={
             listings
               .filter(listing => !listing.published)
@@ -109,13 +112,13 @@ function PublishListing () {
         />
         {listingId && (
           <>
-            <Text mt="4">Please select your availability dates:</Text>
-            <Button colorScheme="red" onClick={handleClearDates} mt="4">
+            <Text mt='4'>Please select your availability dates:</Text>
+            <Button colorScheme='red' onClick={handleClearDates} mt='4'>
               Clear Dates
             </Button>
             <Center>
               <Calendar
-                className="red"
+                className='red'
                 value={availability}
                 onChange={handleDateChanges}
                 multiple
@@ -123,7 +126,7 @@ function PublishListing () {
                 zIndex={9}
               />
             </Center>
-            <List spacing={3} mt="4">
+            <List spacing={3} mt='4'>
               {availability.map((dateRange, index) => (
                 <ListItem key={index}>
                   <ListIcon as={CheckCircleIcon} color='green.500'/>
@@ -133,7 +136,7 @@ function PublishListing () {
             </List>
           </>
         )}
-        <Button colorScheme="blue" onClick={handleSubmit} mt="4">
+        <Button colorScheme='blue' onClick={handleSubmit} mt='4'>
           Publish
         </Button>
       </>
@@ -149,7 +152,7 @@ function PublishListing () {
         {allListingsPublished ? renderAllListingsPublished() : renderListingsToPublish()}
       </VStack>
       {showPopup && (
-        <Popup title="Error" body={error} primaryButtonText="OK" onClose={() => setShowPopup(false)}
+        <Popup title='Error' body={error} primaryButtonText='OK' onClose={() => setShowPopup(false)}
                onConfirm={() => setShowPopup(false)}/>
       )}
     </CenteredBox>

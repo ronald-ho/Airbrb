@@ -6,20 +6,20 @@ describe('NumberInputFieldCustom Component Tests', () => {
   const mockOnChange = jest.fn();
 
   it('renders without crashing', () => {
-    render(<NumberInputFieldCustom title="Test" value={5} onChange={() => {
+    render(<NumberInputFieldCustom title='Test' value={5} onChange={() => {
     }}/>);
     expect(screen.getByText('Test:')).toBeInTheDocument();
   });
 
   it('renders correctly', () => {
-    render(<NumberInputFieldCustom title="Test Title" value={5} onChange={() => {
+    render(<NumberInputFieldCustom title='Test Title' value={5} onChange={() => {
     }}/>);
     expect(screen.getByText('Test Title:')).toBeInTheDocument();
     expect(screen.getByRole('textbox')).toHaveValue('5');
   });
 
   it('does not decrement below minimum value', () => {
-    render(<NumberInputFieldCustom title="Test" value={1} onChange={mockOnChange}/>);
+    render(<NumberInputFieldCustom title='Test' value={1} onChange={mockOnChange}/>);
     fireEvent.click(screen.getByText('-'));
     expect(mockOnChange).not.toHaveBeenCalled();
   });
@@ -33,7 +33,7 @@ describe('NumberInputFieldCustom Component Tests', () => {
   });
 
   it('displays the provided title', () => {
-    render(<NumberInputFieldCustom title="Quantity" value={5} onChange={() => {
+    render(<NumberInputFieldCustom title='Quantity' value={5} onChange={() => {
     }}/>);
     expect(screen.getByText('Quantity:')).toBeInTheDocument();
   });

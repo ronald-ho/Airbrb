@@ -10,7 +10,10 @@ import { ListingContext } from './ListingContext';
  * @param {function} onSubmit - Callback function to submit the price data.
  * @param {function} onBack - Callback function to navigate back to the previous step.
  */
-const PriceStep = ({ onSubmit, onBack }) => {
+const PriceStep = ({
+  onSubmit,
+  onBack
+}) => {
   // Access listing data from the context
   const { listingData } = useContext(ListingContext);
 
@@ -41,13 +44,13 @@ const PriceStep = ({ onSubmit, onBack }) => {
         <h1>Price</h1>
 
         {/* Render a FormInput component for entering the price */}
-        <FormInput name="price" label="Price per night" type="number" value={price} onChange={handleInputChange}/>
+        <FormInput name='price' label='Price per night' type='number' value={price} onChange={handleInputChange}/>
       </VStack>
 
       {/* Render "Back" and "Next" buttons for navigation */}
-      <Flex justify="space-between" mt={4}>
-        <Button colorScheme="gray" onClick={onBack}>Back</Button>
-        <Button colorScheme="blue" onClick={handleNext} disabled={!price}>Next</Button>
+      <Flex justify='space-between' mt={4}>
+        <Button colorScheme='gray' onClick={onBack}>Back</Button>
+        <Button colorScheme='blue' onClick={handleNext} disabled={!price}>Next</Button>
       </Flex>
     </CenteredBox>
   )

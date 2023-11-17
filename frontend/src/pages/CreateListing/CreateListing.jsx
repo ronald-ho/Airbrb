@@ -19,9 +19,9 @@ function CreateListing () {
         <Text>Choose how to create your listing!</Text>
 
         {/* Flex container to display options */}
-        <Flex justify="space-evenly" width="100%">
+        <Flex justify='space-evenly' width='100%'>
           {/* Box for Express Creation */}
-          <Box p={6} marginRight={2} borderWidth={1} borderRadius={25} boxShadow="lg" cursor="pointer"
+          <Box p={6} marginRight={2} borderWidth={1} borderRadius={25} boxShadow='lg' cursor='pointer'
                onClick={() => navigate('/create-listing/title')}>
             <VStack spacing={4}>
               <h1>Express Creation</h1>
@@ -29,14 +29,14 @@ function CreateListing () {
               {/* Image representing Express Creation */}
               <Image
                 src={rocketIcon}
-                boxSize="80%"
-                alt="Express creation"
+                boxSize='80%'
+                alt='Express creation'
               />
             </VStack>
           </Box>
 
           {/* Box for JSON Upload */}
-          <Box p={6} marginLeft={2} borderWidth={1} borderRadius={25} boxShadow="lg" cursor="pointer"
+          <Box p={6} marginLeft={2} borderWidth={1} borderRadius={25} boxShadow='lg' cursor='pointer'
                onClick={() => navigate('/create-listing/json')}>
             <VStack spacing={4}>
               <h1>JSON Upload</h1>
@@ -44,8 +44,8 @@ function CreateListing () {
               {/* Image representing JSON Upload */}
               <Image
                 src={jsonIcon}
-                boxSize="80%"
-                alt="JSON Upload"
+                boxSize='80%'
+                alt='JSON Upload'
               />
             </VStack>
           </Box>

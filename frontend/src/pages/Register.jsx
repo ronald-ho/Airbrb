@@ -65,30 +65,30 @@ function Register () {
       <VStack spacing={4}>
         <h1>Register</h1>
         {/* Form controls for name, email, password, and confirm password */}
-        <FormControl id="name" isRequired>
+        <FormControl id='name' isRequired>
           <FormLabel>Name</FormLabel>
-          <Input type="text" value={name} onChange={handleChange(setName)}/>
+          <Input type='text' value={name} onChange={handleChange(setName)}/>
         </FormControl>
-        <FormControl id="email" isRequired>
+        <FormControl id='email' isRequired>
           <FormLabel>Email</FormLabel>
-          <Input type="email" value={email} onChange={handleChange(setEmail)}/>
+          <Input type='email' value={email} onChange={handleChange(setEmail)}/>
         </FormControl>
-        <FormControl id="password" isRequired>
+        <FormControl id='password' isRequired>
           <FormLabel>Password</FormLabel>
-          <Input type="password" value={password} onChange={handleChange(setPassword)}/>
+          <Input type='password' value={password} onChange={handleChange(setPassword)}/>
         </FormControl>
-        <FormControl id="confirm-password" isRequired>
+        <FormControl id='confirm-password' isRequired>
           <FormLabel>Confirm Password</FormLabel>
-          <Input type="password" value={confirmPassword} onChange={handleChange(setConfirmPassword)}/>
+          <Input type='password' value={confirmPassword} onChange={handleChange(setConfirmPassword)}/>
         </FormControl>
         {/* Button to submit the form */}
-        <Button type="submit" colorScheme="blue" onClick={handleSubmit}>
+        <Button type='submit' colorScheme='blue' onClick={handleSubmit}>
           Register
         </Button>
       </VStack>
       {/* Popup component to display errors */}
       {showPopup && (
-        <Popup title="Error" body={error} primaryButtonText="OK" onClose={() => setShowPopup(false)}
+        <Popup title='Error' body={error} primaryButtonText='OK' onClose={() => setShowPopup(false)}
                onConfirm={() => setShowPopup(false)}/>
       )}
     </CenteredBox>

@@ -9,7 +9,13 @@ import {
 } from '@chakra-ui/react';
 import React from 'react';
 
-function QuantitySelector ({ title, units, defaults, value, setter }) {
+function QuantitySelector ({
+  title,
+  units,
+  defaults,
+  value,
+  setter
+}) {
   return (
     <Stack direction='column' spacing={4}>
       <Text fontWeight='bold'>{title}</Text>

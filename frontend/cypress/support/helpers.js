@@ -12,7 +12,11 @@ export const user2Credentials = {
   password: 'password'
 }
 
-export const register = ({ name, email, password }) => {
+export const register = ({
+  name,
+  email,
+  password
+}) => {
   cy.get('body').then(($body) => {
     if ($body.find('button:contains("Sign In")').length) {
       cy.get('button:contains("Sign In")').click();
@@ -31,7 +35,10 @@ export const register = ({ name, email, password }) => {
   cy.get('button[type=submit]').click();
 }
 
-export const login = ({ email, password }) => {
+export const login = ({
+  email,
+  password
+}) => {
   cy.get('body').then(($body) => {
     if ($body.find('button:contains("Sign In")').length) {
       cy.get('button:contains("Sign In")').click();

@@ -23,7 +23,10 @@ export const ListingProvider = ({ children }) => {
 
   // Provide the listingData and updateListingData functions to the context
   return (
-    <ListingContext.Provider value={{ listingData, updateListingData }}>
+    <ListingContext.Provider value={{
+      listingData,
+      updateListingData
+    }}>
       {children}
     </ListingContext.Provider>
   );

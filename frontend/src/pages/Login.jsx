@@ -60,22 +60,22 @@ function Login () {
         <h1>Login</h1>
 
         {/* Email input field */}
-        <FormControl id="email" isRequired>
+        <FormControl id='email' isRequired>
           <FormLabel>Email</FormLabel>
-          <Input type="email" value={email} onChange={handleChange(setEmail)}/>
+          <Input type='email' value={email} onChange={handleChange(setEmail)}/>
         </FormControl>
 
         {/* Password input field */}
-        <FormControl id="password" isRequired>
+        <FormControl id='password' isRequired>
           <FormLabel>Password</FormLabel>
-          <Input type="password" value={password} onChange={handleChange(setPassword)}/>
+          <Input type='password' value={password} onChange={handleChange(setPassword)}/>
         </FormControl>
 
         {/* Link to register */}
-        <Link to="/register">Register</Link>
+        <Link to='/register'>Register</Link>
 
         {/* Login button */}
-        <Button type="submit" colorScheme="blue" onClick={handleSubmit}>
+        <Button type='submit' colorScheme='blue' onClick={handleSubmit}>
           Login
         </Button>
       </VStack>
@@ -83,9 +83,9 @@ function Login () {
       {/* Popup for displaying errors */}
       {showPopup && (
         <Popup
-          title="Error"
+          title='Error'
           body={error}
-          primaryButtonText="OK"
+          primaryButtonText='OK'
           onClose={() => setShowPopup(false)}
           onConfirm={() => setShowPopup(false)}
         />

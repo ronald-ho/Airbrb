@@ -10,7 +10,10 @@ import { ListingContext } from './ListingContext';
  * @param {function} onSubmit - Callback function to submit the thumbnail data.
  * @param {function} onBack - Callback function to navigate back to the previous step.
  */
-const ThumbnailStep = ({ onSubmit, onBack }) => {
+const ThumbnailStep = ({
+  onSubmit,
+  onBack
+}) => {
   // Access listing data from the context
   const { listingData } = useContext(ListingContext);
 
@@ -65,20 +68,20 @@ const ThumbnailStep = ({ onSubmit, onBack }) => {
         {/* Input for selecting a thumbnail image file */}
         <FormControl isRequired>
           <FormLabel>Thumbnail</FormLabel>
-          <Input type="file" accept="image/*" onChange={handleThumbnailChange}/>
+          <Input type='file' accept='image/*' onChange={handleThumbnailChange}/>
         </FormControl>
 
         {/* Input for entering a YouTube URL */}
         <FormControl>
           <FormLabel>YouTube URL</FormLabel>
-          <Input type="url" value={youtubeURL} onChange={handleYoutubeURLChange} placeholder="Enter YouTube URL"/>
+          <Input type='url' value={youtubeURL} onChange={handleYoutubeURLChange} placeholder='Enter YouTube URL'/>
         </FormControl>
       </VStack>
 
       {/* Render "Back" and "Next" buttons for navigation */}
-      <Flex justify="space-between" mt={4}>
-        <Button colorScheme="gray" onClick={onBack}>Back</Button>
-        <Button colorScheme="blue" onClick={handleNext} disabled={!thumbnail && !youtubeURL}>Next</Button>
+      <Flex justify='space-between' mt={4}>
+        <Button colorScheme='gray' onClick={onBack}>Back</Button>
+        <Button colorScheme='blue' onClick={handleNext} disabled={!thumbnail && !youtubeURL}>Next</Button>
       </Flex>
     </CenteredBox>
   )

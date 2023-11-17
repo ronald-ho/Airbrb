@@ -10,7 +10,10 @@ import { ListingContext } from './ListingContext';
  * @param {function} onSubmit - Callback function to submit the property type data.
  * @param {function} onBack - Callback function to navigate back to the previous step.
  */
-const PropertyTypeStep = ({ onSubmit, onBack }) => {
+const PropertyTypeStep = ({
+  onSubmit,
+  onBack
+}) => {
   // Access listing data from the context
   const { listingData } = useContext(ListingContext);
 
@@ -41,9 +44,9 @@ const PropertyTypeStep = ({ onSubmit, onBack }) => {
       </VStack>
 
       {/* Render "Back" and "Next" buttons for navigation */}
-      <Flex justify="space-between" mt={4}>
-        <Button colorScheme="gray" onClick={onBack}>Back</Button>
-        <Button colorScheme="blue" onClick={handleNext} disabled={!propertyType}>Next</Button>
+      <Flex justify='space-between' mt={4}>
+        <Button colorScheme='gray' onClick={onBack}>Back</Button>
+        <Button colorScheme='blue' onClick={handleNext} disabled={!propertyType}>Next</Button>
       </Flex>
     </CenteredBox>
   )

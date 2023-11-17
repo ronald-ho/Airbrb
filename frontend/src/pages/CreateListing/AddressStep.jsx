@@ -10,7 +10,10 @@ import { ListingContext } from './ListingContext';
  * @param {function} onSubmit - Callback function to submit the address data.
  * @param {function} onBack - Callback function to navigate back to the previous step.
  */
-const AddressStep = ({ onSubmit, onBack }) => {
+const AddressStep = ({
+  onSubmit,
+  onBack
+}) => {
   // Access listing data from the context
   const { listingData } = useContext(ListingContext);
 
@@ -31,7 +34,10 @@ const AddressStep = ({ onSubmit, onBack }) => {
 
   // Handle input changes and update the address state
   const handleInputChange = (e) => {
-    const { name, value } = e.target;
+    const {
+      name,
+      value
+    } = e.target;
     setAddress((prevFields) => ({
       ...prevFields,
       [name]: value
@@ -55,18 +61,18 @@ const AddressStep = ({ onSubmit, onBack }) => {
         <h1>Address</h1>
 
         {/* Render FormInput components for address fields */}
-        <FormInput name="number" label="Number" type="text" value={address.number} onChange={handleInputChange}/>
-        <FormInput name="street" label="Street" type="text" value={address.street} onChange={handleInputChange}/>
-        <FormInput name="city" label="City" type="text" value={address.city} onChange={handleInputChange}/>
-        <FormInput name="state" label="State" type="text" value={address.state} onChange={handleInputChange}/>
-        <FormInput name="postcode" label="Post Code" type="text" value={address.postcode} onChange={handleInputChange}/>
-        <FormInput name="country" label="Country" type="text" value={address.country} onChange={handleInputChange}/>
+        <FormInput name='number' label='Number' type='text' value={address.number} onChange={handleInputChange}/>
+        <FormInput name='street' label='Street' type='text' value={address.street} onChange={handleInputChange}/>
+        <FormInput name='city' label='City' type='text' value={address.city} onChange={handleInputChange}/>
+        <FormInput name='state' label='State' type='text' value={address.state} onChange={handleInputChange}/>
+        <FormInput name='postcode' label='Post Code' type='text' value={address.postcode} onChange={handleInputChange}/>
+        <FormInput name='country' label='Country' type='text' value={address.country} onChange={handleInputChange}/>
       </VStack>
 
       {/* Render "Back" and "Next" buttons for navigation */}
-      <Flex justify="space-between" mt={4}>
-        <Button colorScheme="gray" onClick={onBack}>Back</Button>
-        <Button colorScheme="blue" onClick={handleNext} disabled={!areAllFieldsFilled()}>Next</Button>
+      <Flex justify='space-between' mt={4}>
+        <Button colorScheme='gray' onClick={onBack}>Back</Button>
+        <Button colorScheme='blue' onClick={handleNext} disabled={!areAllFieldsFilled()}>Next</Button>
       </Flex>
     </CenteredBox>
   );

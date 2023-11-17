@@ -38,7 +38,7 @@ function AllListings () {
   // Get filter inputs
   const defaultBedrooms = [0, 8];
   const [bedroomFilter, setBedroomFilter] = useState(defaultBedrooms);
-  const defaultPrices = [0, 10000]
+  const defaultPrices = [0, 5000]
   const [priceFilter, setPriceFilter] = useState(defaultPrices);
 
   // Get date search inputs and also passes search dates into listing previews
@@ -299,8 +299,11 @@ function AllListings () {
           borderColor='gray.200'
           boxShadow='lg'
           position='fixed'
-          left="50%"
-          width={{ base: '95%', md: '70%' }}
+          left='50%'
+          width={{
+            base: '95%',
+            md: '70%'
+          }}
           transform='translate(-50%, 60px)'
           zIndex={400}
           divider={<StackDivider/>}
@@ -329,7 +332,12 @@ function AllListings () {
       </Box>
 
       <Grid
-        templateColumns={{ base: 'repeat(1, 1fr)', sm: 'repeat(2, 1fr)', md: 'repeat(3, 1fr)', lg: 'repeat(4, 1fr)' }}
+        templateColumns={{
+          base: 'repeat(1, 1fr)',
+          sm: 'repeat(2, 1fr)',
+          md: 'repeat(3, 1fr)',
+          lg: 'repeat(4, 1fr)'
+        }}
         width='100%'
         gap='3'
       >
@@ -351,7 +359,11 @@ function AllListings () {
 
               return (
                 <GridItem
-                  width={{ base: '300px', sm: '200px', md: '225px' }}
+                  width={{
+                    base: '300px',
+                    sm: '200px',
+                    md: '225px'
+                  }}
                   key={index}
                 >
                   {ListingPreview(listing, url)}

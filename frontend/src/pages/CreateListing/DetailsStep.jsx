@@ -4,7 +4,10 @@ import CenteredBox from '../../components/CenteredBox';
 import NumberInputFieldCustom from '../../components/NumberInputFieldCustom';
 import { ListingContext } from './ListingContext';
 
-const DetailsStep = ({ onSubmit, onBack }) => {
+const DetailsStep = ({
+  onSubmit,
+  onBack
+}) => {
   const { listingData } = useContext(ListingContext);
 
   // State for bedrooms, beds, and bathrooms
@@ -14,20 +17,24 @@ const DetailsStep = ({ onSubmit, onBack }) => {
 
   const handleNext = (event) => {
     event.preventDefault();
-    onSubmit({ bedrooms, beds, bathrooms });
+    onSubmit({
+      bedrooms,
+      beds,
+      bathrooms
+    });
   };
 
   return (
     <CenteredBox>
       <h1>Details</h1>
-      <Flex flexDirection="column" spacing={4}>
-        <NumberInputFieldCustom title="Bedrooms" value={bedrooms} onChange={setBedrooms}/>
-        <NumberInputFieldCustom title="Beds" value={beds} onChange={setBeds}/>
-        <NumberInputFieldCustom title="Bathrooms" value={bathrooms} onChange={setBathrooms}/>
+      <Flex flexDirection='column' spacing={4}>
+        <NumberInputFieldCustom title='Bedrooms' value={bedrooms} onChange={setBedrooms}/>
+        <NumberInputFieldCustom title='Beds' value={beds} onChange={setBeds}/>
+        <NumberInputFieldCustom title='Bathrooms' value={bathrooms} onChange={setBathrooms}/>
       </Flex>
-      <Flex justify="space-between" mt={4}>
-        <Button colorScheme="gray" onClick={onBack}>Back</Button>
-        <Button colorScheme="blue" onClick={handleNext}>Next</Button>
+      <Flex justify='space-between' mt={4}>
+        <Button colorScheme='gray' onClick={onBack}>Back</Button>
+        <Button colorScheme='blue' onClick={handleNext}>Next</Button>
       </Flex>
     </CenteredBox>
   );

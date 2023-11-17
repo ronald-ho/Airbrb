@@ -20,7 +20,10 @@ const CreateListingSteps = () => {
   const { step } = useParams();
 
   // Get listingData and updateListingData from the ListingContext
-  const { listingData, updateListingData } = useContext(ListingContext);
+  const {
+    listingData,
+    updateListingData
+  } = useContext(ListingContext);
 
   // Initialize navigation and error state
   const navigate = useNavigate();
@@ -117,7 +120,7 @@ const CreateListingSteps = () => {
     <div>
       {StepComponent}
       {showPopup && (
-        <Popup title="Error" body={error} primaryButtonText="OK" onClose={() => setShowPopup(false)}
+        <Popup title='Error' body={error} primaryButtonText='OK' onClose={() => setShowPopup(false)}
                onConfirm={() => setShowPopup(false)}/>
       )}
     </div>

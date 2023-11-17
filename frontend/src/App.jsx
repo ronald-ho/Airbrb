@@ -28,20 +28,20 @@ function App () {
             <Center pt='5rem' mx={0}>
               {/* <Container> */}
               <Routes>
-                <Route path="/" element={<AllListings/>}/>
-                <Route path="/login" element={<Login/>}/>
-                <Route path="/register" element={<Register/>}/>
-                <Route path="/my-listings" element={<HostedListings/>}/>
-                <Route path="/my-listings/edit/:listingId" element={<EditListing/>}/>
-                <Route path="/my-listings/profits" element={<Profits/>}/>
-                <Route path="/listings" element={<AllListings/>}/>
-                <Route path="/listing/:data" element={<ViewListing/>}/>
-                <Route path="/booking-history" element={<BookingHistory/>}/>
-                <Route path="/booking-history/:listingId" element={<BookingHistory/>}/>
-                <Route path="/create-listing/:step" element={<CreateListingSteps/>}/>
-                <Route path="/create-listing" element={<CreateListing/>}/>
-                <Route path="/create-listing/json" element={<JsonUpload/>}/>
-                <Route path="/publish-listing" element={<PublishListing/>}/>
+                <Route path='/' element={<AllListings/>}/>
+                <Route path='/login' element={<Login/>}/>
+                <Route path='/register' element={<Register/>}/>
+                <Route path='/my-listings' element={<HostedListings/>}/>
+                <Route path='/my-listings/edit/:listingId' element={<EditListing/>}/>
+                <Route path='/my-listings/profits' element={<Profits/>}/>
+                <Route path='/listings' element={<AllListings/>}/>
+                <Route path='/listing/:data' element={<ViewListing/>}/>
+                <Route path='/booking-history' element={<BookingHistory/>}/>
+                <Route path='/booking-history/:listingId' element={<BookingHistory/>}/>
+                <Route path='/create-listing/:step' element={<CreateListingSteps/>}/>
+                <Route path='/create-listing' element={<CreateListing/>}/>
+                <Route path='/create-listing/json' element={<JsonUpload/>}/>
+                <Route path='/publish-listing' element={<PublishListing/>}/>
               </Routes>
             </Center>
           </BrowserRouter>

@@ -4,7 +4,7 @@ import PropertyTypeSelector from '../components/PropertyTypeSelector';
 
 describe('Property type selector when creating listing', () => {
   test('Renders PropertyTypeSelector with default state', () => {
-    render(<PropertyTypeSelector propertyType="House" onChange={() => {
+    render(<PropertyTypeSelector propertyType='House' onChange={() => {
     }}/>);
 
     // Check if "House" is selected
@@ -16,7 +16,7 @@ describe('Property type selector when creating listing', () => {
   test('Calls onChange with "Apartment" when Apartment is clicked', () => {
     const mockOnChange = jest.fn();
 
-    render(<PropertyTypeSelector propertyType="House" onChange={mockOnChange}/>);
+    render(<PropertyTypeSelector propertyType='House' onChange={mockOnChange}/>);
 
     // Click the "Apartment" image
     fireEvent.click(screen.getByAltText('Apartment'));
@@ -28,7 +28,7 @@ describe('Property type selector when creating listing', () => {
   test('Calls onChange with "House" when House is clicked', () => {
     const mockOnChange = jest.fn();
 
-    render(<PropertyTypeSelector propertyType="Apartment" onChange={mockOnChange}/>);
+    render(<PropertyTypeSelector propertyType='Apartment' onChange={mockOnChange}/>);
 
     // Click the "House" image
     fireEvent.click(screen.getByAltText('House'));

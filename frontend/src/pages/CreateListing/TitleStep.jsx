@@ -38,12 +38,12 @@ const TitleStep = ({ onSubmit }) => {
         <h1>Choose a Title for your Airbnb!</h1>
 
         {/* Render a FormInput component for entering the title */}
-        <FormInput name="title" label="Title" type="text" value={title} onChange={handleInputChange}/>
+        <FormInput name='title' label='Title' type='text' value={title} onChange={handleInputChange}/>
       </VStack>
 
       {/* Render a "Next" button to proceed to the next step */}
-      <Flex justify="flex-end" mt={4}>
-        <Button colorScheme="blue" onClick={handleNext} disabled={!title.trim()}>Next</Button>
+      <Flex justify='flex-end' mt={4}>
+        <Button colorScheme='blue' onClick={handleNext} disabled={!title.trim()}>Next</Button>
       </Flex>
     </CenteredBox>
   );

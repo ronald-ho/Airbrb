@@ -9,9 +9,9 @@ describe('Popup', () => {
   test('Renders popup with correct title and body', () => {
     render(
       <Popup
-        title="Test Title"
-        body="Test Body"
-        primaryButtonText="Confirm"
+        title='Test Title'
+        body='Test Body'
+        primaryButtonText='Confirm'
         onClose={mockOnClose}
         onConfirm={mockOnConfirm}
       />
@@ -26,9 +26,9 @@ describe('Popup', () => {
   test('Calls onClose when close button is clicked', () => {
     render(
       <Popup
-        title="Test Title"
-        body="Test Body"
-        primaryButtonText="Confirm"
+        title='Test Title'
+        body='Test Body'
+        primaryButtonText='Confirm'
         onClose={mockOnClose}
         onConfirm={mockOnConfirm}
       />
@@ -44,9 +44,9 @@ describe('Popup', () => {
   test('Calls onConfirm when confirm button is clicked', () => {
     render(
       <Popup
-        title="Test Title"
-        body="Test Body"
-        primaryButtonText="Confirm"
+        title='Test Title'
+        body='Test Body'
+        primaryButtonText='Confirm'
         onClose={mockOnClose}
         onConfirm={mockOnConfirm}
       />
