@@ -39,7 +39,6 @@ const ThumbnailStep = ({ onSubmit, onBack }) => {
     }
   };
 
-  // Handle YouTube URL input change
   const handleYoutubeURLChange = (event) => {
     setYoutubeURL(event.target.value);
     setThumbnailPreview(event.target.value);
@@ -70,7 +69,7 @@ const ThumbnailStep = ({ onSubmit, onBack }) => {
         </FormControl>
 
         {/* Input for entering a YouTube URL */}
-        <FormControl isRequired>
+        <FormControl>
           <FormLabel>YouTube URL</FormLabel>
           <Input type="url" value={youtubeURL} onChange={handleYoutubeURLChange} placeholder="Enter YouTube URL"/>
         </FormControl>
