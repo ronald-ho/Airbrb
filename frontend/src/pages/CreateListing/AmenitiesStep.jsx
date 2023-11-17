@@ -1,7 +1,7 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { ListingContext } from './ListingContext';
 import { Button, Flex, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
+import React, { useContext, useEffect, useState } from 'react';
 import CenteredBox from '../../components/CenteredBox';
+import { ListingContext } from './ListingContext';
 
 /**
  * AmenitiesStep component represents the step in the listing creation process

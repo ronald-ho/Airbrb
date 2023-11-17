@@ -1,9 +1,9 @@
-import React from 'react';
-import register from '../api/auth/register';
 import { Button, FormControl, FormLabel, Input, useToast, VStack } from '@chakra-ui/react';
-import Popup from '../components/Popup';
-import CenteredBox from '../components/CenteredBox';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import register from '../api/auth/register';
+import CenteredBox from '../components/CenteredBox';
+import Popup from '../components/Popup';
 
 /**
  * This component represents the registration form.

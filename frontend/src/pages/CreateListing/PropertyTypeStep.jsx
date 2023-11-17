@@ -1,8 +1,8 @@
 import { Button, Flex, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
-import { ListingContext } from './ListingContext';
 import CenteredBox from '../../components/CenteredBox';
 import PropertyTypeSelector from '../../components/PropertyTypeSelector';
+import { ListingContext } from './ListingContext';
 
 /**
  * PropertyTypeStep component represents the step in the listing creation process

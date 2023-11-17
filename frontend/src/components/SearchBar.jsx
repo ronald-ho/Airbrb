@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from 'react';
-import { Box, Text, Divider, Circle, Input, FormControl, FormLabel, Button } from '@chakra-ui/react'
 import { SearchIcon } from '@chakra-ui/icons';
+import { Box, Button, Circle, Divider, FormControl, FormLabel, Input, Text } from '@chakra-ui/react'
 import { RangeDatepicker } from 'chakra-dayzed-datepicker';
+import React, { useEffect, useState } from 'react';
 
 function SearchBar ({ onClickHandler }) {
   const handleClick = () => {
@@ -28,7 +28,7 @@ function SearchBar ({ onClickHandler }) {
       aria-label='Open Search'
     >
       <Text px='2' fontWeight='semibold'>Anywhere</Text>
-      <Divider orientation='vertical' />
+      <Divider orientation='vertical'/>
       <Text px='2' fontWeight='semibold' whiteSpace='nowrap'>Any week</Text>
       <Circle bg='gray.100' size='30px'>
         <SearchIcon color='black' boxSize='15px'/>
@@ -87,8 +87,8 @@ function InputBar ({ onClickHandler, updateFilters }) {
           />
         </FormControl>
       </Box>
-      <Divider orientation='vertical' />
-      <Box px='3' _hover={{ bg: 'gray.100', borderWidth: '1px' }} >
+      <Divider orientation='vertical'/>
+      <Box px='3' _hover={{ bg: 'gray.100', borderWidth: '1px' }}>
         <FormControl>
           <FormLabel px='3' mt='1' mb='0'>When</FormLabel>
           <RangeDatepicker
@@ -133,7 +133,7 @@ function InputBar ({ onClickHandler, updateFilters }) {
         </FormControl>
       </Box>
       <Button
-        leftIcon={<SearchIcon />}
+        leftIcon={<SearchIcon/>}
         onClick={onClickHandler}
         borderRadius='20px'
         mr='2'

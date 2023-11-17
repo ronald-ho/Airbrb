@@ -1,22 +1,22 @@
+import { Center, ChakraProvider } from '@chakra-ui/react'
 import React from 'react';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import { Center, ChakraProvider } from '@chakra-ui/react'
+import { AuthProvider } from './components/AuthProvider';
+import NavBar from './components/NavBar';
+import AllListings from './pages/AllListings';
+import BookingHistory from './pages/BookingHistory';
+import CreateListing from './pages/CreateListing/CreateListing';
+import CreateListingSteps from './pages/CreateListing/CreateListingSteps';
+import JsonUpload from './pages/CreateListing/JsonUpload';
+import { ListingProvider } from './pages/CreateListing/ListingContext';
+import EditListing from './pages/EditListing';
+import HostedListings from './pages/HostedListings';
 
 import Login from './pages/Login';
-import Register from './pages/Register';
-import AllListings from './pages/AllListings';
-import HostedListings from './pages/HostedListings';
-import EditListing from './pages/EditListing';
-import ViewListing from './pages/ViewListing';
-import BookingHistory from './pages/BookingHistory';
-import { ListingProvider } from './pages/CreateListing/ListingContext';
-import CreateListingSteps from './pages/CreateListing/CreateListingSteps';
-import CreateListing from './pages/CreateListing/CreateListing';
-import JsonUpload from './pages/CreateListing/JsonUpload';
-import NavBar from './components/NavBar';
-import PublishListing from './pages/PublishListing';
-import { AuthProvider } from './components/AuthProvider';
 import Profits from './pages/Profits';
+import PublishListing from './pages/PublishListing';
+import Register from './pages/Register';
+import ViewListing from './pages/ViewListing';
 
 function App () {
   return (

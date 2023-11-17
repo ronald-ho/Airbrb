@@ -1,8 +1,8 @@
 import { Button, Flex, FormControl, FormLabel, Input, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
-import { ListingContext } from './ListingContext';
 import CenteredBox from '../../components/CenteredBox';
 import ThumbnailPreview from '../../components/ThumbnailPreview';
+import { ListingContext } from './ListingContext';
 
 /**
  * ThumbnailStep component represents the step in the listing creation process

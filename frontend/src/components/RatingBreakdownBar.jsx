@@ -1,4 +1,3 @@
-import React from 'react';
 import {
   Box,
   Modal,
@@ -10,6 +9,7 @@ import {
   Progress,
   useDisclosure
 } from '@chakra-ui/react'
+import React from 'react';
 import StarRating from './StarRating';
 
 function RatingBreakdownBar ({ listing, rating }) {
@@ -47,7 +47,7 @@ function RatingBreakdownBar ({ listing, rating }) {
         width='100%'
       >
         <Box width='20%'>{rating} Stars</Box>
-        <Progress flexShrink='0' value={percent} width='45%' mx='1' colorScheme='blackAlpha' />
+        <Progress flexShrink='0' value={percent} width='45%' mx='1' colorScheme='blackAlpha'/>
         <Box width='35%' fontSize='sm'>{percent}%/{totalReviews} reviews</Box>
       </Box>
 

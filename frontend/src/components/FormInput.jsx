@@ -1,5 +1,5 @@
-import React from 'react';
 import { FormControl, FormLabel, Input } from '@chakra-ui/react';
+import React from 'react';
 
 const FormInput = ({ name, label, type, value, onChange }) => (
   <FormControl isRequired>

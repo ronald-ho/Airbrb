@@ -1,14 +1,14 @@
-import React, { useState } from 'react';
-import CenteredBox from '../components/CenteredBox';
-import { Button, Center, List, ListIcon, ListItem, Text, useToast, VStack } from '@chakra-ui/react';
-import { useLocation, useNavigate } from 'react-router-dom';
-import { publishListing } from '../api/listings/publish';
-import { Calendar } from 'react-multi-date-picker';
 import { CheckCircleIcon } from '@chakra-ui/icons';
-import Popup from '../components/Popup';
+import { Button, Center, List, ListIcon, ListItem, Text, useToast, VStack } from '@chakra-ui/react';
+import React, { useState } from 'react';
+import { Calendar } from 'react-multi-date-picker';
 import 'react-multi-date-picker/styles/colors/red.css'
-import { customSelectStyles, formatOptionLabel } from '../helpers';
+import { useLocation, useNavigate } from 'react-router-dom';
 import Select from 'react-select';
+import { publishListing } from '../api/listings/publish';
+import CenteredBox from '../components/CenteredBox';
+import Popup from '../components/Popup';
+import { customSelectStyles, formatOptionLabel } from '../helpers';
 
 /**
  * PublishListing component displays a form to publish a listing with availability dates.

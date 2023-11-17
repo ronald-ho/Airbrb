@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import { HamburgerIcon } from '@chakra-ui/icons';
 import {
   Box,
   Button,
@@ -16,9 +16,9 @@ import {
   useBreakpointValue,
   useDisclosure
 } from '@chakra-ui/react';
-import { HamburgerIcon } from '@chakra-ui/icons';
-import airbnbLogo from '../assets/airbnb.svg'
+import React, { useContext } from 'react';
 import airbnbIcon from '../assets/airbnb-icon.svg'
+import airbnbLogo from '../assets/airbnb.svg'
 import { AuthContext } from './AuthProvider';
 
 const logout = () => {

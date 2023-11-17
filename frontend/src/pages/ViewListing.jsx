@@ -1,6 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
-import { getListing } from '../api/listings/actions';
+import { StarIcon } from '@chakra-ui/icons';
 import {
   Badge,
   Box,
@@ -25,15 +23,17 @@ import {
   UnorderedList,
   useToast
 } from '@chakra-ui/react';
-import { addressToString, averageRating } from '../helpers';
-import { StarIcon } from '@chakra-ui/icons';
 import { RangeDatepicker } from 'chakra-dayzed-datepicker';
-import { createNewBooking } from '../api/booking/actions';
-import { reviewListing } from '../api/listings/review';
+import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { getAllBookings } from '../api/booking';
+import { createNewBooking } from '../api/booking/actions';
+import { getListing } from '../api/listings/actions';
+import { reviewListing } from '../api/listings/review';
 import ImageCarousel from '../components/ImageCarousel';
-import StarRating from '../components/StarRating';
 import RatingBreakdownBar from '../components/RatingBreakdownBar';
+import StarRating from '../components/StarRating';
+import { addressToString, averageRating } from '../helpers';
 
 function ViewListing () {
   // URL Information
@@ -272,7 +272,8 @@ function ViewListing () {
               onDateChange={setSelectedDates}
             />
           </FormControl>
-          <Button onClick={sendBookingRequest} width='100%' colorScheme='red' aria-label='Send booking'>Request to book</Button>
+          <Button onClick={sendBookingRequest} width='100%' colorScheme='red' aria-label='Send booking'>Request to
+            book</Button>
         </Stack>
       </Stack>
 
@@ -291,7 +292,8 @@ function ViewListing () {
                 <option value='5'>5 Star</option>
               </Select>
 
-              <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange} aria-label='Review input'></Textarea>
+              <Textarea placeholder='Write a review' value={reviewText} onChange={handleReviewTextChange}
+                        aria-label='Review input'></Textarea>
               <Button onClick={submitReview} colorScheme='red' aria-label='Submit review'>Submit Review</Button>
             </Stack>
             : null

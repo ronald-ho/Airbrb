@@ -1,5 +1,5 @@
-import React from 'react';
 import { Image } from '@chakra-ui/react';
+import React from 'react';
 
 function ThumbnailPreview ({ url, alt }) {
   // USED https://stackoverflow.com/questions/5717093/check-if-a-javascript-string-is-a-url

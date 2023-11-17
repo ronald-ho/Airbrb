@@ -1,5 +1,5 @@
-import React from 'react';
 import { Button, HStack, Input, Text } from '@chakra-ui/react';
+import React from 'react';
 
 const DetailsInputField = ({ title, numberInput }) => {
   const increaseProps = numberInput.getIncrementButtonProps();

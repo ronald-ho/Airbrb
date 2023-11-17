@@ -1,5 +1,3 @@
-import React, { useEffect, useState } from 'react';
-import { getAllListings } from '../api/listings';
 import {
   Box,
   Button,
@@ -13,12 +11,14 @@ import {
   StackDivider,
   Text
 } from '@chakra-ui/react';
-import ListingPreview from '../components/ListingPreview';
-import { InputBar, SearchBar } from '../components/SearchBar';
-import { getListing } from '../api/listings/actions';
+import React, { useEffect, useState } from 'react';
 import { getAllBookings } from '../api/booking';
-import { averageRating } from '../helpers';
+import { getAllListings } from '../api/listings';
+import { getListing } from '../api/listings/actions';
+import ListingPreview from '../components/ListingPreview';
 import QuantitySelector from '../components/QuantitySelector';
+import { InputBar, SearchBar } from '../components/SearchBar';
+import { averageRating } from '../helpers';
 
 function AllListings () {
   // Get listings data
@@ -287,7 +287,7 @@ function AllListings () {
         {
           isSearchVisible
             ? <SearchBar onClickHandler={handleSearchClick}/>
-            : <InputBar onClickHandler={handleSubmitClick} updateFilters={updateTextAndDate} />
+            : <InputBar onClickHandler={handleSubmitClick} updateFilters={updateTextAndDate}/>
         }
 
         <Modal isOpen={!isSearchVisible}>
@@ -313,7 +313,8 @@ function AllListings () {
         >
           <QuantitySelector title={'Bedrooms'} defaults={defaultBedrooms} value={bedroomFilter}
                             setter={setBedroomFilter}/>
-          <QuantitySelector title={'Price'} units={'$'} defaults={defaultPrices} value={priceFilter} setter={setPriceFilter}/>
+          <QuantitySelector title={'Price'} units={'$'} defaults={defaultPrices} value={priceFilter}
+                            setter={setPriceFilter}/>
           <Box display='flex' alignItems='center' justifyContent='space-between'>
             <Text fontWeight='bold' whiteSpace='nowrap'>Sort Reviews</Text>
             <Select value={sortReviews} onChange={handleSelectReviews} width='30%' aria-label='Sort reviews by'>

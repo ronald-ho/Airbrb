@@ -1,5 +1,5 @@
+import { fireEvent, render, screen } from '@testing-library/react';
 import React from 'react';
-import { render, screen, fireEvent } from '@testing-library/react';
 import { BrowserRouter } from 'react-router-dom';
 import { InputBar } from '../components/SearchBar';
 
@@ -12,7 +12,7 @@ describe('Input bar to enter text and calendar dates', () => {
 
     render(
       <BrowserRouter>
-        <InputBar onClickHandler={onClickHandlerMock} updateFilters={updateFiltersMock} />
+        <InputBar onClickHandler={onClickHandlerMock} updateFilters={updateFiltersMock}/>
       </BrowserRouter>
     );
 
@@ -28,7 +28,7 @@ describe('Input bar to enter text and calendar dates', () => {
 
     render(
       <BrowserRouter>
-        <InputBar onClickHandler={onClickHandlerMock} updateFilters={updateFiltersMock} />
+        <InputBar onClickHandler={onClickHandlerMock} updateFilters={updateFiltersMock}/>
       </BrowserRouter>
     );
 
@@ -45,7 +45,7 @@ describe('Input bar to enter text and calendar dates', () => {
 
     render(
       <BrowserRouter>
-        <InputBar onClickHandler={onClickHandlerMock} updateFilters={updateFiltersMock} />
+        <InputBar onClickHandler={onClickHandlerMock} updateFilters={updateFiltersMock}/>
       </BrowserRouter>
     );
 

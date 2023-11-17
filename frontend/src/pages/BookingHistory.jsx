@@ -1,12 +1,12 @@
+import { AbsoluteCenter, Badge, Box, Button, ButtonGroup, Center, Flex, Spinner, Text, VStack } from '@chakra-ui/react';
+import moment from 'moment/moment';
 import React, { useEffect, useState } from 'react';
-import { getAllBookingDetails } from '../api/booking';
 import { useParams } from 'react-router-dom';
 import Select from 'react-select';
-import { getAllListingDetailsByUser } from '../api/listings';
-import { AbsoluteCenter, Badge, Box, Button, ButtonGroup, Center, Flex, Spinner, Text, VStack } from '@chakra-ui/react';
-import { customSelectStyles, formatOptionLabel, statusColourSchemes } from '../helpers';
-import moment from 'moment/moment';
+import { getAllBookingDetails } from '../api/booking';
 import { acceptBooking, declineBooking, deleteBooking } from '../api/booking/actions';
+import { getAllListingDetailsByUser } from '../api/listings';
+import { customSelectStyles, formatOptionLabel, statusColourSchemes } from '../helpers';
 
 function BookingHistory () {
   const { listingId } = useParams();

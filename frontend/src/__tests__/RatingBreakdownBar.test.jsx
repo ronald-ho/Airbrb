@@ -1,5 +1,5 @@
+import { fireEvent, render } from '@testing-library/react';
 import React from 'react';
-import { render, fireEvent } from '@testing-library/react';
 import RatingBreakdownBar from '../components/RatingBreakdownBar';
 
 describe('RatingBreakdownBar', () => {
@@ -14,7 +14,7 @@ describe('RatingBreakdownBar', () => {
   test('Basic Test Case - Breakdown with reviews', () => {
     const rating = 5;
     const { getByText, getByRole, queryByText, queryAllByLabelText } = render(
-      <RatingBreakdownBar listing={listing} rating={rating} />
+      <RatingBreakdownBar listing={listing} rating={rating}/>
     );
 
     // Assert that the component renders with all ratings
@@ -48,7 +48,7 @@ describe('RatingBreakdownBar', () => {
   test('Edge Case - Breakdown for rating with no reviews', () => {
     const rating = 1;
     const { getByText, getByRole, queryByText } = render(
-      <RatingBreakdownBar listing={listing} rating={rating} />
+      <RatingBreakdownBar listing={listing} rating={rating}/>
     );
 
     // Assert that the component renders with all ratings

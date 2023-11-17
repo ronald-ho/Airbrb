@@ -1,8 +1,8 @@
 import { Button, Flex, VStack } from '@chakra-ui/react';
 import React, { useContext, useEffect, useState } from 'react';
-import { ListingContext } from './ListingContext';
-import FormInput from '../../components/FormInput';
 import CenteredBox from '../../components/CenteredBox';
+import FormInput from '../../components/FormInput';
+import { ListingContext } from './ListingContext';
 
 /**
  * PriceStep component represents the step in the listing creation process

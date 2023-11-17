@@ -1,4 +1,3 @@
-import React, { useRef } from 'react';
 import {
   AlertDialog,
   AlertDialogBody,
@@ -8,6 +7,7 @@ import {
   AlertDialogOverlay,
   Button,
 } from '@chakra-ui/react';
+import React, { useRef } from 'react';
 
 function Popup (props) {
   const { title, body, primaryButtonText, onClose, onConfirm } = props;

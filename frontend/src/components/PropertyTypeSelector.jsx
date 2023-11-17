@@ -1,7 +1,7 @@
-import React from 'react';
 import { Flex, Image, VStack } from '@chakra-ui/react';
-import houseIcon from '../assets/house.png'
+import React from 'react';
 import apartmentIcon from '../assets/apartment.png';
+import houseIcon from '../assets/house.png'
 
 const PropertyTypeSelector = ({ propertyType, onChange }) => {
   return (

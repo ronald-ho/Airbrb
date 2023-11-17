@@ -1,5 +1,3 @@
-import { apiCall } from '../../services/api';
-import { getListing } from '../listings/actions';
 import {
   differenceInCalendarDays,
   eachDayOfInterval,
@@ -11,6 +9,8 @@ import {
   parseISO,
   subDays
 } from 'date-fns';
+import { apiCall } from '../../services/api';
+import { getListing } from '../listings/actions';
 
 /**
  * Get all bookings

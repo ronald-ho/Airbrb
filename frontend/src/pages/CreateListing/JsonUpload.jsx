@@ -1,11 +1,11 @@
-import CenteredBox from '../../components/CenteredBox';
+import { WarningTwoIcon } from '@chakra-ui/icons';
 import { Button, Flex, Input, List, ListIcon, ListItem, useToast, VStack } from '@chakra-ui/react';
 import React, { useState } from 'react';
-import { createNewListing } from '../../api/listings/actions';
 import { useNavigate } from 'react-router-dom';
-import { customAjv, listingSchema } from '../../helpers';
+import { createNewListing } from '../../api/listings/actions';
+import CenteredBox from '../../components/CenteredBox';
 import Popup from '../../components/Popup';
-import { WarningTwoIcon } from '@chakra-ui/icons';
+import { customAjv, listingSchema } from '../../helpers';
 
 /**
  * JsonUpload component allows users to upload a JSON file to create a new listing.
