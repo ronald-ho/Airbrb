@@ -8,10 +8,8 @@ const lock = new AsyncLock();
 
 const JWT_SECRET = process.env.JWT_SECRET;
 
-const DATABASE_URL = process.env.DATABASE_URL;
-
 const pool = new Pool({
-  connectionString: DATABASE_URL,
+  connectionString: process.env.POSTGRES_URL,
 });
 
 /***************************************************************
