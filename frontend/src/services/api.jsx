@@ -25,7 +25,7 @@ axios.interceptors.response.use(
 );
 
 /**
- * Helper function to make API calls
+ * Helper function to make API calls with logging
  * @param endpoint {string} The desired API endpoint path
  * @param method {string} HTTP method (e.g., "GET", "POST")
  * @param data {object} (Optional) Data to send with the request
@@ -44,6 +44,9 @@ export const apiCall = async (endpoint, method, data = null) => {
     config.data = data;
   }
 
+  // Log request details before sending
+  console.log(`API Call: ${method} ${API_BASE_URL}/${endpoint}`, data);
+
   try {
     const response = await axios(config);
     return {
@@ -57,5 +60,8 @@ export const apiCall = async (endpoint, method, data = null) => {
         ? error.response.data.error
         : 'Unknown error occurred'
     };
+  } finally {
+    // Log response details after receiving regardless of success or error
+    console.log(`API Call Response: ${method} ${API_BASE_URL}/${endpoint} - Status: ${response.status}`, response.data);
   }
 };
