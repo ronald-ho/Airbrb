@@ -1,5 +1,4 @@
 import axios from 'axios';
-import config from '../config';
 
 const API_BASE_URL = process.env.API_BASE_URL;
 
