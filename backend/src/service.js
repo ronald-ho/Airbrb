@@ -151,34 +151,44 @@ export const assertOwnsBooking = async (email, bookingId) => {
 };
 
 export const addListing = async (title, owner, address, price, thumbnail, metadata) =>
-  resourceLock(async (resolve, reject) => {
-    if (title === undefined) {
-      return reject(new InputError('Must provide a title for new listing'));
-    } else if (price === undefined || isNaN(price)) {
-      return reject(new InputError('Must provide a valid price for new listing'));
-    } else if (thumbnail === undefined) {
-      return reject(new InputError('Must provide a thumbnail for new listing'));
-    } else if (metadata === undefined) {
-      return reject(new InputError('Must provide property details for this listing'));
-    } else {
-      try {
-        // Check for existing title before inserting
-        const titleCheck = await pool.query('SELECT * FROM listings WHERE title = $1', [title]);
-        if (titleCheck.rows.length > 0) {
-          return reject(new InputError('A listing with this title already exists'));
+    resourceLock(async (resolve, reject) => {
+      // Log incoming parameters to see what is being passed into the function
+      console.log(`addListing called with title: ${title}, owner: ${owner}, address: ${address}, price: ${price}, thumbnail: ${thumbnail}, metadata: ${metadata}`);
+
+      if (title === undefined) {
+        return reject(new InputError('Must provide a title for new listing'));
+      } else if (price === undefined || isNaN(price)) {
+        return reject(new InputError('Must provide a valid price for new listing'));
+      } else if (thumbnail === undefined) {
+        return reject(new InputError('Must provide a thumbnail for new listing'));
+      } else if (metadata === undefined) {
+        return reject(new InputError('Must provide property details for this listing'));
+      } else {
+        try {
+          // Check for existing title before inserting
+          const titleCheck = await pool.query('SELECT * FROM listings WHERE title = $1', [title]);
+          if (titleCheck.rows.length > 0) {
+            return reject(new InputError('A listing with this title already exists'));
+          }
+
+          // Before inserting, log the final check to ensure all values are as expected
+          console.log(`Inserting new listing with title: ${title}, owner: ${owner}`);
+
+          // Insert new listing into database
+          const result = await pool.query('INSERT INTO listings (title, owner, address, price, thumbnail, metadata) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id', [title, owner, address, price, thumbnail, metadata]);
+          const id = result.rows[0].id;
+
+          // Log successful insertion
+          console.log(`Listing added successfully with ID: ${id}`);
+
+          resolve(id);
+        } catch (error) {
+          // Log detailed error if insertion fails
+          console.error('Error adding listing to database:', error);
+          reject(new Error('Internal server error'));
         }
-
-        // Insert new listing into database
-        const result = await pool.query('INSERT INTO listings (title, owner, address, price, thumbnail, metadata) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id', [title, owner, address, price, thumbnail, metadata]);
-        const id = result.rows[0].id;
-
-        resolve(id);
-      } catch (error) {
-        console.error('Error adding listing to database:', error);
-        reject(new Error('Internal server error'));
       }
-    }
-  });
+    });
 
 export const getListingDetails = async (listingId) => {
   try {
