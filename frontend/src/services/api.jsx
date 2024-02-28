@@ -34,7 +34,7 @@ axios.interceptors.response.use(
 export const apiCall = async (endpoint, method, data = null) => {
   const config = {
     method,
-    url: `${API_BASE_URL}/${endpoint}`,
+    url: `https://airbrb-backend.vercel.app/${endpoint}`,
     headers: {
       'Content-Type': 'application/json',
     },
