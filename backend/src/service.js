@@ -6,7 +6,7 @@ const { InputError, AccessError } = require('./error');
 
 const lock = new AsyncLock();
 
-const JWT_SECRET = 'giraffegiraffebeetroot';
+const JWT_SECRET = process.env.JWT_SECRET;
 
 const DATABASE_URL = process.env.DATABASE_URL;
 
