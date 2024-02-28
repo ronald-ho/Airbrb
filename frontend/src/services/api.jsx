@@ -1,9 +1,12 @@
 import axios from 'axios';
 
-const API_BASE_URL = process.env.API_BASE_URL;
+const API_BASE_URL = "https://airbrb-backend.vercel.app";
 
 axios.interceptors.request.use(
   (config) => {
+
+    console.log('Sending request:', config.url, config);
+
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -17,15 +20,20 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   (response) => {
+    console.log('Received response:', response.config.url, response);
     return response;
   },
   (error) => {
+    console.error('Response error:', error);
+    if (error.response) {
+      console.error(`Error response from ${error.response.config.url}:`, error.response.status, error.response.data);
+    }
     return Promise.reject(error);
   }
 );
 
 /**
- * Helper function to make API calls with logging
+ * Helper function to make API calls
  * @param endpoint {string} The desired API endpoint path
  * @param method {string} HTTP method (e.g., "GET", "POST")
  * @param data {object} (Optional) Data to send with the request
@@ -34,7 +42,7 @@ axios.interceptors.response.use(
 export const apiCall = async (endpoint, method, data = null) => {
   const config = {
     method,
-    url: `https://airbrb-backend.vercel.app/${endpoint}`,
+    url: `${API_BASE_URL}/${endpoint}`,
     headers: {
       'Content-Type': 'application/json',
     },
@@ -43,9 +51,6 @@ export const apiCall = async (endpoint, method, data = null) => {
   if (data) {
     config.data = data;
   }
-
-  // Log request details before sending
-  console.log(`API Call: ${method} ${API_BASE_URL}/${endpoint}`, data);
 
   try {
     const response = await axios(config);
@@ -60,8 +65,5 @@ export const apiCall = async (endpoint, method, data = null) => {
         ? error.response.data.error
         : 'Unknown error occurred'
     };
-  } finally {
-    // Log response details after receiving regardless of success or error
-    console.log(`API Call Response: ${method} ${API_BASE_URL}/${endpoint} - Status: ${response.status}`, response.data);
   }
 };
