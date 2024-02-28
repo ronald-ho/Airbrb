@@ -1,10 +1,9 @@
 import axios from 'axios';
 
-const API_BASE_URL = "https://airbrb-backend.vercel.app";
+const API_BASE_URL = 'https://airbrb-backend.vercel.app';
 
 axios.interceptors.request.use(
   (config) => {
-
     console.log('Sending request:', config.url, config);
 
     const token = localStorage.getItem('token');
