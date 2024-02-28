@@ -1,4 +1,3 @@
-import fs from 'fs';
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import bodyParser from 'body-parser';
@@ -12,7 +11,6 @@ import {
   login,
   logout,
   register,
-  save,
   assertOwnsListing,
   assertOwnsBooking,
   addListing,
@@ -50,7 +48,6 @@ const catchErrors = (fn) => async (req, res) => {
       console.log(`Body params are ${JSON.stringify(req.body)}`);
     }
     await fn(req, res);
-    save();
   } catch (err) {
     if (err instanceof InputError) {
       res.status(400).send({ error: err.message });
