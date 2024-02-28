@@ -1,43 +1,93 @@
-import fs from 'fs';
-import jwt from 'jsonwebtoken';
-import AsyncLock from 'async-lock';
-import { InputError, AccessError } from './error';
+const { Pool } = require('pg');
+const jwt = require('jsonwebtoken');
+const AsyncLock = require('async-lock');
+
+const { InputError, AccessError } = require('./error');
 
 const lock = new AsyncLock();
 
 const JWT_SECRET = 'giraffegiraffebeetroot';
-const DATABASE_FILE = './database.json';
+
+const DATABASE_URL = process.env.DATABASE_URL;
+
+const pool = new Pool({
+  connectionString: DATABASE_URL,
+});
 
 /***************************************************************
-                       State Management
-***************************************************************/
+ ******************* State Management ***********************
+ ***************************************************************/
 
+// Initialize empty objects for users, listings, and bookings
 let users = {};
 let listings = {};
 let bookings = {};
 
-const update = (users, listings, bookings) =>
-  new Promise((resolve, reject) => {
-    lock.acquire('saveData', () => {
-      try {
-        fs.writeFileSync(
-          DATABASE_FILE,
-          JSON.stringify(
-            {
-              users,
-              listings,
-              bookings,
-            },
-            null,
-            2,
-          ),
-        );
-        resolve();
-      } catch {
-        reject(new Error('Writing to database failed'));
-      }
-    });
-  });
+const update = async (users, listings, bookings) => {
+  try {
+    await pool.query('BEGIN');
+    await pool.query('DELETE FROM users');
+    await pool.query('DELETE FROM listings');
+    await pool.query('DELETE FROM bookings');
+
+    const userQueries = Object.keys(users).map((email) => ({
+      text: 'INSERT INTO users (email, password, name, session_active) VALUES ($1, $2, $3, $4)',
+      values: [email, users[email].password, users[email].name, users[email].sessionActive],
+    }));
+    await Promise.all(userQueries.map((query) => pool.query(query)));
+
+    const listingQueries = Object.keys(listings).map((id) => ({
+      text: `INSERT INTO listings (owner, title, address, price, thumbnail, metadata, availability, published, posted_on)
+             VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`,
+      values: [
+        listings[id].owner,
+        listings[id].title,
+        listings[id].address,
+        listings[id].price,
+        listings[id].thumbnail,
+        listings[id].metadata,
+        listings[id].availability,
+        listings[id].published,
+        listings[id].postedOn,
+      ],
+    }));
+    await Promise.all(listingQueries.map((query) => pool.query(query)));
+
+    const bookingQueries = Object.keys(bookings).map((id) => ({
+      text: `INSERT INTO bookings (owner, date_range, total_price, listing_id, status)
+             VALUES ($1, $2, $3, $4, $5)`,
+      values: [
+        bookings[id].owner,
+        bookings[id].dateRange,
+        bookings[id].totalPrice,
+        bookings[id].listingId,
+        bookings[id].status,
+      ],
+    }));
+    await Promise.all(bookingQueries.map((query) => pool.query(query)));
+
+    await pool.query('COMMIT');
+  } catch (error) {
+    await pool.query('ROLLBACK');
+    console.error('Error saving data:', error);
+  }
+};
+
+// Load data from database on startup
+(async () => {
+  try {
+    const result = await pool.query('SELECT * FROM users');
+    users = result.rows.reduce((acc, user) => ({ ...acc, [user.email]: user }), {});
+
+    const result2 = await pool.query('SELECT * FROM listings');
+    listings = result2.rows.reduce((acc, listing) => ({ ...acc, [listing.id]: listing }), {});
+
+    const result3 = await pool.query('SELECT * FROM bookings');
+    bookings = result3.rows.reduce((acc, booking) => ({ ...acc, [booking.id]: booking }), {});
+  } catch (error) {
+    console.error('Error loading data from database:', error);
+  }
+})();
 
 export const save = () => update(users, listings, bookings);
 export const reset = () => {
@@ -46,16 +96,6 @@ export const reset = () => {
   listings = {};
   bookings = {};
 };
-
-try {
-  const data = JSON.parse(fs.readFileSync(DATABASE_FILE));
-  users = data.users;
-  listings = data.listings;
-  bookings = data.bookings;
-} catch {
-  console.log('WARNING: No database found, create a new one');
-  save();
-}
 
 /***************************************************************
                        Helper Functions
@@ -82,11 +122,11 @@ const generateId = (currentList, max = 999999999) => {
                        Auth Functions
 ***************************************************************/
 
-export const getEmailFromAuthorization = (authorization) => {
+export const getEmailFromAuthorization = async (authorization) => {
   try {
     const token = authorization.replace('Bearer ', '');
-    const { email } = jwt.verify(token, JWT_SECRET);
-    if (!(email in users)) {
+    const {email} = jwt.verify(token, JWT_SECRET);
+    if (!(email in users) || !await pool.query('SELECT 1 FROM users WHERE email = $1', [email])) {
       throw new AccessError('Invalid Token');
     }
     return email;
@@ -94,6 +134,7 @@ export const getEmailFromAuthorization = (authorization) => {
     throw new AccessError('Invalid Token');
   }
 };
+
 
 export const login = (email, password) =>
   resourceLock((resolve, reject) => {
