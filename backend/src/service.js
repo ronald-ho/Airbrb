@@ -150,7 +150,7 @@ export const assertOwnsBooking = async (email, bookingId) => {
   }
 };
 
-export const addListing = async (title, email, address, price, thumbnail, metadata) =>
+export const addListing = async (title, owner, address, price, thumbnail, metadata) =>
   resourceLock(async (resolve, reject) => {
     if (title === undefined) {
       return reject(new InputError('Must provide a title for new listing'));
@@ -169,7 +169,7 @@ export const addListing = async (title, email, address, price, thumbnail, metada
         }
 
         // Insert new listing into database
-        const result = await pool.query('INSERT INTO listings (title, owner, address, price, thumbnail, metadata) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id', [title, email, address, price, thumbnail, metadata]);
+        const result = await pool.query('INSERT INTO listings (title, owner, address, price, thumbnail, metadata) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id', [title, owner, address, price, thumbnail, metadata]);
         const id = result.rows[0].id;
 
         resolve(id);
