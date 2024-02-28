@@ -26,9 +26,9 @@ axios.interceptors.response.use(
 
 /**
  * Helper function to make API calls
- * @param endpoint
- * @param method
- * @param data
+ * @param endpoint {string} The desired API endpoint path
+ * @param method {string} HTTP method (e.g., "GET", "POST")
+ * @param data {object} (Optional) Data to send with the request
  * @returns {Promise<{success: boolean, error: (*|string)}|{success: boolean, data: any}>}
  */
 export const apiCall = async (endpoint, method, data = null) => {
