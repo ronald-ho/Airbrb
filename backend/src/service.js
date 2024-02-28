@@ -18,7 +18,19 @@ const pool = new Pool({
 
 export const resourceLock = (callback) =>
   new Promise((resolve, reject) => {
-    lock.acquire('resourceLock', callback(resolve, reject));
+    lock.acquire('resourceLock', (done) => {
+      try {
+        callback(resolve, reject);
+      } catch (error) {
+        reject(error);
+      } finally {
+        done();
+      }
+    }, {}, (err) => {
+      if (err) {
+        reject(err);
+      }
+    });
   });
 
 /***************************************************************
