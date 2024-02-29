@@ -293,7 +293,7 @@ export const removeListing = async (listingId) =>
     }
   });
 
-export const publishListing = async (listingId, availability) =>
+export const publishListing = async (listingId, availability) => 
   resourceLock(async (resolve, reject) => {
     if (availability === undefined) {
       return reject(new InputError('Must provide listing availability'));
@@ -307,10 +307,17 @@ export const publishListing = async (listingId, availability) =>
           return reject(new InputError('This listing is already published'));
         }
 
-        const stringifyAvailability = JSON.stringify(availability);
+        // Insert each availability entry into the availabilities table
+        const insertPromises = availability.map(availabilityEntry => {
+          return pool.query('INSERT INTO availabilities (listing_id, start_date, end_date) VALUES ($1, $2, $3)', [listingId, availabilityEntry[0], availabilityEntry[1]]);
+        });
 
-        // Update listing details in the database
-        await pool.query('UPDATE listings SET availability = $1, published = true, posted_on = $2 WHERE id = $3', [availability, new Date().toISOString(), listingId]);
+        // Execute all insert operations concurrently
+        await Promise.all(insertPromises);
+
+        // Update the listing to be published
+        await pool.query('UPDATE listings SET published = true, posted_on = $1 WHERE id = $2', [new Date().toISOString(), listingId]);
+
         resolve();
       } catch (error) {
         console.error('Error publishing listing:', error);
@@ -318,6 +325,7 @@ export const publishListing = async (listingId, availability) =>
       }
     }
   });
+
 
 export const unpublishListing = async (listingId) =>
   resourceLock(async (resolve, reject) => {
