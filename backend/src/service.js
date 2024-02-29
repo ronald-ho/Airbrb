@@ -232,7 +232,7 @@ export const getAllListings = async () => {
 
 export const updateListing = async (listingId, title, address, thumbnail, price, metadata) => {
   try {
-    if (!listingId || typeof listingId !== 'number') {
+    if (!listingId) {
       throw new Error('Invalid listing ID');
     }
 
