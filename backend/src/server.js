@@ -1,4 +1,3 @@
-import fs from 'fs';
 import express from 'express';
 import swaggerUi from 'swagger-ui-express';
 import bodyParser from 'body-parser';
@@ -12,7 +11,6 @@ import {
   login,
   logout,
   register,
-  save,
   assertOwnsListing,
   assertOwnsBooking,
   addListing,
@@ -32,7 +30,11 @@ import {
 
 const app = express();
 
-app.use(cors());
+app.use(cors({
+  origin: 'https://airbrb-eosin.vercel.app',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json({ limit: '50mb' }));
 app.use(morgan(':method :url :status'));
@@ -46,7 +48,6 @@ const catchErrors = (fn) => async (req, res) => {
       console.log(`Body params are ${JSON.stringify(req.body)}`);
     }
     await fn(req, res);
-    save();
   } catch (err) {
     if (err instanceof InputError) {
       res.status(400).send({ error: err.message });
@@ -64,8 +65,14 @@ const catchErrors = (fn) => async (req, res) => {
 ***************************************************************/
 
 const authed = (fn) => async (req, res) => {
-  const email = getEmailFromAuthorization(req.header('Authorization'));
-  await fn(req, res, email);
+  try {
+    const email = await getEmailFromAuthorization(req.header('Authorization'));
+    console.log('Email resolved:', email);
+    await fn(req, res, email);
+  } catch (error) {
+    console.error('Error in auth middleware:', error);
+    res.status(401).json({ error: 'Unauthorized' });
+  }
 };
 
 app.post(
@@ -259,12 +266,4 @@ app.get('/', (req, res) => res.redirect('/docs'));
 
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-const configData = JSON.parse(fs.readFileSync('../frontend/src/config.json'));
-const port = 'BACKEND_PORT' in configData ? configData.BACKEND_PORT : 5033;
-
-const server = app.listen(port, () => {
-  console.log(`Backend is now listening on port ${port}!`);
-  console.log(`For API docs, navigate to http://localhost:${port}`);
-});
-
-export default server;
+export default app;

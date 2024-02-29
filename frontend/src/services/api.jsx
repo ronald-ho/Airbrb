@@ -1,10 +1,11 @@
 import axios from 'axios';
-import config from '../config';
 
-const API_BASE_URL = config.API_BASE_URL;
+const API_BASE_URL = 'https://airbrb-backend.vercel.app';
 
 axios.interceptors.request.use(
   (config) => {
+    console.log('Sending request:', config.url, config);
+
     const token = localStorage.getItem('token');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
@@ -18,18 +19,23 @@ axios.interceptors.request.use(
 
 axios.interceptors.response.use(
   (response) => {
+    console.log('Received response:', response.config.url, response);
     return response;
   },
   (error) => {
+    console.error('Response error:', error);
+    if (error.response) {
+      console.error(`Error response from ${error.response.config.url}:`, error.response.status, error.response.data);
+    }
     return Promise.reject(error);
   }
 );
 
 /**
  * Helper function to make API calls
- * @param endpoint
- * @param method
- * @param data
+ * @param endpoint {string} The desired API endpoint path
+ * @param method {string} HTTP method (e.g., "GET", "POST")
+ * @param data {object} (Optional) Data to send with the request
  * @returns {Promise<{success: boolean, error: (*|string)}|{success: boolean, data: any}>}
  */
 export const apiCall = async (endpoint, method, data = null) => {
