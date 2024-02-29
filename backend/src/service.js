@@ -193,11 +193,26 @@ export const addListing = async (title, owner, address, price, thumbnail, metada
 export const getListingDetails = async (listingId) => {
   try {
     // Fetch listing details from database
-    const result = await pool.query('SELECT * FROM listings WHERE id = $1', [listingId]);
-    if (result.rows.length !== 1) {
+    const result = await pool.query(
+      `SELECT l.*, r.*
+      FROM listings AS l
+      LEFT JOIN reviews AS r ON l.id = r.listing_id
+      WHERE l.id = $1`,
+      [listingId]
+    );
+
+    if (result.rows.length === 0) {
       throw new InputError('Invalid listing ID');
     }
-    return result.rows[0];
+
+    // Separate listing and reviews data
+    const listingData = result.rows[0];
+    const reviews = result.rows.filter((row) => row.listing_id === listingId); // Filter reviews for this listing
+
+    // Combine listing data with reviews
+    listingData.reviews = reviews;
+
+    return listingData;
   } catch (error) {
     console.error('Error getting listing details:', error);
     throw new Error('Internal server error');
