@@ -194,9 +194,10 @@ export const getListingDetails = async (listingId) => {
   try {
     // Fetch listing details from database
     const result = await pool.query(
-      `SELECT l.*, r.*
+      `SELECT l.*, r.*, a.*
       FROM listings AS l
       LEFT JOIN reviews AS r ON l.id = r.listing_id
+      LEFT JOIN availabilities AS a ON l.id = a.listing_id
       WHERE l.id = $1`,
       [listingId]
     );
@@ -205,12 +206,12 @@ export const getListingDetails = async (listingId) => {
       throw new InputError('Invalid listing ID');
     }
 
-    // Separate listing and reviews data
     const listingData = result.rows[0];
-    const reviews = result.rows.filter((row) => row.listing_id === listingId); // Filter reviews for this listing
+    const reviews = result.rows.filter((row) => row.listing_id === listingId); 
+    const availabilities = result.rows.filter((row) => row.listing_id === listingId); 
 
-    // Combine listing data with reviews
     listingData.reviews = reviews;
+    listingData.availabilities = availabilities;
 
     return listingData;
   } catch (error) {
