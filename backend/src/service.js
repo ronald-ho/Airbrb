@@ -338,8 +338,12 @@ export const unpublishListing = async (listingId) =>
         return reject(new InputError('This listing is already unpublished'));
       }
 
-      // Update listing details in the database
-      await pool.query('UPDATE listings SET availability = $1, published = false, posted_on = null WHERE id = $2', [[], listingId]);
+      // Delete availabilities associated with the listing
+      await pool.query('DELETE FROM availabilities WHERE listing_id = $1', [listingId]);
+
+      // Update the listing to be unpublished (no need to update availability in listings table)
+      await pool.query('UPDATE listings SET published = false, posted_on = null WHERE id = $1', [listingId]);
+
       resolve();
     } catch (error) {
       console.error('Error unpublishing listing:', error);
