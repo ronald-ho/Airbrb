@@ -184,7 +184,7 @@ export const addListing = async (title, owner, address, price, thumbnail, metada
 
           await pool.query(
               'INSERT INTO addresses (listing_id, number, street, city, state, postcode, country) VALUES ($1, $2, $3, $4, $5, $6, $7)',
-              [id, number, street, city, state, postcode, country]
+              [listingId, number, street, city, state, postcode, country]
           );
 
           // Log successful insertion
