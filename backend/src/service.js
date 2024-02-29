@@ -270,6 +270,8 @@ export const updateListing = async (listingId, title, address, thumbnail, price,
 
     const updateString = `UPDATE listings SET ${updateStatementParts.join(', ')} WHERE id = $${updateValues.length}`;
 
+    console.log("updateString: ", updateString);
+
     await pool.query(updateString, updateValues);
   } catch (error) {
     console.error('Error updating listing:', error);
