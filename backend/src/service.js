@@ -207,15 +207,30 @@ export const getListingDetails = async (listingId) => {
     }
 
     const listingData = result.rows[0];
-    const reviews = result.rows.filter((row) => row.listing_id === listingId);
-    const availabilities = result.rows.map((row) => ({
-      ...row,
-      start_date: row.start_date * 1000,
-      end_date: row.end_date * 1000,
+    const reviews = result.rows.filter(row => row.review_id != null).map(review => ({
+      // Add necessary review fields here
+      review_id: review.review_id,
+      // other review fields...
     }));
+
+    const availabilitiesSet = new Set();
+    const availabilities = result.rows
+      .filter(row => row.start_date != null && row.end_date != null)
+      .map(row => [row.start_date * 1000, row.end_date * 1000])
+      .filter(pair => {
+        const pairString = JSON.stringify(pair);
+        if (availabilitiesSet.has(pairString)) {
+          return false;
+        }
+        availabilitiesSet.add(pairString);
+        return true;
+      });
 
     listingData.reviews = reviews;
     listingData.availabilities = availabilities;
+
+    delete listingData.start_date;
+    delete listingData.end_date;
 
     return listingData;
   } catch (error) {
