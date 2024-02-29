@@ -313,8 +313,8 @@ export const publishListing = async (listingId, availability) =>
 
         // Insert each availability entry into the availabilities table
         const insertPromises = availability.map(availabilityEntry => {
-          const startDateInSeconds = availabilityEntry[0] / 1000;
-          const endDateInSeconds = availabilityEntry[1] / 1000;
+          const startDateInSeconds = Math.floor(availabilityEntry[0] / 1000);
+          const endDateInSeconds = Math.floor(availabilityEntry[1] / 1000);
           return pool.query('INSERT INTO availabilities (listing_id, start_date, end_date) VALUES ($1, $2, $3)', [listingId, startDateInSeconds, endDateInSeconds]);
         });
 
