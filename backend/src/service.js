@@ -176,8 +176,11 @@ export const addListing = async (title, owner, address, price, thumbnail, metada
           console.log(`Inserting new listing with title: ${title}, owner: ${owner}`);
 
           // Insert new listing into database
-          const result = await pool.query('INSERT INTO listings (title, owner, address, price, thumbnail, metadata) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id', [title, owner, address, price, thumbnail, metadata]);
-          const id = result.rows[0].id;
+          const result = await pool.query(
+              'INSERT INTO listings (title, owner, price, thumbnail, metadata) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+              [title, owner, price, thumbnail, metadata]
+          );
+          const listingId = result.rows[0].id;
 
           await pool.query(
               'INSERT INTO addresses (listing_id, number, street, city, state, postcode, country) VALUES ($1, $2, $3, $4, $5, $6, $7)',
