@@ -151,44 +151,44 @@ export const assertOwnsBooking = async (email, bookingId) => {
 };
 
 export const addListing = async (title, owner, address, price, thumbnail, metadata) =>
-    resourceLock(async (resolve, reject) => {
-      // Log incoming parameters to see what is being passed into the function
-      console.log(`addListing called with title: ${title}, owner: ${owner}, address: ${address}, price: ${price}, thumbnail: ${thumbnail}, metadata: ${metadata}`);
+  resourceLock(async (resolve, reject) => {
+    // Log incoming parameters to see what is being passed into the function
+    console.log(`addListing called with title: ${title}, owner: ${owner}, address: ${address}, price: ${price}, thumbnail: ${thumbnail}, metadata: ${metadata}`);
 
-      if (title === undefined) {
-        return reject(new InputError('Must provide a title for new listing'));
-      } else if (price === undefined || isNaN(price)) {
-        return reject(new InputError('Must provide a valid price for new listing'));
-      } else if (thumbnail === undefined) {
-        return reject(new InputError('Must provide a thumbnail for new listing'));
-      } else if (metadata === undefined) {
-        return reject(new InputError('Must provide property details for this listing'));
-      } else {
-        try {
-          // Check for existing title before inserting
-          const titleCheck = await pool.query('SELECT * FROM listings WHERE title = $1', [title]);
-          if (titleCheck.rows.length > 0) {
-            return reject(new InputError('A listing with this title already exists'));
-          }
-
-          // Before inserting, log the final check to ensure all values are as expected
-          console.log(`Inserting new listing with title: ${title}, owner: ${owner}`);
-
-          // Insert new listing into database
-          const result = await pool.query('INSERT INTO listings (title, owner, address, price, thumbnail, metadata) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id', [title, owner, address, price, thumbnail, metadata]);
-          const id = result.rows[0].id;
-
-          // Log successful insertion
-          console.log(`Listing added successfully with ID: ${id}`);
-
-          resolve(id);
-        } catch (error) {
-          // Log detailed error if insertion fails
-          console.error('Error adding listing to database:', error);
-          reject(new Error('Internal server error'));
+    if (title === undefined) {
+      return reject(new InputError('Must provide a title for new listing'));
+    } else if (price === undefined || isNaN(price)) {
+      return reject(new InputError('Must provide a valid price for new listing'));
+    } else if (thumbnail === undefined) {
+      return reject(new InputError('Must provide a thumbnail for new listing'));
+    } else if (metadata === undefined) {
+      return reject(new InputError('Must provide property details for this listing'));
+    } else {
+      try {
+        // Check for existing title before inserting
+        const titleCheck = await pool.query('SELECT * FROM listings WHERE title = $1', [title]);
+        if (titleCheck.rows.length > 0) {
+          return reject(new InputError('A listing with this title already exists'));
         }
+
+        // Before inserting, log the final check to ensure all values are as expected
+        console.log(`Inserting new listing with title: ${title}, owner: ${owner}`);
+
+        // Insert new listing into database
+        const result = await pool.query('INSERT INTO listings (title, owner, address, price, thumbnail, metadata) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id', [title, owner, address, price, thumbnail, metadata]);
+        const id = result.rows[0].id;
+
+        // Log successful insertion
+        console.log(`Listing added successfully with ID: ${id}`);
+
+        resolve(id);
+      } catch (error) {
+        // Log detailed error if insertion fails
+        console.error('Error adding listing to database:', error);
+        reject(new Error('Internal server error'));
       }
-    });
+    }
+  });
 
 export const getListingDetails = async (listingId) => {
   try {
@@ -207,8 +207,12 @@ export const getListingDetails = async (listingId) => {
     }
 
     const listingData = result.rows[0];
-    const reviews = result.rows.filter((row) => row.listing_id === listingId); 
-    const availabilities = result.rows.filter((row) => row.listing_id === listingId); 
+    const reviews = result.rows.filter((row) => row.listing_id === listingId);
+    const availabilities = result.rows.map((row) => ({
+      ...row,
+      start_date: row.start_date * 1000,
+      end_date: row.end_date * 1000,
+    }));
 
     listingData.reviews = reviews;
     listingData.availabilities = availabilities;
@@ -271,8 +275,8 @@ export const updateListing = async (listingId, title, address, thumbnail, price,
 
     const updateString = `UPDATE listings SET ${updateStatementParts.join(', ')} WHERE id = $1`;
 
-    console.log("updateString: ", updateString);
-    console.log("updateValues: ", updateValues);
+    console.log('updateString: ', updateString);
+    console.log('updateValues: ', updateValues);
 
     await pool.query(updateString, updateValues);
   } catch (error) {
@@ -293,7 +297,7 @@ export const removeListing = async (listingId) =>
     }
   });
 
-export const publishListing = async (listingId, availability) => 
+export const publishListing = async (listingId, availability) =>
   resourceLock(async (resolve, reject) => {
     if (availability === undefined) {
       return reject(new InputError('Must provide listing availability'));
@@ -309,7 +313,9 @@ export const publishListing = async (listingId, availability) =>
 
         // Insert each availability entry into the availabilities table
         const insertPromises = availability.map(availabilityEntry => {
-          return pool.query('INSERT INTO availabilities (listing_id, start_date, end_date) VALUES ($1, $2, $3)', [listingId, availabilityEntry[0], availabilityEntry[1]]);
+          const startDateInSeconds = availabilityEntry[0] / 1000;
+          const endDateInSeconds = availabilityEntry[1] / 1000;
+          return pool.query('INSERT INTO availabilities (listing_id, start_date, end_date) VALUES ($1, $2, $3)', [listingId, startDateInSeconds, endDateInSeconds]);
         });
 
         // Execute all insert operations concurrently
@@ -325,7 +331,6 @@ export const publishListing = async (listingId, availability) =>
       }
     }
   });
-
 
 export const unpublishListing = async (listingId) =>
   resourceLock(async (resolve, reject) => {
