@@ -230,42 +230,44 @@ export const getAllListings = async () => {
   }
 };
 
-export const updateListing = async (listingId, title, address, thumbnail, price, metadata) =>
-  resourceLock(async (resolve, reject) => {
-    try {
-      const updateValues = [];
-      let updateString = 'UPDATE listings SET ';
-      if (title) {
-        updateValues.push(title);
-        updateString += 'title = $1, ';
-      }
-      if (address) {
-        updateValues.push(address);
-        updateString += 'address = $2, ';
-      }
-      if (thumbnail) {
-        updateValues.push(thumbnail);
-        updateString += 'thumbnail = $3, ';
-      }
-      if (price) {
-        updateValues.push(price);
-        updateString += 'price = $4, ';
-      }
-      if (metadata) {
-        updateValues.push(metadata);
-        updateString += 'metadata = $5 ';
-      }
+export const updateListing = async (listingId, title, address, thumbnail, price, metadata) => {
+  try {
+    const updateValues = [listingId];
+    const updateStatementParts = [];
 
-      updateString = updateString.slice(0, -2) + ', WHERE id = $6';
-      updateValues.push(listingId);
-
-      await pool.query(updateString, updateValues);
-      resolve();
-    } catch (error) {
-      console.error('Error updating listing:', error);
-      reject(new Error('Internal server error'));
+    if (title) {
+      updateValues.push(title);
+      updateStatementParts.push('title = $1');
     }
-  });
+
+    if (address) {
+      updateValues.push(address);
+      updateStatementParts.push('address = $2');
+    }
+
+    if (thumbnail) {
+      updateValues.push(thumbnail);
+      updateStatementParts.push('thumbnail = $3');
+    }
+
+    if (price) {
+      updateValues.push(price);
+      updateStatementParts.push('price = $4');
+    }
+
+    if (metadata) {
+      updateValues.push(metadata);
+      updateStatementParts.push('metadata = $5');
+    }
+
+    const updateString = `UPDATE listings SET ${updateStatementParts.join(', ')} WHERE id = $${updateValues.length}`;
+
+    await pool.query(updateString, updateValues);
+  } catch (error) {
+    console.error('Error updating listing:', error);
+    throw new Error('Internal server error'); 
+  }
+};
 
 export const removeListing = async (listingId) =>
   resourceLock(async (resolve, reject) => {
