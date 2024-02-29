@@ -232,32 +232,40 @@ export const getAllListings = async () => {
 
 export const updateListing = async (listingId, title, address, thumbnail, price, metadata) => {
   try {
+    if (!listingId || typeof listingId !== 'number') {
+      throw new Error('Invalid listing ID');
+    }
+
     const updateValues = [listingId];
     const updateStatementParts = [];
 
+    if (metadata && typeof metadata === 'object') {
+      metadata = JSON.stringify(metadata);
+    }
+
     if (title) {
       updateValues.push(title);
-      updateStatementParts.push('title = $1');
+      updateStatementParts.push('title = $' + updateValues.length);
     }
 
     if (address) {
       updateValues.push(address);
-      updateStatementParts.push('address = $2');
+      updateStatementParts.push('address = $' + updateValues.length);
     }
 
     if (thumbnail) {
       updateValues.push(thumbnail);
-      updateStatementParts.push('thumbnail = $3');
+      updateStatementParts.push('thumbnail = $' + updateValues.length);
     }
 
     if (price) {
       updateValues.push(price);
-      updateStatementParts.push('price = $4');
+      updateStatementParts.push('price = $' + updateValues.length);
     }
 
     if (metadata) {
       updateValues.push(metadata);
-      updateStatementParts.push('metadata = $5');
+      updateStatementParts.push('metadata = $' + updateValues.length);
     }
 
     const updateString = `UPDATE listings SET ${updateStatementParts.join(', ')} WHERE id = $${updateValues.length}`;
@@ -265,7 +273,7 @@ export const updateListing = async (listingId, title, address, thumbnail, price,
     await pool.query(updateString, updateValues);
   } catch (error) {
     console.error('Error updating listing:', error);
-    throw new Error('Internal server error'); 
+    throw new Error('Internal server error');
   }
 };
 
