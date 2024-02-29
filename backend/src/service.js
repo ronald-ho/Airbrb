@@ -306,6 +306,8 @@ export const publishListing = async (listingId, availability) =>
           return reject(new InputError('This listing is already published'));
         }
 
+        const stringifyAvailability = JSON.stringify(availability);
+
         // Update listing details in the database
         await pool.query('UPDATE listings SET availability = $1, published = true, posted_on = $2 WHERE id = $3', [availability, new Date().toISOString(), listingId]);
         resolve();
