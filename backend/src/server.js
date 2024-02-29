@@ -65,8 +65,14 @@ const catchErrors = (fn) => async (req, res) => {
 ***************************************************************/
 
 const authed = (fn) => async (req, res) => {
-  const email = getEmailFromAuthorization(req.header('Authorization'));
-  await fn(req, res, email);
+  try {
+    const email = await getEmailFromAuthorization(req.header('Authorization'));
+    console.log('Email resolved:', email);
+    await fn(req, res, email);
+  } catch (error) {
+    console.error('Error in auth middleware:', error);
+    res.status(401).json({ error: 'Unauthorized' });
+  }
 };
 
 app.post(
