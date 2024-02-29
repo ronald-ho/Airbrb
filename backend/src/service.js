@@ -165,6 +165,7 @@ export const addListing = async (title, owner, address, price, thumbnail, metada
         return reject(new InputError('Must provide property details for this listing'));
       } else {
         try {
+          const { number, street, city, state, postcode, country } = address;
           // Check for existing title before inserting
           const titleCheck = await pool.query('SELECT * FROM listings WHERE title = $1', [title]);
           if (titleCheck.rows.length > 0) {
@@ -177,6 +178,11 @@ export const addListing = async (title, owner, address, price, thumbnail, metada
           // Insert new listing into database
           const result = await pool.query('INSERT INTO listings (title, owner, address, price, thumbnail, metadata) VALUES ($1, $2, $3, $4, $5, $6) RETURNING id', [title, owner, address, price, thumbnail, metadata]);
           const id = result.rows[0].id;
+
+          await pool.query(
+              'INSERT INTO addresses (listing_id, number, street, city, state, postcode, country) VALUES ($1, $2, $3, $4, $5, $6, $7)',
+              [id, number, street, city, state, postcode, country]
+          );
 
           // Log successful insertion
           console.log(`Listing added successfully with ID: ${id}`);
