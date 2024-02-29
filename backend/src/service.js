@@ -315,7 +315,7 @@ export const publishListing = async (listingId, availability) =>
         const insertPromises = availability.map(availabilityEntry => {
           const startDateInSeconds = Math.floor(availabilityEntry[0] / 1000);
           const endDateInSeconds = Math.floor(availabilityEntry[1] / 1000);
-          return pool.query('INSERT INTO availabilities (listing_id, start_date, end_date) VALUES ($1, $2, $3)', [listingId, startDateInSeconds, endDateInSeconds]);
+          return pool.query('INSERT INTO availabilities (listing_id, start_date, end_date) VALUES ($1, to_timestamp($2), to_timestamp($3))', [listingId, startDateInSeconds, endDateInSeconds]);
         });
 
         // Execute all insert operations concurrently
