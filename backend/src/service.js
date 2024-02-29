@@ -268,9 +268,10 @@ export const updateListing = async (listingId, title, address, thumbnail, price,
       updateStatementParts.push('metadata = $' + updateValues.length);
     }
 
-    const updateString = `UPDATE listings SET ${updateStatementParts.join(', ')} WHERE id = $${updateValues.length}`;
+    const updateString = `UPDATE listings SET ${updateStatementParts.join(', ')} WHERE id = $1`;
 
     console.log("updateString: ", updateString);
+    console.log("updateValues: ", updateValues);
 
     await pool.query(updateString, updateValues);
   } catch (error) {
