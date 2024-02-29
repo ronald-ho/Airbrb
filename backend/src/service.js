@@ -233,7 +233,6 @@ export const getAllListings = async () => {
 export const updateListing = async (listingId, title, address, thumbnail, price, metadata) =>
   resourceLock(async (resolve, reject) => {
     try {
-      // Update specific listing details in the database
       const updateValues = [];
       let updateString = 'UPDATE listings SET ';
       if (title) {
@@ -257,7 +256,7 @@ export const updateListing = async (listingId, title, address, thumbnail, price,
         updateString += 'metadata = $5 ';
       }
 
-      updateString = updateString.slice(0, -2) + ' WHERE id = $6';
+      updateString = updateString.slice(0, -2) + ', WHERE id = $6';
       updateValues.push(listingId);
 
       await pool.query(updateString, updateValues);
